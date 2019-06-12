@@ -1,0 +1,27 @@
+{
+  "name": "quivia-webapp",
+  "version": "1.0.0",
+  "description": "quiz app to practice MERN stack",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pranabs1ngh/quivia-webapp.git"
+  },
+  "author": "Pranab Singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pranabs1ngh/quivia-webapp/issues"
+  },
+  "homepage": "https://github.com/pranabs1ngh/quivia-webapp#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "mongoose": "^5.5.15",
+    "passport": "^0.4.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0"
+  }
+}
