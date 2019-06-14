@@ -1,21 +1,22 @@
 const express = require('express');
 const session = require('express-session');
+const flash = require('connect-flash');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const flash = require('connect-flash');
 const keys = require('./config/keys');
-
-const app = express();
 require('./config/passport');
 
+const app = express();
+
 // CONNECT TO MONGODB
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true })
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useCreateIndex: true })
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log('Couldn\'t connect to MongoDB...', err));
 
 // EXPRESS SESSION MIDDLEWARE
 app.use(session({
-  secret: 'secret',
+  maxAge: 30 * 24 * 60 * 60 * 1000,
+  secret: keys.cookieSecret,
   resave: true,
   saveUninitialized: true
 }));
@@ -32,8 +33,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // ROUTES
-app.get('/', (req, res) => { res.send(req.session) });
-app.use('/user', require('./routes/user'));
+app.get('/', require('./routes'));
+app.use('/user', require('./routes/userRoutes'));
+app.use('/auth', require('./routes/authRoutes'));
 
 const PORT = process.env.PORT || 5000;
 

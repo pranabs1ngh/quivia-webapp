@@ -2,35 +2,25 @@ const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 
 const userSchema = new mongoose.Schema({
+  email: String,
+  googleID: String,
+  password: String,
+
   name: {
     type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 20,
-    default: 'Freshman'
+    required: true
   },
+
   title: {
     type: String,
-    minlength: 5,
-    maxlength: 20,
     default: 'Freshman'
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    minlength: 5,
-    maxlength: 255
-  },
-  password: {
-    type: String,
-    minlength: 8,
-    maxlength: 1024
-  },
+
   noOfGamesPlayed: {
     type: [Number],
     default: 0
   },
+
   noOfQuestionsPlayed: {
     type: [Number],
     default: 0
