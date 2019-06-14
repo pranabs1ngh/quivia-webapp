@@ -4,6 +4,7 @@ const Joi = require('@hapi/joi');
 const userSchema = new mongoose.Schema({
   email: String,
   googleID: String,
+  facebookID: String,
   password: String,
 
   name: {
