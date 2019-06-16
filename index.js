@@ -1,5 +1,5 @@
 const express = require('express');
-const session = require('express-session');
+const session = require('cookie-session');
 const flash = require('connect-flash');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -16,9 +16,7 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useCreateIndex: true })
 // EXPRESS SESSION MIDDLEWARE
 app.use(session({
   maxAge: 30 * 24 * 60 * 60 * 1000,
-  secret: keys.cookieSecret,
-  resave: true,
-  saveUninitialized: true
+  secret: keys.cookieSecret
 }));
 
 // FLASH MIDDLEWARE
