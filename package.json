@@ -2,9 +2,9 @@
   "name": "quivia-webapp",
   "version": "1.0.0",
   "description": "quiz app to practice MERN stack",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
