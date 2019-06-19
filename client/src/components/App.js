@@ -1,13 +1,15 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import UserForm from './UserForm';
+import Home from './Home';
 
 const App = () => {
   return (
     <div>
-      <BrowserRouter>
+      <Router>
+        <Route path='/' exact component={Home} />
         <Route path='/user' exact component={UserForm} />
-      </BrowserRouter>
+      </Router>
     </div>
   );
 };
