@@ -11,8 +11,14 @@ class UserForm extends React.Component {
     signUpError: null
   };
 
-  signUpClick = event => { event.target.parentElement.parentElement.parentElement.parentElement.classList.add("right-panel-active") };
-  signInClick = event => { event.target.parentElement.parentElement.parentElement.parentElement.classList.remove("right-panel-active") };
+  signUpClick = event => {
+    event.target.parentElement.parentElement.parentElement.parentElement.classList.add("right-panel-active");
+    this.props.history.push('/user/signup');
+  };
+  signInClick = event => {
+    event.target.parentElement.parentElement.parentElement.parentElement.classList.remove("right-panel-active");
+    this.props.history.push('/user/signin');
+  };
 
   signUp = async e => {
     e.preventDefault();

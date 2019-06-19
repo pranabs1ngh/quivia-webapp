@@ -7,7 +7,7 @@ class Home extends React.Component {
   componentWillMount = async () => {
     await this.props.fetchUser();
 
-    if (!this.props.user) this.props.history.push('/user');
+    if (!this.props.user) this.props.history.push('/user/signin');
   }
 
   render = () => {
