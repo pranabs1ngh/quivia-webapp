@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
   if (req.user) {
     const { name, title, noOfGamesPlayed, noOfQuestionsPlayed } = req.user;
     res.send({ name, title, noOfGamesPlayed, noOfQuestionsPlayed });
-  } else res.status(404).send('User not found');
+  } else res.send(null);
 });
 
 // REGISTER USER
