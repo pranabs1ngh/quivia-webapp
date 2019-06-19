@@ -7,8 +7,10 @@ const router = express.Router();
 
 // GET USER
 router.get('/', (req, res) => {
-  const { name, title, noOfGamesPlayed, noOfQuestionsPlayed } = req.user;
-  res.send({ name, title, noOfGamesPlayed, noOfQuestionsPlayed });
+  if (req.user) {
+    const { name, title, noOfGamesPlayed, noOfQuestionsPlayed } = req.user;
+    res.send({ name, title, noOfGamesPlayed, noOfQuestionsPlayed });
+  } else res.status(404).send('User not found');
 });
 
 // REGISTER USER
