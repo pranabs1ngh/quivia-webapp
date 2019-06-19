@@ -5,6 +5,12 @@ const { User, validate } = require('../models/User');
 
 const router = express.Router();
 
+// GET USER
+router.get('/', (req, res) => {
+  const { name, title, noOfGamesPlayed, noOfQuestionsPlayed } = req.user;
+  res.send({ name, title, noOfGamesPlayed, noOfQuestionsPlayed });
+});
+
 // REGISTER USER
 router.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
