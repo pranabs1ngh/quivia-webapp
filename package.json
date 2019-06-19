@@ -4,7 +4,8 @@
   "description": "quiz app to practice MERN stack",
   "main": "server/index.js",
   "scripts": {
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "heroku-postbuild": "npm i --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",

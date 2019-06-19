@@ -34,7 +34,7 @@ passport.use(new LocalStrategy({ usernameField: 'email', passReqToCallback: true
 passport.use(new GoogleStrategy({
   clientID: keys.googleClientID,
   clientSecret: keys.gooogleClientSecret,
-  callbackURL: "/auth/google/callback"
+  callbackURL: "/api/auth/google/callback"
 }, async (accessToken, refreshToken, profile, done) => {
   let user = await User.findOne({ googleID: profile.id });
   if (user) { done(null, user); }
@@ -51,7 +51,7 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
   clientID: keys.facebookClientID,
   clientSecret: keys.facebookClientSecret,
-  callbackURL: "/auth/facebook/callback"
+  callbackURL: "/api/auth/facebook/callback"
 }, async (accessToken, refreshToken, profile, done) => {
   let user = await User.findOne({ facebookID: profile.id });
   if (user) { done(null, user); }

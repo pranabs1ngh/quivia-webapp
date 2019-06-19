@@ -10,7 +10,7 @@ router.get('/google', passport.authenticate('google', {
 
 router.get('/google/callback', passport.authenticate('google', {
   successRedirect: '/',
-  failureRedirect: '/user/login'
+  failureRedirect: '/user'
 }));
 
 // FACEBOOK AUTH ROUTES
@@ -18,8 +18,7 @@ router.get('/facebook', passport.authenticate('facebook'));
 
 router.get('/facebook/callback', passport.authenticate('facebook', {
   successRedirect: '/',
-  failureRedirect: '/user/login'
+  failureRedirect: '/user'
 }));
-
 
 module.exports = router;

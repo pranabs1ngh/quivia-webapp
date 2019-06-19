@@ -31,9 +31,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // ROUTES
-app.get('/', require('./routes'));
-app.use('/user', require('./routes/userRoutes'));
-app.use('/auth', require('./routes/authRoutes'));
+app.use('/api/user', require('./routes/userRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.get('/', (req, res) => { res.send(req.session) });
+
+// CLIENT ROUTE
+if (process.env.NODE_ENV === 'producion') {
+  app.use(express.static('../client/build/'));
+
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+};
 
 const PORT = process.env.PORT || 5000;
 
