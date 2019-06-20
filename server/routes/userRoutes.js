@@ -26,12 +26,14 @@ router.post('/signup', async (req, res) => {
 
   user = new User({ name, email, password });
 
-  // HASH PASSWORD
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
 
   await user.save();
-  res.send('User Registered');
+
+  // CREATE SESSION
+  req.login(user, err => { if (err) return res.status(400).send(err) });
+  res.send({ auth: true });
 });
 
 // LOGIN USER
