@@ -1,5 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { fetchUser } from '../actions'
+
 import './css/UserForm.css';
 
 class UserForm extends React.Component {
@@ -29,7 +32,7 @@ class UserForm extends React.Component {
     }
     axios.post("/api/user/signup", data)
       .then(res => {
-        console.log(res);
+        if (res.data.auth) this.props.history.push('/');
       })
       .catch(err => {
         this.setState({ signUpError: err.response.data });
@@ -47,10 +50,15 @@ class UserForm extends React.Component {
         if (res.data.auth) this.props.history.push('/');
       })
       .catch(err => {
-        console.log(err.response);
         this.setState({ signInError: err.response.data });
       })
   };
+
+  componentWillMount = async () => {
+    await this.props.fetchUser();
+
+    if (this.props.user) this.props.history.push('/');
+  }
 
   render = () => {
     return (
@@ -63,10 +71,10 @@ class UserForm extends React.Component {
               <a href="/api/auth/facebook" className="social"><i className="fab fa-facebook-f"></i></a>
             </div>
             <span>or use your email for registration</span>
-            <input type="text" value={this.state.name} onChange={e => { this.setState({ name: e.target.value, signUpError: null }) }} placeholder="Name" />
-            <input type="email" value={this.state.email} onChange={e => { this.setState({ email: e.target.value, signUpError: null }) }} placeholder="Email" />
-            <input type="password" value={this.state.password} onChange={e => { this.setState({ password: e.target.value, signUpError: null }) }} placeholder="Password" />
-            {(() => { if (this.state.signUpError) return <div className="error">{this.state.signUpError}</div> })()}
+            <input type="text" spellCheck="false" value={this.state.name} onChange={e => { this.setState({ name: e.target.value, signUpError: null }) }} placeholder="Name" />
+            <input type="email" spellCheck="false" value={this.state.email} onChange={e => { this.setState({ email: e.target.value, signUpError: null }) }} placeholder="Email" />
+            <input type="password" spellCheck="false" value={this.state.password} onChange={e => { this.setState({ password: e.target.value, signUpError: null }) }} placeholder="Password" />
+            {(() => { if (this.state.signUpError) return <div className="error"><i className="fa fa-exclamation-circle warning"></i>{this.state.signUpError}</div> })()}
             <button className="signUp">Sign Up</button>
           </form>
         </div>
@@ -78,9 +86,11 @@ class UserForm extends React.Component {
               <a href="/api/auth/facebook" className="social"><i className="fab fa-facebook-f"></i></a>
             </div>
             <span>or use your account</span>
-            <input type="email" value={this.state.email} onChange={e => { this.setState({ email: e.target.value, signInError: null }) }} placeholder="Email" />
-            <input type="password" value={this.state.password} onChange={e => { this.setState({ password: e.target.value, signInError: null }) }} placeholder="Password" />
-            {(() => { if (this.state.signInError) return <div className="error">{this.state.signInError}</div> })()}
+            <input name="username" type="text" autoComplete="username email" spellCheck="false" value={this.state.email} onChange={e => { this.setState({ email: e.target.value, signInError: null }) }} placeholder="Email" />
+            <input name="password" type="password" spellCheck="false" autoComplete="password" value={this.state.password} onChange={e => { this.setState({ password: e.target.value, signInError: null }) }} placeholder="Password" />
+            {(() => {
+              if (this.state.signInError) return <div className="error"><i className="fa fa-exclamation-circle warning"></i>{this.state.signInError}</div>
+            })()}
             <button className="signIn">Sign In</button>
           </form>
         </div>
@@ -103,4 +113,8 @@ class UserForm extends React.Component {
   }
 };
 
-export default UserForm;
+const mapStateToProps = state => {
+  return { user: state.user }
+}
+
+export default connect(mapStateToProps, { fetchUser })(UserForm);
