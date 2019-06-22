@@ -23,8 +23,8 @@ class UserForm extends React.Component {
     this.props.history.push('/user/signin');
   };
 
-  signUp = async e => {
-    e.preventDefault();
+  signUp = event => {
+    event.preventDefault();
     const data = {
       name: this.state.name,
       email: this.state.email,
@@ -39,8 +39,8 @@ class UserForm extends React.Component {
       })
   };
 
-  signIn = async e => {
-    e.preventDefault();
+  signIn = event => {
+    event.preventDefault();
     const data = {
       email: this.state.email,
       password: this.state.password
