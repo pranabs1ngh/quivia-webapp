@@ -17,14 +17,22 @@ const userSchema = new mongoose.Schema({
     default: 'Freshman'
   },
 
+  displayImage: String,
+
   noOfGamesPlayed: {
-    type: [Number],
-    default: 0
+    type: mongoose.Schema.Types.Mixed,
+    default: {
+      won: 0,
+      lost: 0
+    }
   },
 
   noOfQuestionsPlayed: {
-    type: [Number],
-    default: 0
+    type: mongoose.Schema.Types.Mixed,
+    default: {
+      won: 0,
+      lost: 0
+    }
   },
 });
 

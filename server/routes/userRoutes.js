@@ -8,8 +8,8 @@ const router = express.Router();
 // GET USER
 router.get('/', (req, res) => {
   if (req.user) {
-    const { name, title, noOfGamesPlayed, noOfQuestionsPlayed } = req.user;
-    res.send({ name, title, noOfGamesPlayed, noOfQuestionsPlayed });
+    const { name, title, noOfGamesPlayed, noOfQuestionsPlayed, displayImage } = req.user;
+    res.send({ name, title, noOfGamesPlayed, noOfQuestionsPlayed, displayImage });
   } else res.send(null);
 });
 
@@ -53,7 +53,7 @@ router.post('/signin', (req, res, next) => {
 // LOGOUT USER
 router.get('/signout', (req, res) => {
   req.logOut();
-  res.redirect('/');
+  res.send({ auth: false });
 });
 
 module.exports = router;

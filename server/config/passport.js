@@ -41,7 +41,8 @@ passport.use(new GoogleStrategy({
   else {
     user = new User({
       name: profile.displayName,
-      googleID: profile.id,
+      displayImage: profile.photos[0].value,
+      googleID: profile.id
     });
     user = await user.save();
     done(null, user);
@@ -51,13 +52,16 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
   clientID: keys.facebookClientID,
   clientSecret: keys.facebookClientSecret,
-  callbackURL: "/api/auth/facebook/callback"
+  callbackURL: "/api/auth/facebook/callback",
+  profileFields: ['name', 'emails', 'picture.type(large)']
 }, async (accessToken, refreshToken, profile, done) => {
   let user = await User.findOne({ facebookID: profile.id });
   if (user) { done(null, user); }
   else {
+    console.log(profile);
     user = new User({
-      name: profile.displayName,
+      name: profile.name.givenName.concat(' ', profile.name.familyName),
+      displayImage: profile.photos[0].value,
       facebookID: profile.id
     });
     user = await user.save();
