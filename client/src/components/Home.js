@@ -10,37 +10,41 @@ const Wrapper = styled.div`
   padding: 25px;
   height: 768px;
   font-family: 'Varela Round', sans-serif;
-  z-index: 2;
   display: flex;
 `;
 
+const DashboardShadow = styled.div`
+  position: absolute;
+  margin: 115 0 0 14;
+  border-bottom-left-radius: 35px;
+  border-top-left-radius: 180px;
+  border-bottom-right-radius: 35px;
+  border-top-right-radius: 35px;
+  box-shadow: 0px 0px 15px 0px rgba(94,94,94,1);  
+  height: 500px;
+  width: 359px;
+  z-index: 2;
+`;
+
+const DashboardBG = styled.img`
+  position: absolute;
+  margin: 115 0 0 -125;
+  z-index: 2;
+`;
+
+
 const Dashboard = styled.div`
-  width: 60%;
-  background: -webkit-linear-gradient(
-    to left bottom,
-    #e91e63,
-    #ff5722
-  );
-  background: linear-gradient(
-    to left bottom,
-    #e91e63,
-    #ff5722
-  );
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  border-radius: 15px;
-  border-top-left-radius: 25%;
-  height: 550px;
-  margin-top: 75px;
-  z-index: 4;
+  margin-top: 115px;
+  z-index: 3;
 `;
 
 const Logo = styled.img`
   width: 100px;
-  margin: 30px 10px 10px 250px;
+  margin: 30px 10px 10px 245px;
 `;
 
 const Title = styled.div`
-  margin: 25px 0 0 -25px;
+  margin: 40 0 0 -20;
   border-radius: 35px;
   height: 50px;
   width: 120px;
@@ -48,33 +52,24 @@ const Title = styled.div`
   padding: 16px;
   text-align: center;
   font-size: 15px;
-  z-index: 5;
 `;
 
 const ProfilePic = styled.img`
+  margin: -55 0 60 145;
   border-radius: 50%;
-  width: 100px;
   height: 100px;
-  margin-left: 132px;
-  margin-top: -50;
-  margin-bottom: 60px;
+  width: 100px;
   object-fit: cover;
-  z-index: 5;
 `;
 
 const Namespace = styled.img`
-  width: 150px;
+  margin: -175 0 0 255;
   float: right;
-  margin-right: -25px;
-  margin-top: -70px;
-  z-index: 5;
+  width: 150px;  
 `;
 
 const NamespaceData = styled.div`
-  position: absolute;
-  width: 150px;
-  margin-left: 205px;
-  margin-top: -150px;
+  margin: -150 25 0 0;
   font-size: 1.5rem;
   font-weight: bold;
   text-align: right;
@@ -85,13 +80,18 @@ const Surname = styled.div`
   font-weight: 400;
 `;
 
+const ProgressData = styled.div`
+  margin: 70 0 0 30;
+  width: 320px;
+`;
+
 const Progress = styled.div`
-  margin: 20px;
-  color: #fff;
-  font-weight: bold;
+  margin: 20 0 0 0;
 `;
 
 const ProgressHeading = styled.div`
+  color: #fff;
+  font-weight: bold;
   margin: 10px;
 `;
 
@@ -99,15 +99,11 @@ const ProgressBar = styled.div`
   height: 30px;
   background: #fff;
   padding: 7px;
-  border-radius: 10px;
+  border-radius: 0.45rem;
 `;
 
-const ProgressBarStriped = styled.div`
-  display: -ms-flexbox;
-  display: flex;
+const ProgressBarStriped = styled.div`  
   height: 1rem;
-  overflow: hidden;
-  font-size: 0.75rem;
   border-radius: 0.35rem;
   background-image: linear-gradient(
     45deg,
@@ -132,26 +128,25 @@ const SignOut = styled.div`
   width: 65px;
   padding: 28px 10px 25px 23px;
   color: black;
-  margin-top: 35px;
-  margin-left: 275px;
+  margin: 25 0 0 285;
   cursor: pointer;
 
   :hover {
     padding-right: 12px;
     transition: .2s ease-in-out;
     transform: scale(1.05);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
 `;
 
 const Topics = styled.div`
-  margin: 15px 0 15px -75px;
+  margin: 15 0 15 -95;
   border-radius: 10px;
-  padding: 15px 15px 15px 115px;
+  padding: 15 15 15 95;
   background-color: #f6f7fc;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   width: 100%;
-  z-index: 3;
+  z-index: 1;
 `;
 
 const TopicHeading = styled.div`
@@ -196,10 +191,10 @@ const TopicTitle = styled.h5`
 `;
 
 class Home extends React.Component {
-  splitName = name => name = name ? name.split(' ') : '';
-
   names = ['GK', 'Books', 'Film', 'Music', 'Television', 'Games', 'Science', 'Compuers', 'Maths', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals', 'Vehicles', 'Comics', 'Gadgets'];
   topicNo = [9, 10, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+
+  splitName = name => name = name ? name.split(' ') : '';
 
   percentage = data => {
     if (data) {
@@ -211,12 +206,18 @@ class Home extends React.Component {
 
   topicCards = (topicName, topicNo) => {
     return (
-      <TopicCard>
+      <TopicCard onClick={() => this.onCardClick(topicNo)} key={topicNo}>
         <TopicImg src={`/img/topic-${topicNo}.png`}></TopicImg>
         <TopicTitle>{topicName}</TopicTitle>
       </TopicCard>
     );
   }
+
+  onCardClick = key => {
+    // call API to build a socket connection
+    // or transfer call to next gameplay page
+    console.log(key);
+  };
 
   signOut = () => {
     axios.get('/api/user/signout')
@@ -234,6 +235,8 @@ class Home extends React.Component {
   render = () => {
     return (
       <Wrapper>
+        <DashboardShadow></DashboardShadow>
+        <DashboardBG src='img/dashboard-bg.png'></DashboardBG>
         <Dashboard>
           <Logo src="img/logo.png" alt="profile-pic"></Logo>
           <Title><h4>{this.props.user.title}</h4></Title>
@@ -246,18 +249,20 @@ class Home extends React.Component {
               {this.splitName(this.props.user.name)[1]}
             </Surname>
           </NamespaceData>
-          <Progress>
-            <ProgressHeading>Games Won: {this.percentage(this.props.user.noOfGamesPlayed)}%</ProgressHeading>
-            <ProgressBar>
-              <ProgressBarStriped width={this.percentage(this.props.user.noOfGamesPlayed)}></ProgressBarStriped>
-            </ProgressBar>
-          </Progress>
-          <Progress>
-            <ProgressHeading>Accuracy: {this.percentage(this.props.user.noOfQuestionsPlayed)}%</ProgressHeading>
-            <ProgressBar>
-              <ProgressBarStriped width={this.percentage(this.props.user.noOfQuestionsPlayed)}></ProgressBarStriped>
-            </ProgressBar>
-          </Progress>
+          <ProgressData>
+            <Progress>
+              <ProgressHeading>Games Won: {this.percentage(this.props.user.noOfGamesPlayed)}%</ProgressHeading>
+              <ProgressBar>
+                <ProgressBarStriped width={this.percentage(this.props.user.noOfGamesPlayed)}></ProgressBarStriped>
+              </ProgressBar>
+            </Progress>
+            <Progress>
+              <ProgressHeading>Accuracy: {this.percentage(this.props.user.noOfQuestionsPlayed)}%</ProgressHeading>
+              <ProgressBar>
+                <ProgressBarStriped width={this.percentage(this.props.user.noOfQuestionsPlayed)}></ProgressBarStriped>
+              </ProgressBar>
+            </Progress>
+          </ProgressData>
           <SignOut onClick={this.signOut} >
             <i className="fa fa-power-off fa-lg" aria-hidden="true"></i>
           </SignOut>
