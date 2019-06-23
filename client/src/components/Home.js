@@ -237,7 +237,7 @@ const SignOut = styled.div`
 
 const Topics = styled.div`
   margin: 15 0 15 -95;
-  border-radius: 10px;
+  border-radius: 30px;
   padding: 15 15 15 95;
   background-color: #f6f7fc;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
