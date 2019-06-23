@@ -4,6 +4,102 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { fetchUser } from '../actions';
 
+class Home extends React.Component {
+  names = ['GK', 'Books', 'Film', 'Music', 'Television', 'Games', 'Science', 'Compuers', 'Maths', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals', 'Vehicles', 'Comics', 'Gadgets'];
+  topicNo = [9, 10, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+
+  splitName = name => name = name ? name.split(' ') : '';
+
+  percentage = data => {
+    if (data) {
+      const percentage = Math.round(((data.won / (data.won + data.lost)) * 100));
+      if (percentage) return percentage;
+      else return 100;
+    }
+  }
+
+  topicCards = (topicName, topicNo) => {
+    return (
+      <TopicCard onClick={() => this.onCardClick(topicNo)} key={topicNo}>
+        <TopicImg src={`/img/topic-${topicNo}.png`}></TopicImg>
+        <TopicTitle>{topicName}</TopicTitle>
+      </TopicCard>
+    );
+  }
+
+  onCardClick = key => {
+    // call API to build a socket connection
+    // or transfer call to next gameplay page
+    console.log(key);
+  };
+
+  signOut = () => {
+    axios.get('/api/user/signout')
+      .then(res => {
+        if (!res.data.auth) this.props.history.push('/user/signin');
+      })
+  }
+
+  componentWillMount = async () => {
+    await this.props.fetchUser();
+
+    if (!this.props.user) this.props.history.push('/user/signin');
+  }
+
+  render = () => {
+    return (
+      <Wrapper>
+        <DashboardShadow></DashboardShadow>
+        <DashboardBG src='img/dashboard-bg.png'></DashboardBG>
+        <Dashboard>
+          <Logo src="img/logo.png" alt="profile-pic"></Logo>
+          <Title><h4>{this.props.user.title}</h4></Title>
+          <ProfilePic src={this.props.user.displayImage}></ProfilePic>
+          <Namespace src="img/namespace-bg.png"></Namespace>
+          <NamespaceData>
+            {this.splitName(this.props.user.name)[0]}
+            <br></br>
+            <Surname>
+              {this.splitName(this.props.user.name)[1]}
+            </Surname>
+          </NamespaceData>
+          <ProgressData>
+            <Progress>
+              <ProgressHeading>Games Won: {this.percentage(this.props.user.noOfGamesPlayed)}%</ProgressHeading>
+              <ProgressBar>
+                <ProgressBarStriped width={this.percentage(this.props.user.noOfGamesPlayed)}></ProgressBarStriped>
+              </ProgressBar>
+            </Progress>
+            <Progress>
+              <ProgressHeading>Accuracy: {this.percentage(this.props.user.noOfQuestionsPlayed)}%</ProgressHeading>
+              <ProgressBar>
+                <ProgressBarStriped width={this.percentage(this.props.user.noOfQuestionsPlayed)}></ProgressBarStriped>
+              </ProgressBar>
+            </Progress>
+          </ProgressData>
+          <SignOut onClick={this.signOut} >
+            <i className="fa fa-power-off fa-lg" aria-hidden="true"></i>
+          </SignOut>
+        </Dashboard>
+
+        <Topics>
+          <TopicHeading>Topics</TopicHeading>
+          <TopicBoard>{this.names.map((name, index) => this.topicCards(name, this.topicNo[index]))}</TopicBoard>
+        </Topics>
+      </Wrapper>
+    );
+  };
+};
+
+const mapStateToProps = state => {
+  return { user: state.user }
+}
+
+export default connect(mapStateToProps, { fetchUser })(Home);
+
+
+// STYLED COMPONENTS
+
 const Wrapper = styled.div`
   overflow: hidden;
   width: 956px;
@@ -189,96 +285,3 @@ const TopicImg = styled.img`
 const TopicTitle = styled.h5`
   margin-top: 5px;
 `;
-
-class Home extends React.Component {
-  names = ['GK', 'Books', 'Film', 'Music', 'Television', 'Games', 'Science', 'Compuers', 'Maths', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals', 'Vehicles', 'Comics', 'Gadgets'];
-  topicNo = [9, 10, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
-
-  splitName = name => name = name ? name.split(' ') : '';
-
-  percentage = data => {
-    if (data) {
-      const percentage = Math.round(((data.won / (data.won + data.lost)) * 100));
-      if (percentage) return percentage;
-      else return 100;
-    }
-  }
-
-  topicCards = (topicName, topicNo) => {
-    return (
-      <TopicCard onClick={() => this.onCardClick(topicNo)} key={topicNo}>
-        <TopicImg src={`/img/topic-${topicNo}.png`}></TopicImg>
-        <TopicTitle>{topicName}</TopicTitle>
-      </TopicCard>
-    );
-  }
-
-  onCardClick = key => {
-    // call API to build a socket connection
-    // or transfer call to next gameplay page
-    console.log(key);
-  };
-
-  signOut = () => {
-    axios.get('/api/user/signout')
-      .then(res => {
-        if (!res.data.auth) this.props.history.push('/user/signin');
-      })
-  }
-
-  componentWillMount = async () => {
-    await this.props.fetchUser();
-
-    if (!this.props.user) this.props.history.push('/user/signin');
-  }
-
-  render = () => {
-    return (
-      <Wrapper>
-        <DashboardShadow></DashboardShadow>
-        <DashboardBG src='img/dashboard-bg.png'></DashboardBG>
-        <Dashboard>
-          <Logo src="img/logo.png" alt="profile-pic"></Logo>
-          <Title><h4>{this.props.user.title}</h4></Title>
-          <ProfilePic src={this.props.user.displayImage}></ProfilePic>
-          <Namespace src="img/namespace-bg.png"></Namespace>
-          <NamespaceData>
-            {this.splitName(this.props.user.name)[0]}
-            <br></br>
-            <Surname>
-              {this.splitName(this.props.user.name)[1]}
-            </Surname>
-          </NamespaceData>
-          <ProgressData>
-            <Progress>
-              <ProgressHeading>Games Won: {this.percentage(this.props.user.noOfGamesPlayed)}%</ProgressHeading>
-              <ProgressBar>
-                <ProgressBarStriped width={this.percentage(this.props.user.noOfGamesPlayed)}></ProgressBarStriped>
-              </ProgressBar>
-            </Progress>
-            <Progress>
-              <ProgressHeading>Accuracy: {this.percentage(this.props.user.noOfQuestionsPlayed)}%</ProgressHeading>
-              <ProgressBar>
-                <ProgressBarStriped width={this.percentage(this.props.user.noOfQuestionsPlayed)}></ProgressBarStriped>
-              </ProgressBar>
-            </Progress>
-          </ProgressData>
-          <SignOut onClick={this.signOut} >
-            <i className="fa fa-power-off fa-lg" aria-hidden="true"></i>
-          </SignOut>
-        </Dashboard>
-
-        <Topics>
-          <TopicHeading>Topics</TopicHeading>
-          <TopicBoard>{this.names.map((name, index) => this.topicCards(name, this.topicNo[index]))}</TopicBoard>
-        </Topics>
-      </Wrapper>
-    );
-  };
-};
-
-const mapStateToProps = state => {
-  return { user: state.user }
-}
-
-export default connect(mapStateToProps, { fetchUser })(Home);
