@@ -17,3 +17,13 @@ export const storeSocket = (state = null, { type, payload }) => {
       return null;
   }
 }
+
+export const storeOpponent = (state = null, { type, payload }) => {
+  switch (type) {
+    case 'STORE_OPPONENT_DATA':
+      return payload;
+
+    default:
+      return null;
+  }
+}
