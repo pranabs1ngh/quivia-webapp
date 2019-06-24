@@ -4,7 +4,7 @@ export const storeGameName = (state = null, { type, payload }) => {
       return payload;
 
     default:
-      return null;
+      return state;
   }
 }
 
@@ -14,7 +14,7 @@ export const storeSocket = (state = null, { type, payload }) => {
       return payload;
 
     default:
-      return null;
+      return state;
   }
 }
 
@@ -24,6 +24,6 @@ export const storeOpponent = (state = null, { type, payload }) => {
       return payload;
 
     default:
-      return null;
+      return state;
   }
 }
