@@ -28,12 +28,12 @@ const socket = io => {
     })
 
     socket.on('disconnect', () => {
-      const index = socketRoomMap.findIndex(user => user.socketID === socket.id);
-      const roomID = socketRoomMap[index].roomID;
-      const index_2 = findRoom(roomID);
+      const mapIndex = socketRoomMap.findIndex(user => user.socketID === socket.id);
+      const roomID = socketRoomMap[mapIndex].roomID;
+      const roomIndex = findRoom(roomID);
 
-      delete socketRoomMap[index];
-      delete rooms[index_2];
+      socketRoomMap.splice(mapIndex, 1);
+      rooms.splice(roomIndex, 1);
     })
 
   })
