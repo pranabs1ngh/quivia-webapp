@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
-import { fetchUser } from '../actions';
+import { fetchUser, storeGameName } from '../actions';
 
 class Home extends React.Component {
-  names = ['GK', 'Books', 'Film', 'Music', 'Television', 'Games', 'Science', 'Compuers', 'Maths', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals', 'Vehicles', 'Comics', 'Gadgets'];
+  names = ['GK', 'Books', 'Film', 'Music', 'Television', 'Games', 'Science', 'Computers', 'Maths', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals', 'Vehicles', 'Comics', 'Gadgets'];
   topicNo = [9, 10, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
 
   splitName = name => name = name ? name.split(' ') : '';
@@ -20,17 +20,16 @@ class Home extends React.Component {
 
   topicCards = (topicName, topicNo) => {
     return (
-      <TopicCard onClick={() => this.onCardClick(topicNo)} key={topicNo}>
+      <TopicCard onClick={() => this.onCardClick(topicNo, topicName)} key={topicNo}>
         <TopicImg src={`/img/topic-${topicNo}.png`}></TopicImg>
         <TopicTitle>{topicName}</TopicTitle>
       </TopicCard>
     );
   }
 
-  onCardClick = key => {
-    // call API to build a socket connection
-    // or transfer call to next gameplay page
-    console.log(key);
+  onCardClick = (key, topic) => {
+    this.props.storeGameName({ key, topic, socketRoomID: null });
+    this.props.history.push('/gameplay');
   };
 
   signOut = () => {
@@ -95,7 +94,7 @@ const mapStateToProps = state => {
   return { user: state.user }
 }
 
-export default connect(mapStateToProps, { fetchUser })(Home);
+export default connect(mapStateToProps, { fetchUser, storeGameName })(Home);
 
 
 // STYLED COMPONENTS
@@ -195,12 +194,12 @@ const ProgressBar = styled.div`
   height: 30px;
   background: #fff;
   padding: 7px;
-  border-radius: 0.45rem;
+  border-radius: 0.65rem;
 `;
 
 const ProgressBarStriped = styled.div`  
   height: 1rem;
-  border-radius: 0.35rem;
+  border-radius: 0.45rem;
   background-image: linear-gradient(
     45deg,
     rgba(255, 255, 255, 0.15) 25%,

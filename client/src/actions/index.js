@@ -6,3 +6,5 @@ export const fetchUser = () => async dispatch => {
 
   dispatch({ type: 'FETCH_USER', payload: response.data });
 };
+
+export const storeGameName = data => ({ type: 'STORE_GAME_NAME', payload: data });

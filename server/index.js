@@ -1,4 +1,5 @@
 const express = require('express');
+const socket = require('socket.io');
 const session = require('cookie-session');
 const flash = require('connect-flash');
 const mongoose = require('mongoose');
@@ -47,4 +48,5 @@ if (process.env.NODE_ENV === 'producion') {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, console.log(`Server started on PORT: ${PORT}`));
+const server = app.listen(PORT, console.log(`Server started on PORT: ${PORT}`));
+require('./config/socket')(socket(server));
