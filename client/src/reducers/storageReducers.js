@@ -18,9 +18,9 @@ export const storeSocket = (state = null, { type, payload }) => {
   }
 }
 
-export const storeOpponent = (state = null, { type, payload }) => {
+export const storePlayers = (state = null, { type, payload }) => {
   switch (type) {
-    case 'STORE_OPPONENT_DATA':
+    case 'STORE_PLAYERS_DATA':
       return payload;
 
     default:

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import io from 'socket.io-client';
 import faker from 'faker';
 import unique from 'unique-string';
-import { storeGameName, storeSocket, storeOpponent } from '../actions';
+import { storeGameName, storeSocket, storePlayers } from '../actions';
 
 class GamePlay extends React.Component {
 
@@ -12,23 +12,25 @@ class GamePlay extends React.Component {
 
   waitForOpponent = () => {
     setTimeout(() => {
-      if (!this.props.opponent) {
+      if (!this.props.players) {
+        const { name, title, displayImage } = this.props.user;
+        const player_1 = { name, title, displayImage };
         const player_2 = {
           name: faker.name.findName(),
           title: `BOT`,
           displayImage: faker.image.avatar()
         };
-        this.props.storeOpponent(player_2);
-        this.getQuestions();
+        this.props.storePlayers({ player_1, player_2 });
+        this.getQuestions(true);
       }
     }, 5000);
   }
 
-  getQuestions = () => {
-    this.socket.emit('send_questions', this.props.game.socketRoomID);
+  getQuestions = send => {
+    if (send) this.socket.emit('send_questions', this.props.game.socketRoomID);
     this.socket.on('receive_questions', questions => {
       console.log(questions);
-      if (this.props.opponent.title === 'BOT') this.socket.disconnect();
+      if (this.props.players.player_2.title === 'BOT') this.socket.disconnect();
     })
   }
 
@@ -54,16 +56,18 @@ class GamePlay extends React.Component {
           key,
           player_1: { name, title, displayImage },
           player_2: null,
+          player_1_socketID: null,
+          player_2_socketID: null,
           length: 1
         };
         socket.emit('create_room', room);
         this.props.storeGameName({ key, topic, socketRoomID: room.id });
-
         this.waitForOpponent();
       })
 
-      socket.on('opponent_found', roomData => {
-        this.props.storeOpponent(roomData.player_2);
+      socket.on('opponent_found', ({ player_1, player_2 }) => {
+        this.props.storePlayers({ player_1, player_2 });
+        this.getQuestions(false);
       })
     } else this.props.history.push('/');
   }
@@ -74,7 +78,7 @@ class GamePlay extends React.Component {
 };
 
 const mapStateToProps = state => {
-  return { game: state.game, user: state.user, opponent: state.opponent };
+  return { game: state.game, user: state.user, players: state.players };
 }
 
-export default connect(mapStateToProps, { storeGameName, storeSocket, storeOpponent })(GamePlay);
+export default connect(mapStateToProps, { storeGameName, storeSocket, storePlayers })(GamePlay);

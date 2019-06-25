@@ -1,9 +1,9 @@
-const axios = require('axios');
+const fetch = require('node-fetch');
 
 const rooms = [];
-const socketRoomMap = [];
 
 const findRoom = term => rooms.findIndex(room => room.id.startsWith(term));
+
 const searchForRoom = term => {
   for (let i = 0; i < rooms.length; i++) {
     if (rooms[i].id.startsWith(term) && rooms[i].length < 2)
@@ -11,6 +11,16 @@ const searchForRoom = term => {
   }
   return -1;
 };
+
+const getQuestions = async index => {
+  try {
+    const questions = await fetch(`https://opentdb.com/api.php?amount=7&category=${rooms[index].key}&type=multiple`);
+    const questionsJSON = await questions.json();
+    return questionsJSON;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 const socket = io => {
   io.on('connection', socket => {
@@ -25,37 +35,34 @@ const socket = io => {
 
     socket.on('create_room', room => {
       socket.join(room.id);
+      room.player_1_socketID = socket.id;
       rooms.push(room);
-      socketRoomMap.push({ socketID: socket.id, roomID: room.id });
     });
 
-    socket.on('join', ({ roomID, player2 }) => {
+    socket.on('join', async ({ roomID, player2 }) => {
       socket.join(roomID);
 
       const index = findRoom(roomID);
       rooms[index].player_2 = player2;
+      rooms[index].player_2_socketID = socket.id;
       rooms[index].length++;
 
-      socketRoomMap.push({ socketID: socket.id, roomID: roomID });
-      io.to(roomID).emit('opponent_found', rooms[index]);
+      const { player_1, player_2 } = rooms[index];
+      io.to(roomID).emit('opponent_found', { player_1, player_2 });
+
+      const questions = await getQuestions(index);
+      io.to(roomID).emit('receive_questions', questions);
     })
 
     socket.on('send_questions', async roomID => {
       const index = findRoom(roomID);
-
-      const questions = await axios.get(`https://opentdb.com/api.php?amount=7&category=${rooms[index].key}&type=multiple`);
+      const questions = await getQuestions(index);
       io.to(roomID).emit('receive_questions', questions);
     })
 
     socket.on('disconnect', () => {
-      const mapIndex = socketRoomMap.findIndex(user => user.socketID === socket.id);
-      if (mapIndex + 1) {
-        const roomID = socketRoomMap[mapIndex].roomID;
-        const roomIndex = findRoom(roomID);
-
-        socketRoomMap.splice(mapIndex, 1);
-        rooms.splice(roomIndex, 1);
-      }
+      const index = rooms.findIndex(user => user.player_1_socketID || user.player_2_socketID === socket.id);
+      if (index + 1) rooms.splice(index, 1);
     })
   })
 };
