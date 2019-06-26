@@ -63,6 +63,7 @@ const socket = io => {
     socket.on('disconnect', () => {
       const index = rooms.findIndex(user => user.player_1_socketID || user.player_2_socketID === socket.id);
       if (index + 1) rooms.splice(index, 1);
+      console.log('User disconnected.')
     })
   })
 };
