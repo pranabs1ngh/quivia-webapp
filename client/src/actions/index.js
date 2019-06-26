@@ -7,8 +7,8 @@ export const fetchUser = () => async dispatch => {
   dispatch({ type: 'FETCH_USER', payload: response.data });
 };
 
-export const storeSocket = socket => ({ type: 'STORE_SOCKET', payload: socket });
+export const storeGameData = data => ({ type: 'STORE_GAME_NAME', payload: data });
 
-export const storeGameName = data => ({ type: 'STORE_GAME_NAME', payload: data });
+export const storePlayersData = data => ({ type: 'STORE_PLAYERS_DATA', payload: data });
 
-export const storePlayers = data => ({ type: 'STORE_PLAYERS_DATA', payload: data });
+export const storeDisplayData = data => ({ type: 'STORE_DISPLAY_DATA', payload: data });

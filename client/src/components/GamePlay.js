@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import io from 'socket.io-client';
 import faker from 'faker';
 import unique from 'unique-string';
-import { storeGameName, storeSocket, storePlayers } from '../actions';
+import { storeGameData, storePlayersData } from '../actions';
+
+// import OpponentSearch from './OpponentSearch';
+// import PvPComponent from './PvPComponent'
 
 class GamePlay extends React.Component {
 
@@ -18,9 +21,10 @@ class GamePlay extends React.Component {
         const player_2 = {
           name: faker.name.findName(),
           title: `BOT`,
-          displayImage: faker.image.avatar()
+          displayImage: faker.image.avatar(),
+          level: Math.round(Math.random() * 10)
         };
-        this.props.storePlayers({ player_1, player_2 });
+        this.props.storePlayersData({ player_1, player_2 });
         this.getQuestions(true);
       }
     }, 5000);
@@ -34,51 +38,56 @@ class GamePlay extends React.Component {
     })
   }
 
-  componentWillMount = () => {
-    if (this.props.game) {
-      const { key, topic } = this.props.game;
-      const { name, title, displayImage } = this.props.user;
+  searchForOpponent = () => {
+    const { key, topic } = this.props.game;
+    const { name, title, displayImage } = this.props.user;
 
-      const socket = this.socket;
-      this.props.storeSocket({ socket: this.socket });
+    const socket = this.socket;
 
-      socket.emit('search_room', topic);
+    socket.emit('search_room', topic);
 
-      socket.on('room_found', roomID => {
-        const player2 = { name, title, displayImage }
-        socket.emit('join', { roomID, player2 });
-        this.props.storeGameName({ key, topic, socketRoomID: roomID });
-      })
+    socket.on('room_found', roomID => {
+      const player2 = { name, title, displayImage }
+      socket.emit('join', { roomID, player2 });
+      this.props.storeGameData({ key, topic, socketRoomID: roomID });
+    })
 
-      socket.on('room_not_found', () => {
-        const room = {
-          id: topic + '_' + unique(),
-          key,
-          player_1: { name, title, displayImage },
-          player_2: null,
-          player_1_socketID: null,
-          player_2_socketID: null,
-          length: 1
-        };
-        socket.emit('create_room', room);
-        this.props.storeGameName({ key, topic, socketRoomID: room.id });
-        this.waitForOpponent();
-      })
+    socket.on('room_not_found', () => {
+      const room = {
+        id: topic + '_' + unique(),
+        key,
+        player_1: { name, title, displayImage },
+        player_2: null,
+        player_1_socketID: null,
+        player_2_socketID: null,
+        length: 1
+      };
+      socket.emit('create_room', room);
+      this.props.storeGameData({ key, topic, socketRoomID: room.id });
+      this.waitForOpponent();
+    })
 
-      socket.on('opponent_found', ({ player_1, player_2 }) => {
-        this.props.storePlayers({ player_1, player_2 });
-        this.getQuestions(false);
-      })
-    } else this.props.history.push('/');
+    socket.on('opponent_found', ({ player_1, player_2 }) => {
+      setTimeout(3000);
+      this.props.storePlayersData({ player_1, player_2 });
+      this.getQuestions(false);
+    })
   }
 
-  render = () => (
-    <div>Gameplay</div>
-  )
+  componentWillMount = () => {
+    if (!this.props.game) this.props.history.push('/');
+    if (this.props.game && !this.props.players) this.searchForOpponent();
+  }
+
+  render = () => {
+    // return <PvPComponent />;
+    // return <OpponentSearch />;
+    return <div>Gameplay</div>
+  }
 };
 
 const mapStateToProps = state => {
   return { game: state.game, user: state.user, players: state.players };
 }
 
-export default connect(mapStateToProps, { storeGameName, storeSocket, storePlayers })(GamePlay);
+export default connect(mapStateToProps, { storeGameData, storePlayersData })(GamePlay);

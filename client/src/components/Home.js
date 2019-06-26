@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
-import { fetchUser, storeGameName } from '../actions';
+import { fetchUser, storeGameData } from '../actions';
 
 class Home extends React.Component {
   names = ['GK', 'Books', 'Film', 'Music', 'Television', 'Games', 'Science', 'Computers', 'Maths', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals', 'Vehicles', 'Comics', 'Gadgets'];
@@ -28,7 +28,7 @@ class Home extends React.Component {
   }
 
   onCardClick = (key, topic) => {
-    this.props.storeGameName({ key, topic, socketRoomID: null });
+    this.props.storeGameData({ key, topic, socketRoomID: null });
     this.props.history.push('/gameplay');
   };
 
@@ -94,7 +94,7 @@ const mapStateToProps = state => {
   return { user: state.user }
 }
 
-export default connect(mapStateToProps, { fetchUser, storeGameName })(Home);
+export default connect(mapStateToProps, { fetchUser, storeGameData })(Home);
 
 
 // STYLED COMPONENTS
