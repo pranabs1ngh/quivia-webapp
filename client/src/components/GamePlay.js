@@ -5,8 +5,10 @@ import faker from 'faker';
 import unique from 'unique-string';
 import { storeGameData, storePlayersData } from '../actions';
 
-// import OpponentSearch from './OpponentSearch';
+// import OpponentSearchScreen from './OpponentSearchScreen';
 // import PvPComponent from './PvPComponent'
+// import RoundScreen from './RoundScreen'
+// import ResultScreen from './ResultScreen'
 
 class GamePlay extends React.Component {
 
@@ -81,8 +83,10 @@ class GamePlay extends React.Component {
 
   render = () => {
     // return <PvPComponent />;
-    // return <OpponentSearch />;
-    return <div>Gameplay</div>
+    // return <OpponentSearchScreen />;
+    // return <div>Gameplay</div>
+    // return <RoundScreen topicKey='12' topicName='Music' round='6' />
+    // return <ResultScreen />;
   }
 };
 

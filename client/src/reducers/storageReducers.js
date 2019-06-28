@@ -8,6 +8,16 @@ export const storeGameData = (state = null, { type, payload }) => {
   }
 }
 
+export const storeSocket = (state = null, { type, payload }) => {
+  switch (type) {
+    case 'STORE_SOCKET':
+      return payload;
+
+    default:
+      return state;
+  }
+}
+
 export const storePlayersData = (state = null, { type, payload }) => {
   switch (type) {
     case 'STORE_PLAYERS_DATA':
@@ -18,9 +28,9 @@ export const storePlayersData = (state = null, { type, payload }) => {
   }
 }
 
-export const storeDisplayData = (state = null, { type, payload }) => {
+export const storeWhichPlayer = (state = null, { type, payload }) => {
   switch (type) {
-    case 'STORE_DISPLAY_DATA':
+    case 'STORE_WHICH_PLAYER':
       return payload;
 
     default:

@@ -34,15 +34,15 @@ class PVPComponent extends React.Component {
   )
 }
 
-const mapStateToProps = state => {
-  return {
-    topicKey: state.game.key,
-    player_1: state.players.player_1,
-    player_2: state.players.player_1
-  }
-}
+const mapStateToProps = state => ({
+  topicKey: state.game.key,
+  player_1: state.players.player_1,
+  player_2: state.players.player_1
+});
 
 export default connect(mapStateToProps)(PVPComponent);
+
+// STYLED COMPONENTS
 
 const Wrapper = styled.div`
   position: absolute;
