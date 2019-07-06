@@ -17,7 +17,15 @@ const userSchema = new mongoose.Schema({
     default: 'Freshman'
   },
 
-  displayImage: String,
+  level: {
+    type: Number,
+    default: 1
+  },
+
+  displayImage: {
+    type: String,
+    default: 'https://www.primianotucci.com/static/images/avatar-12df3081.png'
+  },
 
   noOfGamesPlayed: {
     type: mongoose.Schema.Types.Mixed,

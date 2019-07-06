@@ -59,6 +59,7 @@ class Home extends React.Component {
             <Surname>
               {this.splitName(this.props.user.name)[1]}
             </Surname>
+            <Level>Level {this.props.user.level}</Level>
           </NamespaceData>
           <ProgressData>
             <Progress>
@@ -173,8 +174,14 @@ const Surname = styled.div`
   font-weight: 400;
 `;
 
+const Level = styled.div`
+  margin-top: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+`;
+
 const ProgressData = styled.div`
-  margin: 70 0 0 30;
+  margin: 40 0 0 30;
   width: 320px;
 `;
 
