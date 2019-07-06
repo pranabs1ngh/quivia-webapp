@@ -28,9 +28,9 @@ export const storePlayersData = (state = null, { type, payload }) => {
   }
 }
 
-export const storeWhichPlayer = (state = null, { type, payload }) => {
+export const storeQuestions = (state = null, { type, payload }) => {
   switch (type) {
-    case 'STORE_WHICH_PLAYER':
+    case 'STORE_QUESTIONS':
       return payload;
 
     default:

@@ -3,50 +3,46 @@ import { connect } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 
 class PVPComponent extends React.Component {
+  componentDidMount = () => {
+    setTimeout(() => { this.props.updateScreen('playersScreen') }, 5000)
+  }
+
   render = () => (
     <Wrapper>
       <UpperBlock>
         <Player1Wrapper>
-          {/* <DisplayImage src={this.state.player_1.displayImage}></DisplayImage> */}
-          <DisplayImage src='https://www.seekpng.com/png/detail/966-9665493_my-profile-icon-blank-profile-image-circle.png'></DisplayImage>
+          <DisplayImage src={this.props.player_1.displayImage}></DisplayImage>
           <PlayerDataWrapper>
-            <PlayerName>Pranab Singh</PlayerName>
-            <PlayerTitle>Freshman</PlayerTitle>
-            <PlayerLevel>Level 2</PlayerLevel>
-            {/* <PlayerName>{this.state.player_1.name}</PlayerName>
-            <PlayerTitle>{this.state.player_1.title}</PlayerTitle>
-            <PlayerLevel>Level {this.state.player_1.level}</PlayerLevel> */}
+            <PlayerName>{this.props.player_1.name}</PlayerName>
+            <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
+            <PlayerLevel>Level {this.props.player_1.level}</PlayerLevel>
           </PlayerDataWrapper>
         </Player1Wrapper>
       </UpperBlock>
       <PlayersDivider>
         <TopicWrapper>
-          <TopicImage src={`/img/topic-15.png`}></TopicImage>
-          {/* <TopicImage src={`/img/topic-${this.props.topicKey}.png`}></TopicImage> */}
+          <TopicImage src={`/img/topic-${this.props.topicKey}.png`}></TopicImage>
         </TopicWrapper>
       </PlayersDivider>
       <LowerBlock>
         <Player2Wrapper>
           <PlayerDataWrapper>
-            <PlayerName>Tushar Maharana</PlayerName>
-            <PlayerTitle>Professional</PlayerTitle>
-            <PlayerLevel>Level 10</PlayerLevel>
-            {/* <PlayerName>{this.state.player_2.name}</PlayerName>
-            <PlayerTitle>{this.state.player_2.title}</PlayerTitle>
-            <PlayerLevel>Level {this.state.player_2.level}</PlayerLevel> */}
+            <PlayerName>{this.props.player_2.name}</PlayerName>
+            <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
+            <PlayerLevel>Level {this.props.player_2.level}</PlayerLevel>
           </PlayerDataWrapper>
-          <DisplayImage src='https://www.seekpng.com/png/detail/966-9665493_my-profile-icon-blank-profile-image-circle.png'></DisplayImage>
-          {/* <DisplayImage src={this.state.player_2.displayImage}></DisplayImage> */}
+          <DisplayImage src={this.props.player_2.displayImage}></DisplayImage>
         </Player2Wrapper>
       </LowerBlock>
     </Wrapper>
   )
 }
 
-const mapStateToProps = state => ({
-  // topicKey: state.game.key,
-  // player_1: state.players.player_1,
-  // player_2: state.players.player_1
+const mapStateToProps = (state, ownProps) => ({
+  updateScreen: ownProps.updateScreen,
+  topicKey: state.game.key,
+  player_1: state.players.player_1,
+  player_2: state.players.player_2
 });
 
 export default connect(mapStateToProps)(PVPComponent);

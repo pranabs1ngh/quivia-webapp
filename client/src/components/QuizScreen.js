@@ -58,12 +58,6 @@ class QuizScreen extends React.Component {
     this.setState({ correctAns: random });
   }
 
-  calculateScore = ans => {
-    if (this.state.currentRound === 6 && ans == this.state.quizData.correctAns)
-      this.setState(state => ({ playerScore: state.playerScore + 20 + (state.timer * 2) }));
-    else if (ans == this.state.quizData.correctAns) this.setState(state => ({ playerScore: state.playerScore + 10 + state.timer }));
-  }
-
   componentWillMount = () => {
     const { question, correct_answer, incorrect_answers } = this.props.questions[this.state.currentRound];
     this.setState({ question });
