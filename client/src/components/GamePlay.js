@@ -6,9 +6,10 @@ import unique from 'unique-string';
 import { storeGameData, storePlayersData } from '../actions';
 
 // import OpponentSearchScreen from './OpponentSearchScreen';
-// import PvPComponent from './PvPComponent'
+// import PvPScreen from './PvPScreen'
 // import RoundScreen from './RoundScreen'
 // import ResultScreen from './ResultScreen'
+import QuestionScreen from './QuestionScreen'
 
 class GamePlay extends React.Component {
 
@@ -82,10 +83,11 @@ class GamePlay extends React.Component {
   }
 
   render = () => {
-    // return <PvPComponent />;
     // return <OpponentSearchScreen />;
+    // return <PvPScreen />;
     // return <div>Gameplay</div>
     // return <RoundScreen topicKey='12' topicName='Music' round='6' />
+    return <QuestionScreen />
     // return <ResultScreen />;
   }
 };

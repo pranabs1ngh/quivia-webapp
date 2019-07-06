@@ -20,14 +20,16 @@ class QuizScreen extends React.Component {
   // 10. A function will call the results page if opponent leaves the game
   // 11. A state value will keep track if question number page is shown or not,
   //     if not it will be rendered first
-
   state = {
     currentRound: 0,
-    question: '',
-    answers: [],
+    question: 'What is your name?',
+    answers: ['Pranab', 'Ravik', 'Anish', 'Sushant'],
+    correctAns: 0,
+    selectedAnswer: 0,
+    oppAnswer: 1,
     playerScore: 0,
     opponentScore: 0,
-    timer: 10
+    timeLeft: 10
   }
 
   socket = this.props.socket;
@@ -35,7 +37,7 @@ class QuizScreen extends React.Component {
   timer = () => {
     while (this.state.timer > 0) {
       setTimeout(() => {
-        this.setState(state => ({ timer: state.timer - 1 }));
+        this.setState(state => ({ timeLeft: state.timeLeft - 1 }));
       }, 1000);
     }
     // renderResultScreen();

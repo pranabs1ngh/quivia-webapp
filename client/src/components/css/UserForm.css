@@ -390,3 +390,7 @@ input:focus {
     transform: rotate(360deg);
   }
 }
+
+.CircularProgressbar-text {
+  font-weight: bold;
+}

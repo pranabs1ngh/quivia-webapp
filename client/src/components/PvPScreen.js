@@ -7,27 +7,36 @@ class PVPComponent extends React.Component {
     <Wrapper>
       <UpperBlock>
         <Player1Wrapper>
-          <DisplayImage src={this.state.player_1.displayImage}></DisplayImage>
+          {/* <DisplayImage src={this.state.player_1.displayImage}></DisplayImage> */}
+          <DisplayImage src='https://www.seekpng.com/png/detail/966-9665493_my-profile-icon-blank-profile-image-circle.png'></DisplayImage>
           <PlayerDataWrapper>
-            <PlayerName>{this.state.player_1.name}</PlayerName>
+            <PlayerName>Pranab Singh</PlayerName>
+            <PlayerTitle>Freshman</PlayerTitle>
+            <PlayerLevel>Level 2</PlayerLevel>
+            {/* <PlayerName>{this.state.player_1.name}</PlayerName>
             <PlayerTitle>{this.state.player_1.title}</PlayerTitle>
-            <PlayerLevel>Level {this.state.player_1.level}</PlayerLevel>
+            <PlayerLevel>Level {this.state.player_1.level}</PlayerLevel> */}
           </PlayerDataWrapper>
         </Player1Wrapper>
       </UpperBlock>
       <PlayersDivider>
         <TopicWrapper>
-          <TopicImage src={`/img/topic-${this.props.topicKey}.png`}></TopicImage>
+          <TopicImage src={`/img/topic-15.png`}></TopicImage>
+          {/* <TopicImage src={`/img/topic-${this.props.topicKey}.png`}></TopicImage> */}
         </TopicWrapper>
       </PlayersDivider>
       <LowerBlock>
         <Player2Wrapper>
           <PlayerDataWrapper>
-            <PlayerName>{this.state.player_2.name}</PlayerName>
+            <PlayerName>Tushar Maharana</PlayerName>
+            <PlayerTitle>Professional</PlayerTitle>
+            <PlayerLevel>Level 10</PlayerLevel>
+            {/* <PlayerName>{this.state.player_2.name}</PlayerName>
             <PlayerTitle>{this.state.player_2.title}</PlayerTitle>
-            <PlayerLevel>Level {this.state.player_2.level}</PlayerLevel>
+            <PlayerLevel>Level {this.state.player_2.level}</PlayerLevel> */}
           </PlayerDataWrapper>
-          <DisplayImage src={this.state.player_2.displayImage}></DisplayImage>
+          <DisplayImage src='https://www.seekpng.com/png/detail/966-9665493_my-profile-icon-blank-profile-image-circle.png'></DisplayImage>
+          {/* <DisplayImage src={this.state.player_2.displayImage}></DisplayImage> */}
         </Player2Wrapper>
       </LowerBlock>
     </Wrapper>
@@ -35,9 +44,9 @@ class PVPComponent extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  topicKey: state.game.key,
-  player_1: state.players.player_1,
-  player_2: state.players.player_1
+  // topicKey: state.game.key,
+  // player_1: state.players.player_1,
+  // player_2: state.players.player_1
 });
 
 export default connect(mapStateToProps)(PVPComponent);
@@ -52,8 +61,8 @@ const Wrapper = styled.div`
   bottom: 0;
   margin: auto;
   z-index: 1;  
-  height: 768px;
-  width: 956px;
+  height: 700px;
+  width: 850px;
   border-radius: 30px;
   font-family: 'Varela Round', sans-serif;
   color: white;
@@ -79,7 +88,7 @@ const slideDown = keyframes`
 `;
 
 const UpperBlock = styled.div`
-  height: 374px;
+  height: 340px;
   background: rgba(255, 255, 255, 0.2);
   z-index: 2;
   animation: ${slideDown} 0.4s ease-out;
@@ -96,7 +105,7 @@ const slideUp = keyframes`
 
 const LowerBlock = styled.div`
   height: 100%;
-  height: 374px;
+  height: 340px;
   background: rgba(255, 255, 255, 0.2);
   z-index: 2;  
   animation: ${slideUp} 0.4s ease-out;
@@ -155,7 +164,7 @@ const TopicWrapper = styled.div`
   height: 200px;
   width: 200px;
   border-radius: 50%;
-  margin: -90 384;
+  margin: -90 325;
   background: linear-gradient(
     to right,
     #ae259e,
@@ -177,7 +186,7 @@ const TopicImage = styled.img`
 const Player1Wrapper = styled.div`
   position: absolute;
   height: 180px;
-  margin: 100 200;
+  margin: 60 200;
   display: flex;
   z-index: 5;
 `;
@@ -187,7 +196,7 @@ const Player2Wrapper = styled.div`
   height: 180px;
   z-index: 5;
   display: flex;
-  margin: 150 0 0 300;
+  margin: 140 0 0 250;
   text-align: right;
 `;
 

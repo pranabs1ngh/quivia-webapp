@@ -46,17 +46,16 @@ export default connect(mapStateToProps)(ResultScreen);
 // STYLED COMPONENTS
 
 const Wrapper = styled.div`
-  height: 768px;
-  width: 956px;
+  height: 700px;
+  width: 850px;
   border-radius: 30px;
   font-family: 'Varela Round', sans-serif;
   color: white;
   background: linear-gradient(
     to left bottom,
-    #f50057,
-    #ff1744,
-    #f44336,
-    #ff6f00
+    #4a148c,
+    #9c27b0,
+    #e91e63
   );
   display: flex;
   flex-direction: column;
@@ -64,8 +63,8 @@ const Wrapper = styled.div`
 
 const ResultWrapper = styled.div`
   margin: auto;
-  height: 80%;
-  width: 70%;
+  height: 95%;
+  width: 95%;
   border-radius: 30px;
   background: rgb(255, 255, 255, 0.3);
   display: flex;
@@ -93,7 +92,7 @@ const UpperPart = styled.div`
 const Score1 = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
-  color: red;
+  color: #ff5722;
   margin: auto;
 `;
 
@@ -115,7 +114,7 @@ const MidText = styled.div`
   margin: auto;
   width: 50px;
   text-align: center;
-  color: grey;
+  color: #e0e0e0;
 `;
 
 const Player2Wrapper = styled.div`
@@ -129,7 +128,7 @@ const DisplayImage1 = styled.img`
   width: 120px;
   object-fit: cover;
   border-radius: 50%;
-  border: 5px solid #ff1744;
+  border: 5px solid #ff5722;
 `;
 
 const DisplayImage2 = styled.img`
@@ -144,7 +143,7 @@ const PlayerName1 = styled.div`
   font-size: 1.5rem;
   margin-top: 20;
   font-weight: bold;
-  color: #ff1744;
+  color: #ff5722;
 `;
 
 const PlayerName2 = styled.div`

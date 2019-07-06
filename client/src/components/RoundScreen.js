@@ -20,8 +20,8 @@ export default props => {
 // STYLED COMPONENTS
 
 const Wrapper = styled.div`
-  height: 768px;
-  width: 956px;
+  height: 700px;
+  width: 850px;
   border-radius: 30px;
   font-family: 'Varela Round', sans-serif;
   color: white;

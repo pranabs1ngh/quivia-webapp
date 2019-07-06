@@ -18,14 +18,12 @@ class Home extends React.Component {
     }
   }
 
-  topicCards = (topicName, topicNo) => {
-    return (
-      <TopicCard onClick={() => this.onCardClick(topicNo, topicName)} key={topicNo}>
-        <TopicImg src={`/img/topic-${topicNo}.png`}></TopicImg>
-        <TopicTitle>{topicName}</TopicTitle>
-      </TopicCard>
-    );
-  }
+  topicCards = (topicName, topicNo) => (
+    <TopicCard onClick={() => this.onCardClick(topicNo, topicName)} key={topicNo}>
+      <TopicImg src={`/img/topic-${topicNo}.png`}></TopicImg>
+      <TopicTitle>{topicName}</TopicTitle>
+    </TopicCard>
+  )
 
   onCardClick = (key, topic) => {
     this.props.storeGameData({ key, topic, socketRoomID: null });
