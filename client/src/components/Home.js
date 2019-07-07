@@ -26,7 +26,7 @@ class Home extends React.Component {
   )
 
   onCardClick = (key, topic) => {
-    this.props.storeGameData({ key, topic, socketRoomID: null });
+    this.props.storeGameData({ key, topic, round: 0, socketRoomID: null });
     this.props.history.push('/gameplay');
   };
 

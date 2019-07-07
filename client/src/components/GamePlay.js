@@ -7,17 +7,17 @@ import { storeGameData, storePlayersData, storeQuestions } from '../actions'
 
 import OpponentSearchScreen from './OpponentSearchScreen'
 import PvPScreen from './PvPScreen'
-// import RoundScreen from './RoundScreen'
-// import ResultScreen from './ResultScreen'
-// import QuestionScreen from './QuestionScreen'
+import RoundScreen from './RoundScreen'
+import QuestionScreen from './QuestionScreen'
+import ResultScreen from './ResultScreen'
 
 class GamePlay extends React.Component {
 
   state = {
     searchScreen: false,
     playersScreen: false,
-    quizScreen: false,
-    resultScreen: false
+    roundScreen: false,
+    questionScreen: false
   }
 
   socketURL = 'http://localhost:5000/';
@@ -52,7 +52,7 @@ class GamePlay extends React.Component {
   }
 
   searchForOpponent = () => {
-    const { key, topic } = this.props.game;
+    const { key, topic, round } = this.props.game;
     const { name, title, level, displayImage } = this.props.user;
 
     const socket = this.socket;
@@ -62,7 +62,7 @@ class GamePlay extends React.Component {
     socket.on('room_found', roomID => {
       const player2 = { name, title, level, displayImage }
       socket.emit('join', { roomID, player2 });
-      this.props.storeGameData({ key, topic, socketRoomID: roomID });
+      this.props.storeGameData({ key, topic, round, socketRoomID: roomID });
     })
 
     socket.on('room_not_found', () => {
@@ -76,7 +76,7 @@ class GamePlay extends React.Component {
         length: 1
       };
       socket.emit('create_room', room);
-      this.props.storeGameData({ key, topic, socketRoomID: room.id });
+      this.props.storeGameData({ key, topic, round, socketRoomID: room.id });
       this.waitForOpponent();
     })
 
@@ -88,9 +88,14 @@ class GamePlay extends React.Component {
     })
   }
 
-  changeDisplay = key => {
-    this.setState({ [key]: true });
+  updateRound = () => {
+    let { key, topic, round, socketRoomID } = this.props.game;
+    round += 1;
+    this.props.storeGameData({ key, topic, round, socketRoomID });
+    this.setState({ roundScreen: false });
   }
+
+  changeDisplay = key => { this.setState({ [key]: true }) }
 
   componentWillMount = () => {
     if (!this.props.game) this.props.history.push('/');
@@ -99,11 +104,16 @@ class GamePlay extends React.Component {
 
   render = () => {
     if (!this.state.searchScreen) return <OpponentSearchScreen />
-    else if (!this.state.playersScreen) return <PvPScreen updateScreen={this.changeDisplay} />
-    else return <div>Gameplay</div>
-    // return <RoundScreen topicKey='12' topicName='Music' round='6' />
-    // return <QuestionScreen />
-    // return <ResultScreen />;
+    else if (!this.state.playersScreen) return <PvPScreen updateScreen={this.changeDisplay} updateRound={this.updateRound} />
+    else if (!this.state.roundScreen)
+      return <RoundScreen
+        topicKey={this.props.game.key}
+        topicName={this.props.game.topic}
+        round={this.props.game.round}
+        updateScreen={this.changeDisplay}
+      />
+    else if (!this.state.questionScreen) return <QuestionScreen />
+    else return <ResultScreen />;
   }
 };
 

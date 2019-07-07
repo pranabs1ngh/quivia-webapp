@@ -1,11 +1,9 @@
 // REDUX REDUCERS
 import { combineReducers } from 'redux';
-import userReducer from './userReducer';
-import { storeGameData, storeSocket, storePlayersData, storeQuestions } from './storageReducers';
+import { storeUserData, storeGameData, storePlayersData, storeQuestions } from './storageReducers';
 
 export default combineReducers({
-  user: userReducer,
-  socket: storeSocket,
+  user: storeUserData,
   game: storeGameData,
   players: storePlayersData,
   questions: storeQuestions

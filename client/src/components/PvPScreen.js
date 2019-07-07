@@ -4,7 +4,10 @@ import styled, { keyframes } from 'styled-components';
 
 class PVPComponent extends React.Component {
   componentDidMount = () => {
-    setTimeout(() => { this.props.updateScreen('playersScreen') }, 5000)
+    setTimeout(() => {
+      this.props.updateScreen('playersScreen');
+      this.props.updateRound();
+    }, 5000)
   }
 
   render = () => (

@@ -1,16 +1,16 @@
-export const storeGameData = (state = null, { type, payload }) => {
+export const storeUserData = (state = { user: null }, { type, payload }) => {
   switch (type) {
-    case 'STORE_GAME_NAME':
-      return payload;
+    case 'FETCH_USER':
+      return payload
 
     default:
-      return state;
+      return state
   }
 }
 
-export const storeSocket = (state = null, { type, payload }) => {
+export const storeGameData = (state = null, { type, payload }) => {
   switch (type) {
-    case 'STORE_SOCKET':
+    case 'STORE_GAME_NAME':
       return payload;
 
     default:

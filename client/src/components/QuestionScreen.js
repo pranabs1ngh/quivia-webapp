@@ -30,6 +30,21 @@ class QuestionScreen extends React.Component {
     }, 1000);
   }
 
+  arrangeOptions = (correctAns, incorrectAns) => {
+    let answers = ['', '', '', ''];
+    const random = Math.round(Math.random() * 4);
+    answers[random] = correctAns;
+    let pointer = 0;
+    incorrectAns.forEach(element => {
+      if (pointer === random) pointer++;
+      answers[pointer] = element;
+      pointer++;
+    });
+
+    this.setState({ answers })
+    this.setState({ correctAns: random });
+  }
+
   answerDisplayStatus = key => {
     if (this.state.showCorrectAnswer) {
       if (key === this.state.correctAns) return 'flex'
@@ -38,35 +53,39 @@ class QuestionScreen extends React.Component {
     return 'flex'
   }
 
+  handleClick = key => {
+    const playerScore = (key === this.state.correctAns) ? this.state.playerScore + 10 + this.state.timeLeft : 0;
+    this.setState({
+      selectedAnswer: key,
+      sectionCover: 'block',
+      answered: true,
+      playerScore
+    });
+  }
+
+  returnColors = type => {
+    switch (type) {
+      case 'correct':
+        return { bg1: '#00e676', bg2: '#00c853', color: '#fff' }
+      case 'incorrect':
+        return { bg1: '#ff3d00', bg2: '#dd2c00', color: '#fff' }
+      default:
+        return { bg1: '#fff', bg2: '#eee', color: '#000' }
+    }
+  }
+
   answerBtn = (answer, key) => {
     const { selectedAnswer, oppAnswer, correctAns } = this.state;
-    let bg1, bg2, color;
+    let colors;
 
-    if (key === selectedAnswer && key === correctAns) {
-      bg1 = '#00e676';
-      bg2 = '#00c853';
-      color = '#fff';
-    } else if (key === selectedAnswer && key !== correctAns) {
-      bg1 = '#ff3d00';
-      bg2 = '#dd2c00';
-      color = '#fff';
-    } else if (key === oppAnswer && key === correctAns) {
-      bg1 = '#00e676';
-      bg2 = '#00c853';
-      color = '#fff';
-    } else if (key === oppAnswer && key !== correctAns) {
-      bg1 = '#ff3d00';
-      bg2 = '#dd2c00';
-      color = '#fff';
-    } else if (this.state.showCorrectAnswer) {
-      bg1 = '#00e676';
-      bg2 = '#00c853';
-      color = '#fff';
-    } else {
-      bg1 = '#fff';
-      bg2 = '#eee';
-      color = '#000';
-    }
+    if (key === selectedAnswer && key === correctAns) colors = this.returnColors('correct')
+    else if (key === selectedAnswer && key !== correctAns) colors = this.returnColors('incorrect')
+    else if (key === oppAnswer && key === correctAns) colors = this.returnColors('correct')
+    else if (key === oppAnswer && key !== correctAns) colors = this.returnColors('incorrect')
+    else if (this.state.showCorrectAnswer) colors = this.returnColors('correct')
+    else colors = this.returnColors()
+
+    const { bg1, bg2, color } = colors;
 
     return (
       <AnswerWrapper
@@ -84,19 +103,12 @@ class QuestionScreen extends React.Component {
     )
   }
 
-  handleClick = key => {
-    const playerScore = (key === this.state.correctAns) ? this.state.playerScore + 10 + this.state.timeLeft : 0;
-    this.setState({
-      selectedAnswer: key,
-      sectionCover: 'block',
-      answered: true,
-      playerScore
-    });
-  }
-
   showCorrectAnswer = () => { this.setState({ showCorrectAnswer: true }) }
 
   componentWillMount = () => {
+    const { question, correct_answer, incorrect_answers } = this.props.questions[this.props.game.round];
+    this.setState({ question });
+    this.arrangeOptions(correct_answer, incorrect_answers);
     setTimeout(() => {
       this.setState({ displayAns: 'flex' });
       this.timer();
@@ -107,14 +119,14 @@ class QuestionScreen extends React.Component {
     <Wrapper>
       <QuestionSection>
         <Header>
-          <Player2Wrapper>
-            <DisplayImage src='https://www.nicepng.com/png/detail/186-1866063_dicks-out-for-harambe-sample-avatar.png'></DisplayImage>
+          <Player1Wrapper>
+            <DisplayImage src={this.props.player_1.displayImage}></DisplayImage>
             <PlayerDataWrapper>
-              <PlayerName>Pranab Singh</PlayerName>
-              <PlayerTitle>Freshman</PlayerTitle>
+              <PlayerName>{this.props.player_1.name}</PlayerName>
+              <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
               <Score>{this.state.playerScore}</Score>
             </PlayerDataWrapper>
-          </Player2Wrapper>
+          </Player1Wrapper>
           <Timer>
             <CircularProgressbar
               value={this.state.timeLeft * 10}
@@ -128,14 +140,14 @@ class QuestionScreen extends React.Component {
               })}
             />
           </Timer>
-          <Player1Wrapper>
+          <Player2Wrapper>
             <PlayerDataWrapper>
-              <PlayerName>Tushar Maharana</PlayerName>
-              <PlayerTitle>Warrior</PlayerTitle>
-              <Score>125</Score>
+              <PlayerName>{this.props.player_2.name}</PlayerName>
+              <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
+              <Score>{this.state.opponentScore}</Score>
             </PlayerDataWrapper>
-            <DisplayImage src='https://www.nicepng.com/png/detail/186-1866063_dicks-out-for-harambe-sample-avatar.png'></DisplayImage>
-          </Player1Wrapper>
+            <DisplayImage src={this.props.player_2.displayImage}></DisplayImage>
+          </Player2Wrapper>
         </Header>
         <Question>{this.state.question}</Question>
       </QuestionSection>
@@ -147,8 +159,11 @@ class QuestionScreen extends React.Component {
   )
 }
 
-const mapStateToProps = () => ({
-  //
+const mapStateToProps = state => ({
+  game: state.game,
+  player_1: state.players.player_1,
+  player_2: state.players.player_2,
+  questions: state.questions
 })
 
 export default connect(mapStateToProps)(QuestionScreen)
@@ -185,14 +200,14 @@ const Header = styled.div`
   justify-content: space-between;
 `;
 
-const Player2Wrapper = styled.div`
+const Player1Wrapper = styled.div`
   width: 300px;
   display: flex;
   text-align: left;
   justify-content: flex-start;
 `;
 
-const Player1Wrapper = styled.div`
+const Player2Wrapper = styled.div`
   width: 300px;
   display: flex;
   text-align: right;

@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 export default props => {
-  console.log(props);
+
+  setTimeout(() => { props.updateScreen('roundScreen') }, 1500)
+
   return (
     <Wrapper>
       <RoundInfo>
