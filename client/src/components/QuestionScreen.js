@@ -1,22 +1,25 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import styled, { keyframes } from 'styled-components';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import "react-circular-progressbar/dist/styles.css";
+import React from 'react'
+import { connect } from 'react-redux'
+import styled, { keyframes } from 'styled-components'
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
+import "react-circular-progressbar/dist/styles.css"
+import { storePlayersData } from '../actions'
 
 class QuestionScreen extends React.Component {
   state = {
     currentRound: 0,
     displayAns: 'none',
     sectionCover: 'none',
-    question: 'What is your name?',
-    answers: ['Pranab', 'Ravik', 'Anish', 'Sushant'],
-    correctAns: 0,
+    question: '',
+    answers: [],
+    correctAns: null,
     selectedAnswer: null,
-    oppAnswer: null,
     playerScore: 0,
-    opponentScore: 0,
+    oppAnswer: null,
+    oppAnswerSt: null,
+    oppScore: 0,
     answered: false,
+    numOfPlayersAns: null,
     showCorrectAnswer: false,
     timeLeft: 10
   }
@@ -26,16 +29,85 @@ class QuestionScreen extends React.Component {
       if (this.state.timeLeft > 0 && !this.state.answered) {
         this.setState({ timeLeft: this.state.timeLeft - 1 });
         this.timer();
-      } else this.showCorrectAnswer();
+      } else if (this.state.timeLeft === 0) this.showAnswers();
     }, 1000);
+  }
+
+  botAnswer = () => {
+    const time = Math.round(Math.random() * 4) + 3;
+    setTimeout(() => {
+      const random = Math.round(Math.random() * 10);
+      const numOfPlayersAns = this.state.numOfPlayersAns + 1;
+
+      let ans, score;
+      if (random >= 5) {
+        ans = this.state.correctAns;
+        score = this.state.oppScore + 10 + time;
+      } else {
+        ans = Math.round(Math.random() * 4);
+        if (ans === this.state.correctAns) score = this.state.oppScore + 10 + time;
+        else score = this.state.oppScore;
+      }
+
+      this.setState({ oppAnswerSt: ans, oppScore: score, numOfPlayersAns })
+      this.showAnswers();
+    }, time * 1000);
+  }
+
+  sendAnswer = () => {
+    const socket = this.props.socket;
+    const { selectedAnswer, playerScore } = this.state;
+    socket.emit('answered', ({ selectedAnswer, playerScore }));
+  }
+
+  receiveAnswer = () => {
+    const socket = this.props.socket;
+    socket.on('receiveAnswer', ({ selectedAnswer, playerScore }) => {
+      const num = this.state.numOfPlayersAns + 1;
+      this.setState({ oppAnswerSt: selectedAnswer, numOfPlayersAns: num, oppScore: playerScore });
+      this.showAnswers();
+    })
+  }
+
+  showAnswers = () => {
+    console.log(this.state.numOfPlayersAns);
+    if (this.state.numOfPlayersAns === 2) {
+      this.setState({ oppAnswer: this.state.oppAnswerSt });
+      setTimeout(() => {
+        this.setState({ showCorrectAnswer: true });
+        this.renderNextScreen();
+      }, 500);
+    }
+  }
+
+  decodeEscapeChars = key => {
+    key = key.replace('&quot;', '"');
+    key = key.replace('&quot;', '"');
+    key = key.replace('&ldquo;', '"');
+    key = key.replace('&ldquo;', '"');
+    key = key.replace('&rdquo;', '"');
+    key = key.replace('&rdquo;', '"');
+    key = key.replace('&#039;', "'");
+    key = key.replace('&#039;', "'");
+    key = key.replace('&oacute;', 'Ó');
+    key = key.replace('&uuml;', 'Ü');
+    key = key.replace('&aring;', 'Å');
+    key = key.replace('&ouml;', 'Ö');
+    key = key.replace('&auml;', 'Ä');
+    return key;
   }
 
   arrangeOptions = (correctAns, incorrectAns) => {
     let answers = ['', '', '', ''];
-    const random = Math.round(Math.random() * 4);
+    let random = Math.round(Math.random() * 4);
+    if (random === 4) random--;
+
+    correctAns = this.decodeEscapeChars(correctAns);
     answers[random] = correctAns;
+
     let pointer = 0;
     incorrectAns.forEach(element => {
+      element = this.decodeEscapeChars(element);
       if (pointer === random) pointer++;
       answers[pointer] = element;
       pointer++;
@@ -45,22 +117,28 @@ class QuestionScreen extends React.Component {
     this.setState({ correctAns: random });
   }
 
-  answerDisplayStatus = key => {
+  answerVisibilityStatus = key => {
     if (this.state.showCorrectAnswer) {
-      if (key === this.state.correctAns) return 'flex'
-      else return 'none'
+      if (key === this.state.correctAns) return 'visible'
+      else return 'hidden'
     }
-    return 'flex'
+    return 'visible'
   }
 
   handleClick = key => {
     const playerScore = (key === this.state.correctAns) ? this.state.playerScore + 10 + this.state.timeLeft : 0;
+    const numOfPlayersAns = this.state.numOfPlayersAns + 1;
     this.setState({
       selectedAnswer: key,
       sectionCover: 'block',
       answered: true,
-      playerScore
+      playerScore,
+      numOfPlayersAns
     });
+
+    setTimeout(() => {
+      this.showAnswers();
+    }, 500);
   }
 
   returnColors = type => {
@@ -93,7 +171,7 @@ class QuestionScreen extends React.Component {
         key={key}
         bg1={bg1}
         color={color}
-        disp={this.answerDisplayStatus(key)}
+        vis={this.answerVisibilityStatus(key)}
       >
         <Player1Selected display={this.state.selectedAnswer === key ? 'block' : 'none'}></Player1Selected>
         <Index bg2={bg2}>{String.fromCharCode(key + 65)}</Index>
@@ -103,15 +181,27 @@ class QuestionScreen extends React.Component {
     )
   }
 
-  showCorrectAnswer = () => { this.setState({ showCorrectAnswer: true }) }
+  renderNextScreen = () => {
+    setTimeout(() => {
+      if (this.props.game.round === 6) this.props.updateScreen('questionScreen')
+      else this.props.updateRound();
+    }, 1000);
+  }
 
   componentWillMount = () => {
-    const { question, correct_answer, incorrect_answers } = this.props.questions[this.props.game.round];
-    this.setState({ question });
+    let { question, correct_answer, incorrect_answers } = this.props.questions[this.props.game.round];
+
+    question = this.decodeEscapeChars(question);
+    this.setState({ question, numOfPlayersAns: 0 });
+
     this.arrangeOptions(correct_answer, incorrect_answers);
+
     setTimeout(() => {
       this.setState({ displayAns: 'flex' });
       this.timer();
+
+      if (this.props.player_2.title === 'BOT') this.botAnswer();
+      else this.receiveAnswer();
     }, 2000)
   }
 
@@ -144,7 +234,7 @@ class QuestionScreen extends React.Component {
             <PlayerDataWrapper>
               <PlayerName>{this.props.player_2.name}</PlayerName>
               <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
-              <Score>{this.state.opponentScore}</Score>
+              <Score>{this.state.oppScore}</Score>
             </PlayerDataWrapper>
             <DisplayImage src={this.props.player_2.displayImage}></DisplayImage>
           </Player2Wrapper>
@@ -159,14 +249,17 @@ class QuestionScreen extends React.Component {
   )
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
   game: state.game,
+  socket: ownProps.socket,
+  updateRound: ownProps.updateRound,
+  updateScreen: ownProps.updateScreen,
   player_1: state.players.player_1,
   player_2: state.players.player_2,
   questions: state.questions
 })
 
-export default connect(mapStateToProps)(QuestionScreen)
+export default connect(mapStateToProps, { storePlayersData })(QuestionScreen)
 
 // STYLED COMPONENTS
 
@@ -256,7 +349,7 @@ const Timer = styled.div`
 const Question = styled.div`
   margin: 80 auto;
   width: 600px;
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
   text-align: center;
 `;
@@ -280,7 +373,7 @@ const AnswerWrapper = styled.div`
   background: ${props => props.bg1};
   border-radius: 15px;
   display: flex;
-  display: ${props => props.disp}
+  visibility: ${props => props.vis}
   animation: ${FadeIn} 1s ease-out;
   cursor: pointer;
   color: ${props => props.color};
@@ -316,7 +409,7 @@ const Answer = styled.div`
   margin: auto -70;
   width: 365px;
   text-align: center;
-  font-size: 1.3vw;
+  font-size: 1.5rem;
   font-weight: 600;
 `;
 

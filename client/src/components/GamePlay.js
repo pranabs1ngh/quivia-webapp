@@ -60,7 +60,7 @@ class GamePlay extends React.Component {
     socket.emit('search_room', topic);
 
     socket.on('room_found', roomID => {
-      const player2 = { name, title, level, displayImage }
+      const player2 = { name, title, level, displayImage, score: 0 }
       socket.emit('join', { roomID, player2 });
       this.props.storeGameData({ key, topic, round, socketRoomID: roomID });
     })
@@ -69,7 +69,7 @@ class GamePlay extends React.Component {
       const room = {
         id: topic + '_' + unique(),
         key,
-        player_1: { name, title, level, displayImage },
+        player_1: { name, title, level, displayImage, score: 0 },
         player_2: null,
         player_1_socketID: null,
         player_2_socketID: null,
@@ -112,7 +112,12 @@ class GamePlay extends React.Component {
         round={this.props.game.round}
         updateScreen={this.changeDisplay}
       />
-    else if (!this.state.questionScreen) return <QuestionScreen />
+    else if (!this.state.questionScreen)
+      return <QuestionScreen
+        socket={this.socket}
+        updateScreen={this.updateScreen}
+        updateRound={this.updateRound}
+      />
     else return <ResultScreen />;
   }
 };
