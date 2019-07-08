@@ -41,7 +41,6 @@ class QuestionScreen extends React.Component {
     setTimeout(() => {
       const random = Math.round(Math.random() * 10);
       const numOfPlayersAns = this.state.numOfPlayersAns + 1;
-      console.log(random);
 
       let ans, oppScore;
       if (random > 5) {
@@ -88,40 +87,48 @@ class QuestionScreen extends React.Component {
     }
   }
 
+  replaceAll = str => {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
   decodeEscapeChars = key => {
     // APOSTROPHES
-    key = key.replace('&quot;', '"');
-    key = key.replace('&quot;', '"');
-    key = key.replace('&ldquo;', '"');
-    key = key.replace('&ldquo;', '"');
-    key = key.replace('&rdquo;', '"');
-    key = key.replace('&rdquo;', '"');
-    key = key.replace('&rsquo;', "'");
-    key = key.replace('&lsquo;', "'");
-    key = key.replace('&#039;', "'");
-    key = key.replace('&#039;', "'");
+    key = key.replace(new RegExp(this.replaceAll('&quot;'), 'g'), '"');
+    key = key.replace(new RegExp(this.replaceAll('&ldquo;'), 'g'), '"');
+    key = key.replace(new RegExp(this.replaceAll('&rdquo;'), 'g'), '"');
+    key = key.replace(new RegExp(this.replaceAll('&rsquo;'), 'g'), "'");
+    key = key.replace(new RegExp(this.replaceAll('&lsquo;'), 'g'), "'");
+    key = key.replace(new RegExp(this.replaceAll('&#039;'), 'g'), "'");
+
     // MATHEMATICAL SYMBOLS
-    key = key.replace('&pi;', 'π');
-    key = key.replace('&Delta;', 'Δ');
+    key = key.replace(new RegExp(this.replaceAll('&pi;'), 'g'), "π");
+    key = key.replace(new RegExp(this.replaceAll('&Delta;'), 'g'), "Δ");
 
     // LATIN ACUTE VOWELS
-    key = key.replace('&aacute;', 'á');
-    key = key.replace('&eacute;', 'é');
-    key = key.replace('&iacute;', 'í');
-    key = key.replace('&oacute;', 'ó');
-    key = key.replace('&uacute;', 'ú');
+    key = key.replace(new RegExp(this.replaceAll('&aacute;'), 'g'), "á");
+    key = key.replace(new RegExp(this.replaceAll('&Eacute;'), 'g'), "É");
+    key = key.replace(new RegExp(this.replaceAll('&eacute;'), 'g'), "é");
+    key = key.replace(new RegExp(this.replaceAll('&iacute;'), 'g'), "í");
+    key = key.replace(new RegExp(this.replaceAll('&oacute;'), 'g'), "ó");
+    key = key.replace(new RegExp(this.replaceAll('&uacute;'), 'g'), "ú");
     // LATIN DIAERESIS LETTERS
-    key = key.replace('&auml;', 'ä');
-    key = key.replace('&euml;', 'ë');
-    key = key.replace('&iuml;', 'ï');
-    key = key.replace('&ouml;', 'ö');
-    key = key.replace('&uuml;', 'ü');
+    key = key.replace(new RegExp(this.replaceAll('&auml;'), 'g'), "ä");
+    key = key.replace(new RegExp(this.replaceAll('&euml;'), 'g'), "ë");
+    key = key.replace(new RegExp(this.replaceAll('&iuml;'), 'g'), "ï");
+    key = key.replace(new RegExp(this.replaceAll('&ouml;'), 'g'), "ö");
+    key = key.replace(new RegExp(this.replaceAll('&uuml;'), 'g'), "ü");
     // LATIN RING LETTERS
-    key = key.replace('&aring;', 'å');
-    key = key.replace('&ering;', 'e̊');
-    key = key.replace('&iring;', 'i̊');
-    key = key.replace('&oring;', 'o̊');
-    key = key.replace('&uring;', 'ů');
+    key = key.replace(new RegExp(this.replaceAll('&aring;'), 'g'), "å");
+    key = key.replace(new RegExp(this.replaceAll('&ering;'), 'g'), "e̊");
+    key = key.replace(new RegExp(this.replaceAll('&iring;'), 'g'), "i̊");
+    key = key.replace(new RegExp(this.replaceAll('&oring;'), 'g'), "o̊");
+    key = key.replace(new RegExp(this.replaceAll('&uring;'), 'g'), "ů");
+    // LATIN CICUMFLEX LETTERS
+    key = key.replace(new RegExp(this.replaceAll('&acirc;'), 'g'), "â");
+    key = key.replace(new RegExp(this.replaceAll('&ecirc;'), 'g'), "ê");
+    key = key.replace(new RegExp(this.replaceAll('&icirc;'), 'g'), "î");
+    key = key.replace(new RegExp(this.replaceAll('&ocirc;'), 'g'), "ô");
+    key = key.replace(new RegExp(this.replaceAll('&ucirc;'), 'g'), "û");
     return key;
   }
 
@@ -225,13 +232,12 @@ class QuestionScreen extends React.Component {
 
   componentWillMount = () => {
     let { question, correct_answer, incorrect_answers } = this.props.questions[this.props.game.round - 1];
-
     question = this.decodeEscapeChars(question);
+    this.arrangeOptions(correct_answer, incorrect_answers);
+
     const playerScore = this.props.player_1.score;
     const oppScore = this.props.player_2.score;
     this.setState({ question, playerScore, oppScore, numOfPlayersAns: 0 });
-
-    this.arrangeOptions(correct_answer, incorrect_answers);
 
     setTimeout(() => {
       this.setState({ displayAns: 'flex' });
