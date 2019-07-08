@@ -3,42 +3,69 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 class ResultScreen extends React.Component {
+  state = {
+    result: null,
+    player_1_color: null,
+    player_2_color: null
+  }
+
+  rematch = () => {
+    if (this.props.player_2.title !== 'BOT')
+      this.props.socket.emit('rematch', this.props.player_2.socketID);
+    this.props.rematch(true);
+  }
+
+  componentDidMount = () => {
+    this.props.socket.on('rematch', () => { this.props.rematch(false) });
+  }
+
+  componentWillMount = () => {
+    if (this.props.score1 > this.props.score2)
+      this.setState({ result: 'YOU WIN', player_1_color: '#00e676', player_2_color: '#ff5722' })
+    else if (this.props.score1 < this.props.score2)
+      this.setState({ result: 'YOU LOSE', player_1_color: '#ff5722', player_2_color: '#00e676' })
+    else
+      this.setState({ result: 'MATCH DRAW', player_1_color: '#00e676', player_2_color: '#00e676' })
+  }
+
   render = () => (
     <Wrapper>
-      <ResultWrapper>
-        <Result> YOU WIN </Result>
-        <PlayerData>
-          <Player1Wrapper>
-            <UpperPart>
-              <Score1>100</Score1>
-              <DisplayImage1 src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'></DisplayImage1>
-            </UpperPart>
-            <PlayerName1>Pranab Singh</PlayerName1>
-            <PlayerTitle>Freshman</PlayerTitle>
-            <PlayerLevel>Level 5</PlayerLevel>
-          </Player1Wrapper>
-          <MidText>VS</MidText>
-          <Player2Wrapper>
-            <UpperPart>
-              <DisplayImage2 src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'></DisplayImage2>
-              <Score2>120</Score2>
-            </UpperPart>
-            <PlayerName2>Tushar Maharana</PlayerName2>
-            <PlayerTitle>Warrior</PlayerTitle>
-            <PlayerLevel>Level 10</PlayerLevel>
-          </Player2Wrapper>
-        </PlayerData>
+      <Result>{this.state.result}</Result>
+      <PlayerData>
+        <Player1Wrapper>
+          <UpperPart>
+            <Score1 color={this.state.player_1_color} >{this.props.score1}</Score1>
+            <DisplayImage1 src={this.props.player_1.displayImage} color={this.state.player_1_color}></DisplayImage1>
+          </UpperPart>
+          <Player1Name color={this.state.player_1_color}>{this.props.player_1.name}</Player1Name>
+          <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
+          <PlayerLevel>Level {this.props.player_1.level}</PlayerLevel>
+        </Player1Wrapper>
+        <MidText>VS</MidText>
+        <Player2Wrapper>
+          <UpperPart>
+            <DisplayImage2 src={this.props.player_2.displayImage} color={this.state.player_2_color}></DisplayImage2>
+            <Score2 color={this.state.player_2_color}>{this.props.score2}</Score2>
+          </UpperPart>
+          <Player2Name color={this.state.player_2_color}>{this.props.player_2.name}</Player2Name>
+          <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
+          <PlayerLevel>Level {this.props.player_2.level}</PlayerLevel>
+        </Player2Wrapper>
+      </PlayerData>
 
-        <Button>Rematch</Button>
-        <Button>Another Game</Button>
-      </ResultWrapper>
+      <Button onClick={this.rematch}>Rematch</Button>
+      <Button>Another Game</Button>
     </Wrapper>
   )
 }
 
-const mapStateToProps = state => ({
-  // player_1: state.players.player_1,
-  // player_2: state.players.player_1
+const mapStateToProps = (state, ownProps) => ({
+  socket: ownProps.socket,
+  score1: ownProps.score1,
+  score2: ownProps.score2,
+  player_1: state.players.player_1,
+  player_2: state.players.player_2,
+  rematch: ownProps.rematch
 });
 
 export default connect(mapStateToProps)(ResultScreen);
@@ -46,29 +73,15 @@ export default connect(mapStateToProps)(ResultScreen);
 // STYLED COMPONENTS
 
 const Wrapper = styled.div`
+  margin: auto;
   height: 700px;
   width: 850px;
   border-radius: 30px;
+  background-image: linear-gradient(to left bottom, #4a148c, #880e4f );
+  display: flex;
+  flex-direction: column;
   font-family: 'Varela Round', sans-serif;
   color: white;
-  background: linear-gradient(
-    to left bottom,
-    #4a148c,
-    #9c27b0,
-    #e91e63
-  );
-  display: flex;
-  flex-direction: column;
-`;
-
-const ResultWrapper = styled.div`
-  margin: auto;
-  height: 95%;
-  width: 95%;
-  border-radius: 30px;
-  background: rgb(255, 255, 255, 0.3);
-  display: flex;
-  flex-direction: column;
 `;
 
 const Result = styled.div`
@@ -77,6 +90,9 @@ const Result = styled.div`
   font-weight: 800;
   color: #fff;
   margin: 20 auto;
+  background-image: linear-gradient(45deg, #FA8BFF 0%, #2BD2FF 52%, #2BFF88 90%);
+  -webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
 `;
 
 const PlayerData = styled.div`
@@ -92,14 +108,14 @@ const UpperPart = styled.div`
 const Score1 = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
-  color: #ff5722;
+  color: ${props => props.color};
   margin: auto;
 `;
 
 const Score2 = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
-  color: #00e676;
+  color: ${props => props.color};
   margin: auto;
 `;
 
@@ -128,7 +144,7 @@ const DisplayImage1 = styled.img`
   width: 120px;
   object-fit: cover;
   border-radius: 50%;
-  border: 5px solid #ff5722;
+  border: 5px solid ${props => props.color};
 `;
 
 const DisplayImage2 = styled.img`
@@ -136,21 +152,21 @@ const DisplayImage2 = styled.img`
   width: 120px;
   object-fit: cover;
   border-radius: 50%;
-  border: 5px solid #00e676;
+  border: 5px solid ${props => props.color};
 `;
 
-const PlayerName1 = styled.div`
+const Player1Name = styled.div`
   font-size: 1.5rem;
   margin-top: 20;
   font-weight: bold;
-  color: #ff5722;
+  color: ${props => props.color};
 `;
 
-const PlayerName2 = styled.div`
+const Player2Name = styled.div`
   font-size: 1.5rem;
   margin-top: 20;
   font-weight: bold;
-  color: #00e676;
+  color: ${props => props.color};
 `;
 
 const PlayerTitle = styled.div`

@@ -51,7 +51,6 @@ class GamePlay extends React.Component {
       const q = questions.results.map(({ question, correct_answer, incorrect_answers }) =>
         ({ question, correct_answer, incorrect_answers }));
       this.props.storeQuestions(q);
-      if (this.props.players.player_2.title === 'BOT') this.socket.disconnect();
     })
   }
 
@@ -103,6 +102,21 @@ class GamePlay extends React.Component {
 
   updateCorrAns = () => { this.setState({ numOfCorrAns: this.state.numOfCorrAns + 1 }) }
 
+  rematch = send => {
+    this.getQuestions(send);
+    this.setState({
+      player_1_score: 0,
+      player_2_score: 0,
+      numOfCorrAns: 0,
+      playersScreen: false,
+      roundScreen: false,
+      questionScreen: false
+    });
+    let { key, topic, round, socketRoomID } = this.props.game;
+    round = 0;
+    this.props.storeGameData({ key, topic, round, socketRoomID });
+  }
+
   componentWillMount = () => {
     if (!this.props.game) this.props.history.push('/');
     if (this.props.game && !this.props.players) this.searchForOpponent();
@@ -128,7 +142,12 @@ class GamePlay extends React.Component {
         updateRound={this.updateRound}
         updateScreen={this.updateScreen}
       />
-    else return <ResultScreen />;
+    else return <ResultScreen
+      socket={this.socket}
+      score1={this.state.player_1_score}
+      score2={this.state.player_2_score}
+      rematch={this.rematch}
+    />;
   }
 };
 

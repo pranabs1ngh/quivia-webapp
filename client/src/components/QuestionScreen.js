@@ -30,6 +30,7 @@ class QuestionScreen extends React.Component {
         this.timer();
       } else if (this.state.timeLeft === 0 && this.state.numOfPlayersAns !== 2) {
         this.setState({ numOfPlayersAns: 2 });
+        if (this.props.player_2.title !== 'BOT') this.sendAnswer();
         this.showAnswers();
       }
     }, 1000);
@@ -58,17 +59,14 @@ class QuestionScreen extends React.Component {
   }
 
   sendAnswer = () => {
-    const socket = this.props.socket;
     let { selectedAnswer, playerScore } = this.state;
     selectedAnswer = this.state.answers[selectedAnswer];
     const socketID = this.props.player_2.socketID;
-    socket.emit('answered', ({ socketID, selectedAnswer, playerScore }));
+    this.props.socket.emit('answered', ({ socketID, selectedAnswer, playerScore }));
   }
 
   receiveAnswer = () => {
-    const socket = this.props.socket;
-    socket.on('oppAnswered', ({ selectedAnswer, playerScore }) => {
-      console.log('called');
+    this.props.socket.on('oppAnswered', ({ selectedAnswer, playerScore }) => {
       if (this._isMounted) {
         const num = this.state.numOfPlayersAns + 1;
 

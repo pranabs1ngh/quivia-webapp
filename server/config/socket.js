@@ -61,7 +61,11 @@ const socket = io => {
     })
 
     socket.on('answered', ({ socketID, selectedAnswer, playerScore }) => {
-      io.to(`${socketID}`).emit('oppAnswered', { selectedAnswer, playerScore });
+      io.to(socketID).emit('oppAnswered', { selectedAnswer, playerScore });
+    })
+
+    socket.on('rematch', socketID => {
+      io.to(socketID).emit('rematch');
     })
 
     socket.on('disconnect', () => {
