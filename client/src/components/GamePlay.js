@@ -14,6 +14,9 @@ import ResultScreen from './ResultScreen'
 class GamePlay extends React.Component {
 
   state = {
+    player_1_score: 0,
+    player_2_score: 0,
+    numOfCorrAns: 0,
     searchScreen: false,
     playersScreen: false,
     roundScreen: false,
@@ -61,7 +64,7 @@ class GamePlay extends React.Component {
     socket.emit('search_room', topic);
 
     socket.on('room_found', roomID => {
-      const player2 = { name, title, level, displayImage, score: 0, socketID: null }
+      const player2 = { name, title, level, displayImage, socketID: null }
       socket.emit('join', { roomID, player2 });
       this.props.storeGameData({ key, topic, round, socketRoomID: roomID });
     })
@@ -70,7 +73,7 @@ class GamePlay extends React.Component {
       const room = {
         id: topic + '_' + unique(),
         key,
-        player_1: { name, title, level, displayImage, score: 0, socketID: null },
+        player_1: { name, title, level, displayImage, socketID: null },
         player_2: null,
         length: 1
       };
@@ -96,6 +99,10 @@ class GamePlay extends React.Component {
 
   updateScreen = key => { this.setState({ [key]: true }) }
 
+  updateScore = (score1, score2) => { this.setState({ player_1_score: score1, player_2_score: score2 }) }
+
+  updateCorrAns = () => { this.setState({ numOfCorrAns: this.state.numOfCorrAns + 1 }) }
+
   componentWillMount = () => {
     if (!this.props.game) this.props.history.push('/');
     if (this.props.game && !this.props.players) this.searchForOpponent();
@@ -114,8 +121,12 @@ class GamePlay extends React.Component {
     else if (!this.state.questionScreen)
       return <QuestionScreen
         socket={this.socket}
-        updateScreen={this.updateScreen}
+        score1={this.state.player_1_score}
+        score2={this.state.player_2_score}
+        updateCorrAns={this.updateCorrAns}
+        updateScore={this.updateScore}
         updateRound={this.updateRound}
+        updateScreen={this.updateScreen}
       />
     else return <ResultScreen />;
   }

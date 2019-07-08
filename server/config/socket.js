@@ -47,8 +47,6 @@ const socket = io => {
       rooms[index].player_2 = player2;
       rooms[index].length++;
 
-      console.log(rooms[index]);
-
       const { player_1, player_2 } = rooms[index];
       io.to(roomID).emit('opponent_found', { player_1, player_2 });
 
@@ -62,8 +60,8 @@ const socket = io => {
       io.to(roomID).emit('receive_questions', questions);
     })
 
-    socket.on('answered', ({ selectedAnswer, playerScore }) => {
-
+    socket.on('answered', ({ socketID, selectedAnswer, playerScore }) => {
+      io.to(`${socketID}`).emit('oppAnswered', { selectedAnswer, playerScore });
     })
 
     socket.on('disconnect', () => {

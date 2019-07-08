@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import "react-circular-progressbar/dist/styles.css"
-import { storePlayersData } from '../actions'
 
 class QuestionScreen extends React.Component {
   state = {
@@ -29,7 +28,7 @@ class QuestionScreen extends React.Component {
       if (this.state.timeLeft > 0 && !this.state.answered) {
         this.setState({ timeLeft: this.state.timeLeft - 1 });
         this.timer();
-      } else if (this.state.timeLeft === 0) {
+      } else if (this.state.timeLeft === 0 && this.state.numOfPlayersAns !== 2) {
         this.setState({ numOfPlayersAns: 2 });
         this.showAnswers();
       }
@@ -53,27 +52,31 @@ class QuestionScreen extends React.Component {
       }
 
       this.setState({ oppAnswerSt: ans, oppScore, numOfPlayersAns });
-
-      let { name, title, level, displayImage, score } = this.props.player_2;
-      score = oppScore;
-      this.props.storePlayersData({ player_1: this.props.player_1, player_2: { name, title, level, displayImage, score } });
-
+      this.props.updateScore(this.state.playerScore, oppScore);
       this.showAnswers();
     }, time * 1000);
   }
 
   sendAnswer = () => {
     const socket = this.props.socket;
-    const { selectedAnswer, playerScore } = this.state;
-    socket.emit('answered', ({ selectedAnswer, playerScore }));
+    let { selectedAnswer, playerScore } = this.state;
+    selectedAnswer = this.state.answers[selectedAnswer];
+    const socketID = this.props.player_2.socketID;
+    socket.emit('answered', ({ socketID, selectedAnswer, playerScore }));
   }
 
   receiveAnswer = () => {
     const socket = this.props.socket;
-    socket.on('receiveAnswer', ({ selectedAnswer, playerScore }) => {
-      const num = this.state.numOfPlayersAns + 1;
-      this.setState({ oppAnswerSt: selectedAnswer, numOfPlayersAns: num, oppScore: playerScore });
-      this.showAnswers();
+    socket.on('oppAnswered', ({ selectedAnswer, playerScore }) => {
+      console.log('called');
+      if (this._isMounted) {
+        const num = this.state.numOfPlayersAns + 1;
+
+        selectedAnswer = this.state.answers.findIndex(ans => ans === selectedAnswer);
+        this.setState({ oppAnswerSt: selectedAnswer, numOfPlayersAns: num, oppScore: playerScore });
+        this.props.updateScore(this.state.playerScore, playerScore);
+        this.showAnswers();
+      }
     })
   }
 
@@ -99,6 +102,11 @@ class QuestionScreen extends React.Component {
     key = key.replace(new RegExp(this.replaceAll('&rsquo;'), 'g'), "'");
     key = key.replace(new RegExp(this.replaceAll('&lsquo;'), 'g'), "'");
     key = key.replace(new RegExp(this.replaceAll('&#039;'), 'g'), "'");
+
+    // EXTRAS
+    key = key.replace(new RegExp(this.replaceAll('&hellip;'), 'g'), "...");
+    key = key.replace(new RegExp(this.replaceAll('&amp;'), 'g'), "&");
+    key = key.replace(new RegExp(this.replaceAll('&shy;'), 'g'), "-");
 
     // MATHEMATICAL SYMBOLS
     key = key.replace(new RegExp(this.replaceAll('&pi;'), 'g'), "π");
@@ -171,11 +179,11 @@ class QuestionScreen extends React.Component {
       numOfPlayersAns
     });
 
-    let { name, title, level, displayImage, score } = this.props.player_1;
-    score = playerScore;
-    this.props.storePlayersData({ player_1: { name, title, level, displayImage, score }, player_2: this.props.player_2 })
+    if (key === this.state.correctAns) this.props.updateCorrAns();
+    this.props.updateScore(playerScore, this.state.oppScore);
 
     setTimeout(() => {
+      if (this.props.player_2.title !== 'BOT') this.sendAnswer();
       this.showAnswers();
     }, 500);
   }
@@ -231,12 +239,13 @@ class QuestionScreen extends React.Component {
   }
 
   componentWillMount = () => {
+    this._isMounted = true;
     let { question, correct_answer, incorrect_answers } = this.props.questions[this.props.game.round - 1];
     question = this.decodeEscapeChars(question);
     this.arrangeOptions(correct_answer, incorrect_answers);
 
-    const playerScore = this.props.player_1.score;
-    const oppScore = this.props.player_2.score;
+    const playerScore = this.props.score1;
+    const oppScore = this.props.score2;
     this.setState({ question, playerScore, oppScore, numOfPlayersAns: 0 });
 
     setTimeout(() => {
@@ -246,6 +255,10 @@ class QuestionScreen extends React.Component {
       if (this.props.player_2.title === 'BOT') this.botAnswer();
       else this.receiveAnswer();
     }, 2000)
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render = () => (
@@ -295,14 +308,18 @@ class QuestionScreen extends React.Component {
 const mapStateToProps = (state, ownProps) => ({
   game: state.game,
   socket: ownProps.socket,
-  updateRound: ownProps.updateRound,
+  score1: ownProps.score1,
+  score2: ownProps.score2,
+  updateCorrAns: ownProps.updateCorrAns,
   updateScreen: ownProps.updateScreen,
+  updateScore: ownProps.updateScore,
+  updateRound: ownProps.updateRound,
   player_1: state.players.player_1,
   player_2: state.players.player_2,
   questions: state.questions
 })
 
-export default connect(mapStateToProps, { storePlayersData })(QuestionScreen)
+export default connect(mapStateToProps)(QuestionScreen)
 
 // STYLED COMPONENTS
 
