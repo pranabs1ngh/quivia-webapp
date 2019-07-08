@@ -27,12 +27,13 @@ class GamePlay extends React.Component {
     setTimeout(() => {
       if (!this.props.players) {
         const { name, title, level, displayImage } = this.props.user;
-        const player_1 = { name, title, level, displayImage };
+        const player_1 = { name, title, level, displayImage, score: 0 };
         const player_2 = {
           name: faker.name.findName(),
           title: `BOT`,
+          level: Math.round(Math.random() * 20),
           displayImage: faker.image.avatar(),
-          level: Math.round(Math.random() * 20)
+          score: 0
         };
         this.props.storePlayersData({ player_1, player_2 });
         this.setState({ searchScreen: true });
@@ -95,7 +96,7 @@ class GamePlay extends React.Component {
     this.setState({ roundScreen: false });
   }
 
-  changeDisplay = key => { this.setState({ [key]: true }) }
+  updateScreen = key => { this.setState({ [key]: true }) }
 
   componentWillMount = () => {
     if (!this.props.game) this.props.history.push('/');
@@ -104,13 +105,13 @@ class GamePlay extends React.Component {
 
   render = () => {
     if (!this.state.searchScreen) return <OpponentSearchScreen />
-    else if (!this.state.playersScreen) return <PvPScreen updateScreen={this.changeDisplay} updateRound={this.updateRound} />
+    else if (!this.state.playersScreen) return <PvPScreen updateScreen={this.updateScreen} updateRound={this.updateRound} />
     else if (!this.state.roundScreen)
       return <RoundScreen
         topicKey={this.props.game.key}
         topicName={this.props.game.topic}
         round={this.props.game.round}
-        updateScreen={this.changeDisplay}
+        updateScreen={this.updateScreen}
       />
     else if (!this.state.questionScreen)
       return <QuestionScreen

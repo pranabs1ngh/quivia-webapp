@@ -29,7 +29,10 @@ class QuestionScreen extends React.Component {
       if (this.state.timeLeft > 0 && !this.state.answered) {
         this.setState({ timeLeft: this.state.timeLeft - 1 });
         this.timer();
-      } else if (this.state.timeLeft === 0) this.showAnswers();
+      } else if (this.state.timeLeft === 0) {
+        this.setState({ numOfPlayersAns: 2 });
+        this.showAnswers();
+      }
     }, 1000);
   }
 
@@ -38,18 +41,24 @@ class QuestionScreen extends React.Component {
     setTimeout(() => {
       const random = Math.round(Math.random() * 10);
       const numOfPlayersAns = this.state.numOfPlayersAns + 1;
+      console.log(random);
 
-      let ans, score;
-      if (random >= 5) {
+      let ans, oppScore;
+      if (random > 5) {
         ans = this.state.correctAns;
-        score = this.state.oppScore + 10 + time;
+        oppScore = this.state.oppScore + 10 + time;
       } else {
         ans = Math.round(Math.random() * 4);
-        if (ans === this.state.correctAns) score = this.state.oppScore + 10 + time;
-        else score = this.state.oppScore;
+        if (ans === this.state.correctAns) oppScore = this.state.oppScore + 10 + time;
+        else oppScore = this.state.oppScore;
       }
 
-      this.setState({ oppAnswerSt: ans, oppScore: score, numOfPlayersAns })
+      this.setState({ oppAnswerSt: ans, oppScore, numOfPlayersAns });
+
+      let { name, title, level, displayImage, score } = this.props.player_2;
+      score = oppScore;
+      this.props.storePlayersData({ player_1: this.props.player_1, player_2: { name, title, level, displayImage, score } });
+
       this.showAnswers();
     }, time * 1000);
   }
@@ -70,30 +79,49 @@ class QuestionScreen extends React.Component {
   }
 
   showAnswers = () => {
-    console.log(this.state.numOfPlayersAns);
     if (this.state.numOfPlayersAns === 2) {
       this.setState({ oppAnswer: this.state.oppAnswerSt });
       setTimeout(() => {
         this.setState({ showCorrectAnswer: true });
         this.renderNextScreen();
-      }, 500);
+      }, 1000);
     }
   }
 
   decodeEscapeChars = key => {
+    // APOSTROPHES
     key = key.replace('&quot;', '"');
     key = key.replace('&quot;', '"');
     key = key.replace('&ldquo;', '"');
     key = key.replace('&ldquo;', '"');
     key = key.replace('&rdquo;', '"');
     key = key.replace('&rdquo;', '"');
+    key = key.replace('&rsquo;', "'");
+    key = key.replace('&lsquo;', "'");
     key = key.replace('&#039;', "'");
     key = key.replace('&#039;', "'");
-    key = key.replace('&oacute;', 'Ó');
-    key = key.replace('&uuml;', 'Ü');
-    key = key.replace('&aring;', 'Å');
-    key = key.replace('&ouml;', 'Ö');
-    key = key.replace('&auml;', 'Ä');
+    // MATHEMATICAL SYMBOLS
+    key = key.replace('&pi;', 'π');
+    key = key.replace('&Delta;', 'Δ');
+
+    // LATIN ACUTE VOWELS
+    key = key.replace('&aacute;', 'á');
+    key = key.replace('&eacute;', 'é');
+    key = key.replace('&iacute;', 'í');
+    key = key.replace('&oacute;', 'ó');
+    key = key.replace('&uacute;', 'ú');
+    // LATIN DIAERESIS LETTERS
+    key = key.replace('&auml;', 'ä');
+    key = key.replace('&euml;', 'ë');
+    key = key.replace('&iuml;', 'ï');
+    key = key.replace('&ouml;', 'ö');
+    key = key.replace('&uuml;', 'ü');
+    // LATIN RING LETTERS
+    key = key.replace('&aring;', 'å');
+    key = key.replace('&ering;', 'e̊');
+    key = key.replace('&iring;', 'i̊');
+    key = key.replace('&oring;', 'o̊');
+    key = key.replace('&uring;', 'ů');
     return key;
   }
 
@@ -126,7 +154,7 @@ class QuestionScreen extends React.Component {
   }
 
   handleClick = key => {
-    const playerScore = (key === this.state.correctAns) ? this.state.playerScore + 10 + this.state.timeLeft : 0;
+    const playerScore = (key === this.state.correctAns) ? this.state.playerScore + 10 + this.state.timeLeft : this.state.playerScore;
     const numOfPlayersAns = this.state.numOfPlayersAns + 1;
     this.setState({
       selectedAnswer: key,
@@ -135,6 +163,10 @@ class QuestionScreen extends React.Component {
       playerScore,
       numOfPlayersAns
     });
+
+    let { name, title, level, displayImage, score } = this.props.player_1;
+    score = playerScore;
+    this.props.storePlayersData({ player_1: { name, title, level, displayImage, score }, player_2: this.props.player_2 })
 
     setTimeout(() => {
       this.showAnswers();
@@ -165,6 +197,9 @@ class QuestionScreen extends React.Component {
 
     const { bg1, bg2, color } = colors;
 
+    const len = answer.length;
+    const fontSize = len > 23 ? '1rem' : '1.4rem';
+
     return (
       <AnswerWrapper
         onClick={() => this.handleClick(key)}
@@ -175,7 +210,7 @@ class QuestionScreen extends React.Component {
       >
         <Player1Selected display={this.state.selectedAnswer === key ? 'block' : 'none'}></Player1Selected>
         <Index bg2={bg2}>{String.fromCharCode(key + 65)}</Index>
-        <Answer>{answer}</Answer>
+        <Answer fontSize={fontSize}>{answer}</Answer>
         <Player2Selected display={this.state.oppAnswer === key ? 'block' : 'none'}></Player2Selected>
       </AnswerWrapper>
     )
@@ -183,16 +218,18 @@ class QuestionScreen extends React.Component {
 
   renderNextScreen = () => {
     setTimeout(() => {
-      if (this.props.game.round === 6) this.props.updateScreen('questionScreen')
+      if (this.props.game.round === 7) this.props.updateScreen('questionScreen')
       else this.props.updateRound();
     }, 1000);
   }
 
   componentWillMount = () => {
-    let { question, correct_answer, incorrect_answers } = this.props.questions[this.props.game.round];
+    let { question, correct_answer, incorrect_answers } = this.props.questions[this.props.game.round - 1];
 
     question = this.decodeEscapeChars(question);
-    this.setState({ question, numOfPlayersAns: 0 });
+    const playerScore = this.props.player_1.score;
+    const oppScore = this.props.player_2.score;
+    this.setState({ question, playerScore, oppScore, numOfPlayersAns: 0 });
 
     this.arrangeOptions(correct_answer, incorrect_answers);
 
@@ -406,10 +443,10 @@ const Index = styled.div`
 `;
 
 const Answer = styled.div`
-  margin: auto -70;
-  width: 365px;
+  margin: auto -50;
+  width: 320px;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: ${props => props.fontSize};
   font-weight: 600;
 `;
 
