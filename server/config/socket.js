@@ -35,7 +35,7 @@ const socket = io => {
 
     socket.on('create_room', room => {
       socket.join(room.id);
-      room.player_1_socketID = socket.id;
+      room.player_1.socketID = socket.id;
       rooms.push(room);
     });
 
@@ -43,9 +43,11 @@ const socket = io => {
       socket.join(roomID);
 
       const index = findRoom(roomID);
+      player2.socketID = socket.id;
       rooms[index].player_2 = player2;
-      rooms[index].player_2_socketID = socket.id;
       rooms[index].length++;
+
+      console.log(rooms[index]);
 
       const { player_1, player_2 } = rooms[index];
       io.to(roomID).emit('opponent_found', { player_1, player_2 });
@@ -65,7 +67,7 @@ const socket = io => {
     })
 
     socket.on('disconnect', () => {
-      const index = rooms.findIndex(user => user.player_1_socketID || user.player_2_socketID === socket.id);
+      const index = rooms.findIndex(user => user.player_1.socketID || user.player_2.socketID === socket.id);
       if (index + 1) rooms.splice(index, 1);
       console.log('User disconnected.')
     })

@@ -61,7 +61,7 @@ class GamePlay extends React.Component {
     socket.emit('search_room', topic);
 
     socket.on('room_found', roomID => {
-      const player2 = { name, title, level, displayImage, score: 0 }
+      const player2 = { name, title, level, displayImage, score: 0, socketID: null }
       socket.emit('join', { roomID, player2 });
       this.props.storeGameData({ key, topic, round, socketRoomID: roomID });
     })
@@ -70,10 +70,8 @@ class GamePlay extends React.Component {
       const room = {
         id: topic + '_' + unique(),
         key,
-        player_1: { name, title, level, displayImage, score: 0 },
+        player_1: { name, title, level, displayImage, score: 0, socketID: null },
         player_2: null,
-        player_1_socketID: null,
-        player_2_socketID: null,
         length: 1
       };
       socket.emit('create_room', room);
