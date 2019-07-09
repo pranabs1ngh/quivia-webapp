@@ -5,7 +5,6 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const bcrypt = require('bcryptjs');
 const keys = require('../config/keys');
 
-// Load User Model
 const { User, validateLogin } = require('../models/User');
 
 passport.serializeUser((user, done) => {

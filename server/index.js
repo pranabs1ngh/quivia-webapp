@@ -1,7 +1,6 @@
 const express = require('express');
 const socket = require('socket.io');
 const session = require('cookie-session');
-const flash = require('connect-flash');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const keys = require('./config/keys');
@@ -14,14 +13,11 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useCreateIndex: true })
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log('Couldn\'t connect to MongoDB...', err));
 
-// EXPRESS SESSION MIDDLEWARE
+// COOKIE SESSION MIDDLEWARE
 app.use(session({
   maxAge: 30 * 24 * 60 * 60 * 1000,
   secret: keys.cookieSecret
 }));
-
-// FLASH MIDDLEWARE
-app.use(flash());
 
 // PASSPORT MIDDLEWARE
 app.use(passport.initialize());
