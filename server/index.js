@@ -5,7 +5,7 @@ const flash = require('connect-flash');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const keys = require('./config/keys');
-require('./config/passport');
+require('./services/passport');
 
 const app = express();
 
@@ -49,4 +49,4 @@ if (process.env.NODE_ENV === 'producion') {
 const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, console.log(`Server started on PORT: ${PORT}`));
-require('./config/socket')(socket(server));
+require('./services/socket')(socket(server));

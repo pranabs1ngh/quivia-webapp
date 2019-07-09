@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const bcrypt = require('bcryptjs');
-const keys = require('./keys');
+const keys = require('../config/keys');
 
 // Load User Model
 const { User, validateLogin } = require('../models/User');
