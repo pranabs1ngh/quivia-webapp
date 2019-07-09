@@ -6,7 +6,13 @@ class ResultScreen extends React.Component {
   state = {
     result: null,
     player_1_color: null,
-    player_2_color: null
+    player_2_color: null,
+    oppConnected: true
+  }
+
+  rematchBtn = () => {
+    if (this.state.oppConnected) return <Button onClick={this.rematch}>Rematch</Button>
+    else return <ButtonDisabled>Opponent Disconnected</ButtonDisabled>
   }
 
   rematch = () => {
@@ -15,8 +21,14 @@ class ResultScreen extends React.Component {
     this.props.rematch(true);
   }
 
+  anotherGame = () => {
+    this.props.socket.disconnect();
+    this.props.history.push('/');
+  }
+
   componentDidMount = () => {
     this.props.socket.on('rematch', () => { this.props.rematch(false) });
+    this.props.socket.on('opponentDisconnected', () => { this.setState({ oppConnected: false }) });
   }
 
   componentWillMount = () => {
@@ -53,13 +65,14 @@ class ResultScreen extends React.Component {
         </Player2Wrapper>
       </PlayerData>
 
-      <Button onClick={this.rematch}>Rematch</Button>
-      <Button>Another Game</Button>
+      {this.rematchBtn()}
+      <Button onClick={this.anotherGame}>Another Game</Button>
     </Wrapper>
   )
 }
 
 const mapStateToProps = (state, ownProps) => ({
+  history: ownProps.history,
   socket: ownProps.socket,
   score1: ownProps.score1,
   score2: ownProps.score2,
@@ -193,4 +206,16 @@ const Button = styled.div`
     transform: scale(1.1);
     cursor: pointer;
   }
+`;
+
+const ButtonDisabled = styled.div`
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 30px;
+  width: 200px;
+  text-align: center;
+  border-radius: 30px;
+  background: #bdbdbd;
+  color: #000;
+  margin: 40 auto 0 auto;
 `;

@@ -144,6 +144,7 @@ class GamePlay extends React.Component {
       />
     else return <ResultScreen
       socket={this.socket}
+      history={this.props.history}
       score1={this.state.player_1_score}
       score2={this.state.player_2_score}
       rematch={this.rematch}
