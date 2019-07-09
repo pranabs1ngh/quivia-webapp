@@ -1,7 +1,8 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
-import { storeGameData, storePlayersData } from '../actions'
+import React from 'react'
+import { connect } from 'react-redux'
+import axios from 'axios'
+import styled from 'styled-components'
+import { fetchUser, storeGameData, storePlayersData } from '../actions'
 
 class ResultScreen extends React.Component {
   state = {
@@ -9,6 +10,24 @@ class ResultScreen extends React.Component {
     player_1_color: null,
     player_2_color: null,
     oppConnected: true
+  }
+
+  updatePlayerData = () => {
+    let { noOfGamesPlayed, noOfQuestionsPlayed } = this.props.user;
+    if (this.props.score1 > this.props.score2) noOfGamesPlayed.won++;
+    else if (this.props.score1 < this.props.score2) noOfGamesPlayed.lost++;
+    else {
+      noOfGamesPlayed.won++;
+      noOfGamesPlayed.lost++;
+    }
+
+    noOfQuestionsPlayed.won += this.props.numOfCorrAns;
+    noOfQuestionsPlayed.lost += 7 - this.props.numOfCorrAns;
+
+    axios.put('/api/user/update', { noOfGamesPlayed, noOfQuestionsPlayed })
+      .then(res => {
+        if (res.data.update) this.props.fetchUser();
+      })
   }
 
   rematchBtn = () => {
@@ -30,6 +49,7 @@ class ResultScreen extends React.Component {
   }
 
   componentDidMount = () => {
+    this.updatePlayerData();
     this.props.socket.on('rematch', () => { this.props.rematch(false) });
     this.props.socket.on('opponentDisconnected', () => { this.setState({ oppConnected: false }) });
   }
@@ -77,14 +97,16 @@ class ResultScreen extends React.Component {
 const mapStateToProps = (state, ownProps) => ({
   history: ownProps.history,
   socket: ownProps.socket,
+  user: state.user,
   score1: ownProps.score1,
   score2: ownProps.score2,
+  numOfCorrAns: ownProps.numOfCorrAns,
   player_1: state.players.player_1,
   player_2: state.players.player_2,
   rematch: ownProps.rematch
 });
 
-export default connect(mapStateToProps, { storeGameData, storePlayersData })(ResultScreen);
+export default connect(mapStateToProps, { fetchUser, storeGameData, storePlayersData })(ResultScreen);
 
 // STYLED COMPONENTS
 

@@ -12,6 +12,17 @@ router.get('/', (req, res) => {
   } else res.send(null);
 });
 
+router.put('/update', async (req, res) => {
+  if (req.user) {
+    let user = req.user;
+    user.noOfGamesPlayed = req.body.noOfGamesPlayed;
+    user.noOfQuestionsPlayed = req.body.noOfQuestionsPlayed;
+
+    await req.user.save();
+    res.send({ update: true });
+  } else res.status(400).send('User not logged in.')
+});
+
 router.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
 

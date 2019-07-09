@@ -147,6 +147,7 @@ class GamePlay extends React.Component {
       history={this.props.history}
       score1={this.state.player_1_score}
       score2={this.state.player_2_score}
+      numOfCorrAns={this.state.numOfCorrAns}
       rematch={this.rematch}
     />;
   }
