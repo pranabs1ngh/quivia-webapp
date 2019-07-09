@@ -90,7 +90,7 @@ const UpperBlock = styled.div`
   height: 340px;
   background: rgba(255, 255, 255, 0.2);
   z-index: 2;
-  animation: ${slideDown} 0.4s ease-out;
+  animation: ${slideDown} 0.4s;
 `;
 
 const slideUp = keyframes`
@@ -107,7 +107,7 @@ const LowerBlock = styled.div`
   height: 340px;
   background: rgba(255, 255, 255, 0.2);
   z-index: 2;  
-  animation: ${slideUp} 0.4s ease-out;
+  animation: ${slideUp} 0.4s;
 `;
 
 const PlayersDivider = styled.div`  

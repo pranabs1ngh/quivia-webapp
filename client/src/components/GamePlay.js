@@ -122,10 +122,8 @@ class GamePlay extends React.Component {
     if (this.props.game && !this.props.players) this.searchForOpponent();
   }
 
-  render = () => {
-    if (!this.state.searchScreen) return <OpponentSearchScreen />
-    else if (!this.state.playersScreen) return <PvPScreen updateScreen={this.updateScreen} updateRound={this.updateRound} />
-    else if (!this.state.roundScreen)
+  gameplay = () => {
+    if (!this.state.roundScreen)
       return <RoundScreen
         topicKey={this.props.game.key}
         topicName={this.props.game.topic}
@@ -142,14 +140,40 @@ class GamePlay extends React.Component {
         updateRound={this.updateRound}
         updateScreen={this.updateScreen}
       />
-    else return <ResultScreen
-      socket={this.socket}
-      history={this.props.history}
-      score1={this.state.player_1_score}
-      score2={this.state.player_2_score}
-      numOfCorrAns={this.state.numOfCorrAns}
-      rematch={this.rematch}
-    />;
+  }
+
+  render = () => {
+    if (!this.state.searchScreen) return (
+      <>
+        <audio src='/audio/searching.mp3' autoPlay />
+        <OpponentSearchScreen />
+      </>
+    )
+    else if (!this.state.playersScreen) return (
+      <>
+        <audio src='/audio/battle.mp3' autoPlay />
+        <PvPScreen updateScreen={this.updateScreen} updateRound={this.updateRound} />
+      </>
+    )
+    else if (this.state.questionScreen) return (
+      <>
+        <audio src='/audio/result.mp3' autoPlay />
+        <ResultScreen
+          socket={this.socket}
+          history={this.props.history}
+          score1={this.state.player_1_score}
+          score2={this.state.player_2_score}
+          numOfCorrAns={this.state.numOfCorrAns}
+          rematch={this.rematch}
+        />;
+    </>
+    )
+    else return (
+      <>
+        <audio src='/audio/gameplay.mp3' autoPlay />
+        {this.gameplay()}
+      </>
+    )
   }
 };
 
