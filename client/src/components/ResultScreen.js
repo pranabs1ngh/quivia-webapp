@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { storePlayersData } from '../actions'
 
 class ResultScreen extends React.Component {
   state = {
@@ -23,6 +24,7 @@ class ResultScreen extends React.Component {
 
   anotherGame = () => {
     this.props.socket.disconnect();
+    this.props.storePlayersData(null);
     this.props.history.push('/');
   }
 
@@ -81,7 +83,7 @@ const mapStateToProps = (state, ownProps) => ({
   rematch: ownProps.rematch
 });
 
-export default connect(mapStateToProps)(ResultScreen);
+export default connect(mapStateToProps, { storePlayersData })(ResultScreen);
 
 // STYLED COMPONENTS
 

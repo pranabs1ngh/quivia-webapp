@@ -24,9 +24,8 @@ const getQuestions = async index => {
 
 const socket = io => {
   io.on('connection', socket => {
-    console.log('New User Connected...');
-
     socket.on('search_room', topic => {
+      console.log('room searched');
       const index = searchForRoom(topic);
       if (index + 1)
         socket.emit('room_found', rooms[index].id);
