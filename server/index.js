@@ -30,7 +30,6 @@ app.use(express.json());
 // ROUTES
 app.use('/api/user', require('./routes/userRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
-app.get('/', (req, res) => { res.send(req.session) });
 
 // CLIENT ROUTE
 if (process.env.NODE_ENV === 'producion') {
