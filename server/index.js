@@ -32,7 +32,7 @@ app.use('/api/user', require('./routes/userRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
 
 // CLIENT ROUTE
-if (process.env.NODE_ENV === 'producion') {
+if (process.env.NODE_ENV === 'production') {
   app.use(express.static('../client/build/'));
 
   const path = require('path');
