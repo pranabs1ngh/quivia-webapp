@@ -16,7 +16,7 @@ class Home extends React.Component {
     if (data) {
       const percentage = Math.round(((data.won / (data.won + data.lost)) * 100));
       if (percentage) return percentage;
-      else return 100;
+      else return 0;
     }
   }
 
