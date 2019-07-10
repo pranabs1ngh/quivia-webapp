@@ -4,9 +4,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { fetchUser, storeGameData } from '../actions';
 
-import UserForm from './UserForm';
-
-class Home extends React.Component {
+class Homepage extends React.Component {
   names = ['GK', 'Books', 'Film', 'Music', 'Television', 'Games', 'Science', 'Computers', 'Maths', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals', 'Vehicles', 'Comics', 'Gadgets'];
   topicNo = [9, 10, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
 
@@ -39,13 +37,8 @@ class Home extends React.Component {
       })
   }
 
-  componentWillMount = async () => {
-    await this.props.fetchUser();
-  }
-
   render = () => {
-    if (!this.props.user) return <UserForm />
-    else return (
+    return (
       <Wrapper>
         <DashboardShadow></DashboardShadow>
         <DashboardBG src='img/dashboard-bg.png'></DashboardBG>
@@ -94,7 +87,7 @@ const mapStateToProps = state => {
   return { user: state.user }
 }
 
-export default connect(mapStateToProps, { fetchUser, storeGameData })(Home);
+export default connect(mapStateToProps, { fetchUser, storeGameData })(Homepage);
 
 
 // STYLED COMPONENTS
