@@ -167,7 +167,6 @@ class GamePlay extends React.Component {
     else return (
       <>
         <audio src='/audio/gameplay.mp3' autoPlay />
-        <audio src='/audio/result.mp3' />
         {this.gameplay()}
       </>
     )

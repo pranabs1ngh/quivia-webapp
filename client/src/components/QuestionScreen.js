@@ -261,46 +261,49 @@ class QuestionScreen extends React.Component {
   }
 
   render = () => (
-    <Wrapper>
-      <QuestionSection>
-        <Header>
-          <Player1Wrapper>
-            <DisplayImage src={this.props.player_1.displayImage}></DisplayImage>
-            <PlayerDataWrapper>
-              <PlayerName>{this.props.player_1.name}</PlayerName>
-              <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
-              <Score>{this.state.playerScore}</Score>
-            </PlayerDataWrapper>
-          </Player1Wrapper>
-          <Timer>
-            <CircularProgressbar
-              value={this.state.timeLeft * 10}
-              text={`${this.state.timeLeft}`}
-              styles={buildStyles({
-                pathTransitionDuration: 1,
-                textColor: "#9c27b0",
-                textSize: "1.8em",
-                pathColor: "#9c27b0",
-                trailColor: "transparent"
-              })}
-            />
-          </Timer>
-          <Player2Wrapper>
-            <PlayerDataWrapper>
-              <PlayerName>{this.props.player_2.name}</PlayerName>
-              <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
-              <Score>{this.state.oppScore}</Score>
-            </PlayerDataWrapper>
-            <DisplayImage src={this.props.player_2.displayImage}></DisplayImage>
-          </Player2Wrapper>
-        </Header>
-        <Question>{this.state.question}</Question>
-      </QuestionSection>
-      <AnswersSection display={this.state.displayAns}>
-        {this.state.answers.map((val, index) => this.answerBtn(val, index))}
-      </AnswersSection>
-      <SectionCover display={this.state.sectionCover}></SectionCover>
-    </Wrapper>
+    <>
+      <audio src='/audio/result.mp3' />
+      <Wrapper>
+        <QuestionSection>
+          <Header>
+            <Player1Wrapper>
+              <DisplayImage src={this.props.player_1.displayImage}></DisplayImage>
+              <PlayerDataWrapper>
+                <PlayerName>{this.props.player_1.name}</PlayerName>
+                <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
+                <Score>{this.state.playerScore}</Score>
+              </PlayerDataWrapper>
+            </Player1Wrapper>
+            <Timer>
+              <CircularProgressbar
+                value={this.state.timeLeft * 10}
+                text={`${this.state.timeLeft}`}
+                styles={buildStyles({
+                  pathTransitionDuration: 1,
+                  textColor: "#9c27b0",
+                  textSize: "1.8em",
+                  pathColor: "#9c27b0",
+                  trailColor: "transparent"
+                })}
+              />
+            </Timer>
+            <Player2Wrapper>
+              <PlayerDataWrapper>
+                <PlayerName>{this.props.player_2.name}</PlayerName>
+                <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
+                <Score>{this.state.oppScore}</Score>
+              </PlayerDataWrapper>
+              <DisplayImage src={this.props.player_2.displayImage}></DisplayImage>
+            </Player2Wrapper>
+          </Header>
+          <Question>{this.state.question}</Question>
+        </QuestionSection>
+        <AnswersSection display={this.state.displayAns}>
+          {this.state.answers.map((val, index) => this.answerBtn(val, index))}
+        </AnswersSection>
+        <SectionCover display={this.state.sectionCover}></SectionCover>
+      </Wrapper>
+    </>
   )
 }
 
