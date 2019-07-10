@@ -5,6 +5,7 @@
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
+    "dev": "nodemon -r dotenv/config server/index.js",
     "heroku-postbuild": "npm i --prefix client && npm run build --prefix client"
   },
   "repository": {
@@ -29,5 +30,8 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "dotenv": "^8.0.0"
   }
 }
