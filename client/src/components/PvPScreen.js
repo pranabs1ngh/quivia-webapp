@@ -13,6 +13,7 @@ class PVPComponent extends React.Component {
   render = () => (
     <>
       <audio src='/audio/battle.mp3' autoPlay />
+      <audio src='/audio/gameplay.mp3' />
       <Wrapper>
         <UpperBlock>
           <Player1Wrapper>

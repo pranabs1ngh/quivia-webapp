@@ -5,6 +5,7 @@ export default () => {
   return (
     <>
       <audio src='/audio/searching.mp3' autoPlay />
+      <audio src='/audio/battle.mp3' />
       <Wrapper>
         <SpinningGlobe>
           <WorldMap src='img/globe-bg.JPG'></WorldMap>

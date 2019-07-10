@@ -46,48 +46,51 @@ class Home extends React.Component {
   }
 
   render = () => {
-    if (!this.state.user) return <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    if (!this.state.user) return <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
     else return (
-      <Wrapper>
-        <DashboardShadow></DashboardShadow>
-        <DashboardBG src='img/dashboard-bg.png'></DashboardBG>
-        <Dashboard>
-          <Logo src="img/logo.png" alt="profile-pic"></Logo>
-          <Title><h4>{this.props.user.title}</h4></Title>
-          <ProfilePic src={this.props.user.displayImage}></ProfilePic>
-          <Namespace src="img/namespace-bg.png"></Namespace>
-          <NamespaceData>
-            {this.splitName(this.props.user.name)[0]}
-            <br></br>
-            <Surname>
-              {this.splitName(this.props.user.name)[1]}
-            </Surname>
-            <Level>Level {this.props.user.level}</Level>
-          </NamespaceData>
-          <ProgressData>
-            <Progress>
-              <ProgressHeading>Games Won: {this.percentage(this.props.user.noOfGamesPlayed)}%</ProgressHeading>
-              <ProgressBar>
-                <ProgressBarStriped width={this.percentage(this.props.user.noOfGamesPlayed)}></ProgressBarStriped>
-              </ProgressBar>
-            </Progress>
-            <Progress>
-              <ProgressHeading>Accuracy: {this.percentage(this.props.user.noOfQuestionsPlayed)}%</ProgressHeading>
-              <ProgressBar>
-                <ProgressBarStriped width={this.percentage(this.props.user.noOfQuestionsPlayed)}></ProgressBarStriped>
-              </ProgressBar>
-            </Progress>
-          </ProgressData>
-          <SignOut onClick={this.signOut} >
-            <i className="fa fa-power-off fa-lg" aria-hidden="true"></i>
-          </SignOut>
-        </Dashboard>
+      <>
+        <audio src='/audio/searching.mp3' />
+        <Wrapper>
+          <DashboardShadow></DashboardShadow>
+          <DashboardBG src='img/dashboard-bg.png'></DashboardBG>
+          <Dashboard>
+            <Logo src="img/logo.png" alt="profile-pic"></Logo>
+            <Title><h4>{this.props.user.title}</h4></Title>
+            <ProfilePic src={this.props.user.displayImage}></ProfilePic>
+            <Namespace src="img/namespace-bg.png"></Namespace>
+            <NamespaceData>
+              {this.splitName(this.props.user.name)[0]}
+              <br></br>
+              <Surname>
+                {this.splitName(this.props.user.name)[1]}
+              </Surname>
+              <Level>Level {this.props.user.level}</Level>
+            </NamespaceData>
+            <ProgressData>
+              <Progress>
+                <ProgressHeading>Games Won: {this.percentage(this.props.user.noOfGamesPlayed)}%</ProgressHeading>
+                <ProgressBar>
+                  <ProgressBarStriped width={this.percentage(this.props.user.noOfGamesPlayed)}></ProgressBarStriped>
+                </ProgressBar>
+              </Progress>
+              <Progress>
+                <ProgressHeading>Accuracy: {this.percentage(this.props.user.noOfQuestionsPlayed)}%</ProgressHeading>
+                <ProgressBar>
+                  <ProgressBarStriped width={this.percentage(this.props.user.noOfQuestionsPlayed)}></ProgressBarStriped>
+                </ProgressBar>
+              </Progress>
+            </ProgressData>
+            <SignOut onClick={this.signOut} >
+              <i className="fa fa-power-off fa-lg" aria-hidden="true"></i>
+            </SignOut>
+          </Dashboard>
 
-        <Topics>
-          <TopicHeading>Topics</TopicHeading>
-          <TopicBoard>{this.names.map((name, index) => this.topicCards(name, this.topicNo[index]))}</TopicBoard>
-        </Topics>
-      </Wrapper>
+          <Topics>
+            <TopicHeading>Topics</TopicHeading>
+            <TopicBoard>{this.names.map((name, index) => this.topicCards(name, this.topicNo[index]))}</TopicBoard>
+          </Topics>
+        </Wrapper>
+      </>
     );
   };
 };
