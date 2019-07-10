@@ -3,7 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { fetchUser } from '../actions'
 
-import './css/UserForm.css';
+import './css/style.css';
 
 class UserForm extends React.Component {
   state = {
@@ -16,9 +16,11 @@ class UserForm extends React.Component {
 
   signUpClick = event => {
     event.target.parentElement.parentElement.parentElement.parentElement.classList.add("right-panel-active");
+    this.props.history.push('/user/signup');
   };
   signInClick = event => {
     event.target.parentElement.parentElement.parentElement.parentElement.classList.remove("right-panel-active");
+    this.props.history.push('/user/signin');
   };
 
   signUp = event => {
@@ -54,6 +56,8 @@ class UserForm extends React.Component {
 
   componentWillMount = async () => {
     await this.props.fetchUser();
+
+    if (this.props.user) this.props.history.push('/');
   }
 
   render = () => {
