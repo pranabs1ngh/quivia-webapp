@@ -12,8 +12,8 @@ class Home extends React.Component {
   }
 
   render = () => {
-    if (!this.props.user) return <UserForm />
-    else return <Homepage />
+    if (this.props.user) return <Homepage />
+    else return <UserForm />
   };
 };
 
