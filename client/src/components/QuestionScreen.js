@@ -230,13 +230,12 @@ class QuestionScreen extends React.Component {
   }
 
   renderNextScreen = () => {
-    if (this._isMounted) {
-      setTimeout(() => {
-        if (this.props.game.round === 7) this.props.updateScreen('questionScreen')
-        else this.props.updateRound();
-      }, 1000);
-    }
+    setTimeout(() => {
+      if (this.props.game.round === 7) this.props.updateScreen('questionScreen')
+      else this.props.updateRound();
+    }, 1000);
   }
+
 
   componentWillMount = () => {
     this._isMounted = true;

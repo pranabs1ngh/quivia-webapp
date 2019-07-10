@@ -90,10 +90,12 @@ class GamePlay extends React.Component {
   }
 
   updateRound = () => {
-    let { key, topic, round, socketRoomID } = this.props.game;
-    round += 1;
-    this.props.storeGameData({ key, topic, round, socketRoomID });
-    this.setState({ roundScreen: false });
+    if (this.state.roundScreen) {
+      let { key, topic, round, socketRoomID } = this.props.game;
+      round += 1;
+      this.props.storeGameData({ key, topic, round, socketRoomID });
+      this.setState({ roundScreen: false });
+    }
   }
 
   updateScreen = key => { this.setState({ [key]: true }) }
