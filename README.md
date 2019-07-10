@@ -7,6 +7,9 @@ MERN stack.
 
 - An user can sign up / sign in using local
   authentication or via google or facebook OAuth
+- Clicking on a game matches two idle players if
+  present for the same game, else it sends a bot
+  to play with
 
 ## Getting Started
 

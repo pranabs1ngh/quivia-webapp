@@ -19,11 +19,11 @@ class GamePlay extends React.Component {
     numOfCorrAns: 0,
     searchScreen: false,
     playersScreen: false,
-    roundScreen: true,
+    roundScreen: false,
     questionScreen: false
   }
 
-  socketURL = '/';
+  socketURL = 'http://localhost:5000/';
   socket = io.connect(this.socketURL);
 
   waitForOpponent = () => {
