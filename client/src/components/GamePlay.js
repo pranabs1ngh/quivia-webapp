@@ -17,13 +17,14 @@ class GamePlay extends React.Component {
     player_1_score: 0,
     player_2_score: 0,
     numOfCorrAns: 0,
+    oppConnected: true,
     searchScreen: false,
     playersScreen: false,
     roundScreen: false,
     questionScreen: false
   }
 
-  socketURL = 'http://localhost:5000/';
+  socketURL = '/';
   socket = io.connect(this.socketURL);
 
   waitForOpponent = () => {
@@ -119,6 +120,10 @@ class GamePlay extends React.Component {
     this.props.storeGameData({ key, topic, round, socketRoomID });
   }
 
+  componentDidMount = () => {
+    this.socket.on('opponentDisconnected', () => { this.setState({ questionScreen: true, oppConnected: false }) });
+  }
+
   componentWillMount = () => {
     if (!this.props.game) this.props.history.push('/');
     if (this.props.game && !this.props.players) this.searchForOpponent();
@@ -153,6 +158,7 @@ class GamePlay extends React.Component {
     else if (this.state.questionScreen) return <ResultScreen
       socket={this.socket}
       history={this.props.history}
+      oppConnected={this.state.oppConnected}
       score1={this.state.player_1_score}
       score2={this.state.player_2_score}
       numOfCorrAns={this.state.numOfCorrAns}

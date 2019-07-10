@@ -9,7 +9,7 @@ class ResultScreen extends React.Component {
     result: null,
     player_1_color: null,
     player_2_color: null,
-    oppConnected: true
+    oppConnected: this.props.oppConnected
   }
 
   title = ['Freshman', 'Greenhorn', 'Diligent', 'Meticulous', 'Industrious', 'Captain', 'Master', 'G-Master', 'Commander', 'Headman']
@@ -58,7 +58,6 @@ class ResultScreen extends React.Component {
   componentDidMount = () => {
     this.updatePlayerData();
     this.props.socket.on('rematch', () => { this.props.rematch(false) });
-    this.props.socket.on('opponentDisconnected', () => { this.setState({ oppConnected: false }) });
   }
 
   componentWillMount = () => {
@@ -108,6 +107,7 @@ const mapStateToProps = (state, ownProps) => ({
   history: ownProps.history,
   socket: ownProps.socket,
   user: state.user,
+  oppConnected: ownProps.oppConnected,
   score1: ownProps.score1,
   score2: ownProps.score2,
   numOfCorrAns: ownProps.numOfCorrAns,
