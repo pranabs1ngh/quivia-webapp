@@ -12,8 +12,10 @@ class ResultScreen extends React.Component {
     oppConnected: true
   }
 
+  title = ['Freshman', 'Greenhorn', 'Diligent', 'Meticulous', 'Industrious', 'Captain', 'Master', 'G-Master', 'Commander', 'Headman']
+
   updatePlayerData = () => {
-    let { noOfGamesPlayed, noOfQuestionsPlayed } = this.props.user;
+    let { title, level, noOfGamesPlayed, noOfQuestionsPlayed } = this.props.user;
     if (this.props.score1 > this.props.score2) noOfGamesPlayed.won++;
     else if (this.props.score1 < this.props.score2) noOfGamesPlayed.lost++;
     else {
@@ -24,7 +26,12 @@ class ResultScreen extends React.Component {
     noOfQuestionsPlayed.won += this.props.numOfCorrAns;
     noOfQuestionsPlayed.lost += 7 - this.props.numOfCorrAns;
 
-    axios.put('/api/user/update', { noOfGamesPlayed, noOfQuestionsPlayed })
+    if (noOfGamesPlayed.won % 15 === 0) {
+      level++;
+      if (level <= 10) title = this.title[level - 1];
+    }
+
+    axios.put('/api/user/update', { title, level, noOfGamesPlayed, noOfQuestionsPlayed })
       .then(res => {
         if (res.data.update) this.props.fetchUser();
       })

@@ -15,6 +15,8 @@ router.get('/', (req, res) => {
 router.put('/update', async (req, res) => {
   if (req.user) {
     let user = req.user;
+    user.title = req.body.title;
+    user.level = req.body.level;
     user.noOfGamesPlayed = req.body.noOfGamesPlayed;
     user.noOfQuestionsPlayed = req.body.noOfQuestionsPlayed;
 
