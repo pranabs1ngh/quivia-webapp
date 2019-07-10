@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { fetchUser, storeGameData } from '../actions';
 
 class Home extends React.Component {
+  state = { user: false }
+
   names = ['GK', 'Books', 'Film', 'Music', 'Television', 'Games', 'Science', 'Computers', 'Maths', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals', 'Vehicles', 'Comics', 'Gadgets'];
   topicNo = [9, 10, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
 
@@ -39,12 +41,12 @@ class Home extends React.Component {
 
   componentWillMount = async () => {
     await this.props.fetchUser();
-
-    if (!this.props.user) this.props.history.push('/user/signin');
+    if (this.props.user) this.setState({ user: true });
+    else this.props.history.push('/user/signin');
   }
 
   render = () => {
-    if (!this.props.user) return <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    if (!this.state.user) return <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
     else return (
       <Wrapper>
         <DashboardShadow></DashboardShadow>
