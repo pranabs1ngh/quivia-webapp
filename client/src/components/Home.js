@@ -4,6 +4,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { fetchUser, storeGameData } from '../actions';
 
+import UserForm from './UserForm';
+
 class Home extends React.Component {
   names = ['GK', 'Books', 'Film', 'Music', 'Television', 'Games', 'Science', 'Computers', 'Maths', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals', 'Vehicles', 'Comics', 'Gadgets'];
   topicNo = [9, 10, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
@@ -32,19 +34,18 @@ class Home extends React.Component {
 
   signOut = () => {
     axios.get('/api/user/signout')
-      .then(res => {
-        if (!res.data.auth) this.props.history.push('/user/signin');
+      .then(async res => {
+        if (!res.data.auth) await this.props.fetchUser();
       })
   }
 
   componentWillMount = async () => {
     await this.props.fetchUser();
-
-    if (!this.props.user) this.props.history.push('/user/signin');
   }
 
   render = () => {
-    return (
+    if (!this.props.user) return <UserForm />
+    else return (
       <Wrapper>
         <DashboardShadow></DashboardShadow>
         <DashboardBG src='img/dashboard-bg.png'></DashboardBG>
