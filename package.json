@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/pranabs1ngh/quivia-webapp/issues"
   },
-  "homepage": "https://github.com/pranabs1ngh/quivia-webapp#readme",
+  "homepage": "https://quivia-webapp.herokuapp.com/",
   "dependencies": {
     "@hapi/joi": "^15.0.3",
     "bcryptjs": "^2.4.3",
