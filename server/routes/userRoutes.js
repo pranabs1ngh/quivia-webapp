@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   if (req.user) {
-    const { name, title, level, displayImage, noOfGamesPlayed, noOfQuestionsPlayed } = req.user;
-    res.send({ name, title, level, displayImage, noOfGamesPlayed, noOfQuestionsPlayed });
+    const { id, name, title, level, displayImage, noOfGamesPlayed, noOfQuestionsPlayed } = req.user;
+    res.send({ id, name, title, level, displayImage, noOfGamesPlayed, noOfQuestionsPlayed });
   } else res.send(null);
 });
 

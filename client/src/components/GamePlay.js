@@ -23,7 +23,7 @@ class GamePlay extends React.Component {
     questionScreen: false
   }
 
-  socketURL = '/';
+  socketURL = 'http://localhost:5000/';
   socket = io.connect(this.socketURL);
 
   waitForOpponent = () => {
@@ -56,14 +56,14 @@ class GamePlay extends React.Component {
 
   searchForOpponent = () => {
     const { key, topic, round } = this.props.game;
-    const { name, title, level, displayImage } = this.props.user;
+    const { id, name, title, level, displayImage } = this.props.user;
 
     const socket = this.socket;
 
-    socket.emit('search_room', topic);
+    socket.emit('search_room', { topic, id });
 
     socket.on('room_found', roomID => {
-      const player2 = { name, title, level, displayImage, socketID: null }
+      const player2 = { id, name, title, level, displayImage, socketID: null }
       socket.emit('join', { roomID, player2 });
       this.props.storeGameData({ key, topic, round, socketRoomID: roomID });
     })
@@ -72,7 +72,7 @@ class GamePlay extends React.Component {
       const room = {
         id: topic + '_' + unique(),
         key,
-        player_1: { name, title, level, displayImage, socketID: null },
+        player_1: { id, name, title, level, displayImage, socketID: null },
         player_2: null,
         length: 1
       };

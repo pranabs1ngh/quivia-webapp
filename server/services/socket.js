@@ -4,9 +4,9 @@ const rooms = [];
 
 const findRoom = term => rooms.findIndex(room => room.id.startsWith(term));
 
-const searchForRoom = term => {
+const searchForRoom = (topic, id) => {
   for (let i = 0; i < rooms.length; i++) {
-    if (rooms[i].id.startsWith(term) && rooms[i].length < 2)
+    if (rooms[i].id.startsWith(topic) && rooms[i].player_1.id !== id && rooms[i].length < 2)
       return i
   }
   return -1;
@@ -24,8 +24,8 @@ const getQuestions = async index => {
 
 const socket = io => {
   io.on('connection', socket => {
-    socket.on('search_room', topic => {
-      const index = searchForRoom(topic);
+    socket.on('search_room', ({ topic, id }) => {
+      const index = searchForRoom(topic, id);
       if (index + 1)
         socket.emit('room_found', rooms[index].id);
       else socket.emit('room_not_found', null);
