@@ -143,31 +143,19 @@ class GamePlay extends React.Component {
   }
 
   render = () => {
-    if (!this.state.searchScreen) return (
-      <>
-        <audio src='/audio/searching.mp3' autoPlay />
-        <OpponentSearchScreen />
-      </>
-    )
-    else if (!this.state.playersScreen) return (
-      <>
-        <audio src='/audio/battle.mp3' autoPlay />
-        <PvPScreen updateScreen={this.updateScreen} updateRound={this.updateRound} />
-      </>
-    )
-    else if (this.state.questionScreen) return (
-      <>
-        <audio src='/audio/result.mp3' autoPlay />
-        <ResultScreen
-          socket={this.socket}
-          history={this.props.history}
-          score1={this.state.player_1_score}
-          score2={this.state.player_2_score}
-          numOfCorrAns={this.state.numOfCorrAns}
-          rematch={this.rematch}
-        />;
-    </>
-    )
+    if (!this.state.searchScreen) return <OpponentSearchScreen />
+    else if (!this.state.playersScreen) return <PvPScreen
+      updateScreen={this.updateScreen}
+      updateRound={this.updateRound}
+    />
+    else if (this.state.questionScreen) return <ResultScreen
+      socket={this.socket}
+      history={this.props.history}
+      score1={this.state.player_1_score}
+      score2={this.state.player_2_score}
+      numOfCorrAns={this.state.numOfCorrAns}
+      rematch={this.rematch}
+    />;
     else return (
       <>
         <audio src='/audio/gameplay.mp3' autoPlay />

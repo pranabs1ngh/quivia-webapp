@@ -11,33 +11,36 @@ class PVPComponent extends React.Component {
   }
 
   render = () => (
-    <Wrapper>
-      <UpperBlock>
-        <Player1Wrapper>
-          <DisplayImage src={this.props.player_1.displayImage}></DisplayImage>
-          <PlayerDataWrapper>
-            <PlayerName>{this.props.player_1.name}</PlayerName>
-            <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
-            <PlayerLevel>Level {this.props.player_1.level}</PlayerLevel>
-          </PlayerDataWrapper>
-        </Player1Wrapper>
-      </UpperBlock>
-      <PlayersDivider>
-        <TopicWrapper>
-          <TopicImage src={`/img/topic-${this.props.topicKey}.png`}></TopicImage>
-        </TopicWrapper>
-      </PlayersDivider>
-      <LowerBlock>
-        <Player2Wrapper>
-          <PlayerDataWrapper>
-            <PlayerName>{this.props.player_2.name}</PlayerName>
-            <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
-            <PlayerLevel>Level {this.props.player_2.level}</PlayerLevel>
-          </PlayerDataWrapper>
-          <DisplayImage src={this.props.player_2.displayImage}></DisplayImage>
-        </Player2Wrapper>
-      </LowerBlock>
-    </Wrapper>
+    <>
+      <audio src='/audio/battle.mp3' autoPlay />
+      <Wrapper>
+        <UpperBlock>
+          <Player1Wrapper>
+            <DisplayImage src={this.props.player_1.displayImage}></DisplayImage>
+            <PlayerDataWrapper>
+              <PlayerName>{this.props.player_1.name}</PlayerName>
+              <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
+              <PlayerLevel>Level {this.props.player_1.level}</PlayerLevel>
+            </PlayerDataWrapper>
+          </Player1Wrapper>
+        </UpperBlock>
+        <PlayersDivider>
+          <TopicWrapper>
+            <TopicImage src={`/img/topic-${this.props.topicKey}.png`}></TopicImage>
+          </TopicWrapper>
+        </PlayersDivider>
+        <LowerBlock>
+          <Player2Wrapper>
+            <PlayerDataWrapper>
+              <PlayerName>{this.props.player_2.name}</PlayerName>
+              <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
+              <PlayerLevel>Level {this.props.player_2.level}</PlayerLevel>
+            </PlayerDataWrapper>
+            <DisplayImage src={this.props.player_2.displayImage}></DisplayImage>
+          </Player2Wrapper>
+        </LowerBlock>
+      </Wrapper>
+    </>
   )
 }
 

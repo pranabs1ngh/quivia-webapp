@@ -3,14 +3,17 @@ import styled, { keyframes } from 'styled-components';
 
 export default () => {
   return (
-    <Wrapper>
-      <SpinningGlobe>
-        <WorldMap src='img/globe-bg.JPG'></WorldMap>
-      </SpinningGlobe>
-      <SearchText>Searching for opponent
+    <>
+      <audio src='/audio/searching.mp3' autoPlay />
+      <Wrapper>
+        <SpinningGlobe>
+          <WorldMap src='img/globe-bg.JPG'></WorldMap>
+        </SpinningGlobe>
+        <SearchText>Searching for opponent
           <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-      </SearchText>
-    </Wrapper>
+        </SearchText>
+      </Wrapper>
+    </>
   )
 }
 

@@ -64,33 +64,36 @@ class ResultScreen extends React.Component {
   }
 
   render = () => (
-    <Wrapper>
-      <Result>{this.state.result}</Result>
-      <PlayerData>
-        <Player1Wrapper>
-          <UpperPart>
-            <Score1 color={this.state.player_1_color} >{this.props.score1}</Score1>
-            <DisplayImage1 src={this.props.player_1.displayImage} color={this.state.player_1_color}></DisplayImage1>
-          </UpperPart>
-          <Player1Name color={this.state.player_1_color}>{this.props.player_1.name}</Player1Name>
-          <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
-          <PlayerLevel>Level {this.props.player_1.level}</PlayerLevel>
-        </Player1Wrapper>
-        <MidText>VS</MidText>
-        <Player2Wrapper>
-          <UpperPart>
-            <DisplayImage2 src={this.props.player_2.displayImage} color={this.state.player_2_color}></DisplayImage2>
-            <Score2 color={this.state.player_2_color}>{this.props.score2}</Score2>
-          </UpperPart>
-          <Player2Name color={this.state.player_2_color}>{this.props.player_2.name}</Player2Name>
-          <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
-          <PlayerLevel>Level {this.props.player_2.level}</PlayerLevel>
-        </Player2Wrapper>
-      </PlayerData>
+    <>
+      <audio src='/audio/result.mp3' autoPlay />
+      <Wrapper>
+        <Result>{this.state.result}</Result>
+        <PlayerData>
+          <Player1Wrapper>
+            <UpperPart>
+              <Score1 color={this.state.player_1_color} >{this.props.score1}</Score1>
+              <DisplayImage1 src={this.props.player_1.displayImage} color={this.state.player_1_color}></DisplayImage1>
+            </UpperPart>
+            <Player1Name color={this.state.player_1_color}>{this.props.player_1.name}</Player1Name>
+            <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
+            <PlayerLevel>Level {this.props.player_1.level}</PlayerLevel>
+          </Player1Wrapper>
+          <MidText>VS</MidText>
+          <Player2Wrapper>
+            <UpperPart>
+              <DisplayImage2 src={this.props.player_2.displayImage} color={this.state.player_2_color}></DisplayImage2>
+              <Score2 color={this.state.player_2_color}>{this.props.score2}</Score2>
+            </UpperPart>
+            <Player2Name color={this.state.player_2_color}>{this.props.player_2.name}</Player2Name>
+            <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
+            <PlayerLevel>Level {this.props.player_2.level}</PlayerLevel>
+          </Player2Wrapper>
+        </PlayerData>
 
-      {this.rematchBtn()}
-      <Button onClick={this.anotherGame}>Another Game</Button>
-    </Wrapper>
+        {this.rematchBtn()}
+        <Button onClick={this.anotherGame}>Another Game</Button>
+      </Wrapper>
+    </>
   )
 }
 
