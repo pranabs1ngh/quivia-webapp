@@ -19,7 +19,7 @@ class GamePlay extends React.Component {
     numOfCorrAns: 0,
     searchScreen: false,
     playersScreen: false,
-    roundScreen: false,
+    roundScreen: true,
     questionScreen: false
   }
 

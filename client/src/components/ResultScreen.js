@@ -137,7 +137,7 @@ const Result = styled.div`
   font-size: 48px;
   font-weight: 800;
   color: #fff;
-  margin: 20 auto;
+  margin: 40 auto 20 auto;
   background-image: linear-gradient(45deg, #FA8BFF 0%, #2BD2FF 52%, #2BFF88 90%);
   -webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
