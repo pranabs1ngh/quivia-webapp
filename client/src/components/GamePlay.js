@@ -24,8 +24,7 @@ class GamePlay extends React.Component {
     questionScreen: false
   }
 
-  socketURL = 'https://quivia-webapp.herokuapp.com/';
-  socket = io.connect(this.socketURL);
+  socket = io.connect();
 
   waitForOpponent = () => {
     setTimeout(() => {
