@@ -115,7 +115,7 @@ class GamePlay extends React.Component {
       questionScreen: false
     });
     let { key, topic, round, socketRoomID } = this.props.game;
-    round = 0;
+    round = 1;
     this.props.storeGameData({ key, topic, round, socketRoomID });
   }
 
