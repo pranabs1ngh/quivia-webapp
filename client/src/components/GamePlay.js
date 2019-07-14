@@ -91,10 +91,12 @@ class GamePlay extends React.Component {
 
   updateRound = () => {
     if (this.state.roundScreen) {
-      let { key, topic, round, socketRoomID } = this.props.game;
-      round += 1;
-      this.props.storeGameData({ key, topic, round, socketRoomID });
-      this.setState({ roundScreen: false });
+      if (this.props.game.round < 7) {
+        let { key, topic, round, socketRoomID } = this.props.game;
+        round += 1;
+        this.props.storeGameData({ key, topic, round, socketRoomID });
+        this.setState({ roundScreen: false });
+      } else this.updateScreen('questionScreen')
     }
   }
 
@@ -141,7 +143,6 @@ class GamePlay extends React.Component {
         socket={this.socket}
         score1={this.state.player_1_score}
         score2={this.state.player_2_score}
-        updateScreen={this.updateScreen}
         updateCorrAns={this.updateCorrAns}
         updateScore={this.updateScore}
         updateRound={this.updateRound}

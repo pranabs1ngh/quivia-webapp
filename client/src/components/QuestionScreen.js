@@ -237,7 +237,6 @@ class QuestionScreen extends React.Component {
 
 
   componentWillMount = () => {
-    if (this.props.game.round === 8) this.props.updateScreen('questionScreen');
     this._isMounted = true;
     let { question, correct_answer, incorrect_answers } = this.props.questions[this.props.game.round - 1];
     question = this.decodeEscapeChars(question);
@@ -312,7 +311,6 @@ const mapStateToProps = (state, ownProps) => ({
   socket: ownProps.socket,
   score1: ownProps.score1,
   score2: ownProps.score2,
-  updateScreen: ownProps.updateScreen,
   updateCorrAns: ownProps.updateCorrAns,
   updateScore: ownProps.updateScore,
   updateRound: ownProps.updateRound,
