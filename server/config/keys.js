@@ -1,4 +1,5 @@
 module.exports = {
+  baseURL: process.env.BASE_URL,
   cookieSecret: process.env.COOKIE_SECRET,
   mongoURI: process.env.MONGO_URI,
   googleClientID: process.env.GOOGLE_CLIENT_ID,
