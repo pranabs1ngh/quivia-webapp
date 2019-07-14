@@ -126,6 +126,7 @@ class GamePlay extends React.Component {
   componentWillMount = () => {
     if (!this.props.game) this.props.history.push('/');
     if (this.props.game && !this.props.players) this.searchForOpponent();
+    if (this.props.game.round === 8) this.props.updateScreen('questionScreen')
   }
 
   gameplay = () => {
@@ -144,7 +145,6 @@ class GamePlay extends React.Component {
         updateCorrAns={this.updateCorrAns}
         updateScore={this.updateScore}
         updateRound={this.updateRound}
-        updateScreen={this.updateScreen}
       />
   }
 

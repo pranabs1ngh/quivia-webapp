@@ -231,8 +231,7 @@ class QuestionScreen extends React.Component {
 
   renderNextScreen = () => {
     setTimeout(() => {
-      if (this.props.game.round === 7) this.props.updateScreen('questionScreen')
-      else this.props.updateRound();
+      this.props.updateRound();
     }, 1000);
   }
 
@@ -313,7 +312,6 @@ const mapStateToProps = (state, ownProps) => ({
   score1: ownProps.score1,
   score2: ownProps.score2,
   updateCorrAns: ownProps.updateCorrAns,
-  updateScreen: ownProps.updateScreen,
   updateScore: ownProps.updateScore,
   updateRound: ownProps.updateRound,
   player_1: state.players.player_1,
