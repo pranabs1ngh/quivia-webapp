@@ -37,11 +37,6 @@ class ResultScreen extends React.Component {
       })
   }
 
-  rematchBtn = () => {
-    if (this.state.oppConnected) return <Button onClick={this.rematch}>Rematch</Button>
-    else return <ButtonDisabled>Opponent Disconnected</ButtonDisabled>
-  }
-
   rematch = () => {
     if (this.props.player_2.title !== 'BOT')
       this.props.socket.emit('rematch', this.props.player_2.socketID);
@@ -96,7 +91,7 @@ class ResultScreen extends React.Component {
           </Player2Wrapper>
         </PlayerData>
 
-        {this.rematchBtn()}
+        {(this.state.oppConnected) ? <Button onClick={this.rematch}>Rematch</Button> : <ButtonDisabled>Opponent Disconnected</ButtonDisabled>}
         <Button onClick={this.anotherGame}>Another Game</Button>
       </Wrapper>
     </>
