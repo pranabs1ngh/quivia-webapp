@@ -26,7 +26,7 @@ class ResultScreen extends React.Component {
     noOfQuestionsPlayed.won += this.props.numOfCorrAns;
     noOfQuestionsPlayed.lost += 7 - this.props.numOfCorrAns;
 
-    if (noOfGamesPlayed.won % 15 === 0) {
+    if (noOfGamesPlayed.won !== 0 && noOfGamesPlayed.won % 15 === 0) {
       level++;
       if (level <= 10) title = this.title[level - 1];
     }
@@ -53,6 +53,7 @@ class ResultScreen extends React.Component {
   componentDidMount = () => {
     this.updatePlayerData();
     this.props.socket.on('rematch', () => { this.props.rematch(false) });
+    this.props.socket.on('opponentDisconnected', () => { this.setState({ oppConnected: false }) });
   }
 
   componentWillMount = () => {
