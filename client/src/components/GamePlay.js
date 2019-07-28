@@ -24,6 +24,7 @@ class GamePlay extends React.Component {
     questionScreen: false
   }
 
+  url = 'http://localhost:5000';
   socket = io.connect();
 
   waitForOpponent = () => {
