@@ -39,6 +39,7 @@ class GamePlay extends React.Component {
           score: 0
         };
         this.props.storePlayersData({ player_1, player_2 });
+        this.socket.emit('bot_sent', this.props.game.socketRoomID);
         this.setState({ searchScreen: true });
         this.getQuestions(true);
       }

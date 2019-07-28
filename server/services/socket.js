@@ -37,6 +37,11 @@ const socket = io => {
       rooms.push(room);
     });
 
+    socket.on('bot_sent', roomID => {
+      const index = findRoom(roomID);
+      rooms[index].length++;
+    });
+
     socket.on('join', async ({ roomID, player2 }) => {
       socket.join(roomID);
 

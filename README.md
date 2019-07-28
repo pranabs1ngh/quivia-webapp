@@ -39,6 +39,8 @@ Create a '.env' file in the root folder and store
 the following data:
 
 ```
+BASE_URL = ******************
+
 COOKIE_SECRET = *************
 
 MONGO_URI = *****************
