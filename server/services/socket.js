@@ -72,7 +72,11 @@ const socket = io => {
     })
 
     socket.on('disconnect', () => {
-      const index = rooms.findIndex(user => user.player_1.socketID || user.player_2.socketID === socket.id);
+      const index = rooms.findIndex(user => {
+        if (user.player_1.socketID === socket.id) return true;
+        if (user.player_2) if (user.player_2.socketID === socket.id) return true;
+        else return false;
+      });
       if (index + 1) {
         io.to(rooms[index].id).emit('opponentDisconnected');
         rooms.splice(index, 1);
