@@ -111,6 +111,9 @@ const Wrapper = styled.div`
   height: 768px;
   font-family: 'Varela Round', sans-serif;
   display: flex;
+  @media (max-height: 768px) {
+    height: 750px;
+  }
 `;
 
 const DashboardShadow = styled.div`
@@ -285,11 +288,19 @@ const TopicCard = styled.div`
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     cursor: pointer;
   }
+  @media (max-height: 768px) {
+    height: 90px;
+    width: 90px;
+  }
 `;
 
 const TopicImg = styled.img`
   height: 60px;
   width: 60px;
+  @media (max-height: 768px) {
+    height: 55px;
+    width: 55px;
+  }
 `;
 
 const TopicTitle = styled.h5`
