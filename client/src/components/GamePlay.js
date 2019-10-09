@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import io from 'socket.io-client'
 import faker from 'faker'
 import unique from 'unique-string'
-import { storeGameData, storePlayersData, storeQuestions } from '../actions'
+import { setSocketRoomID, updateRound, storePlayersData, storeQuestions } from '../actions'
 
 import OpponentSearchScreen from './OpponentSearchScreen'
 import PvPScreen from './PvPScreen'
@@ -41,8 +41,7 @@ class GamePlay extends React.Component {
   waitForOpponent = () => {
     setTimeout(() => {
       if (!this.props.players) {
-        const { name, title, level, displayImage } = this.props.user
-        const player_1 = { name, title, level, displayImage, score: 0 }
+        const player_1 = { ...this.props.user, score: 0 }
         const player_2 = {
           name: faker.name.findName(),
           title: `BOT`,
@@ -68,7 +67,7 @@ class GamePlay extends React.Component {
   }
 
   searchForOpponent = () => {
-    const { key, topic, round } = this.props.game
+    const { key, topic } = this.props.game
     const { id, name, title, level, displayImage } = this.props.user
 
     const socket = this.socket
@@ -78,7 +77,7 @@ class GamePlay extends React.Component {
     socket.on('room_found', roomID => {
       const player2 = { id, name, title, level, displayImage, socketID: null }
       socket.emit('join', { roomID, player2 })
-      this.props.storeGameData({ key, topic, round, socketRoomID: roomID })
+      this.props.setSocketRoomID(roomID)
     })
 
     socket.on('room_not_found', () => {
@@ -90,7 +89,7 @@ class GamePlay extends React.Component {
         length: 1
       }
       socket.emit('create_room', room)
-      this.props.storeGameData({ key, topic, round, socketRoomID: room.id })
+      this.props.setSocketRoomID(room.id)
       this.waitForOpponent()
     })
 
@@ -105,9 +104,9 @@ class GamePlay extends React.Component {
   updateRound = () => {
     if (this.state.roundScreen) {
       if (this.props.game.round < 7) {
-        let { key, topic, round, socketRoomID } = this.props.game
+        let { round } = this.props.game
         round += 1
-        this.props.storeGameData({ key, topic, round, socketRoomID })
+        this.props.updateRound(round)
         this.setState({ roundScreen: false })
       } else this.updateScreen('questionScreen')
     }
@@ -129,9 +128,7 @@ class GamePlay extends React.Component {
       roundScreen: false,
       questionScreen: false
     })
-    let { key, topic, round, socketRoomID } = this.props.game
-    round = 1
-    this.props.storeGameData({ key, topic, round, socketRoomID })
+    this.props.updateRound(1)
   }
 
   gameplay = () => {
@@ -181,4 +178,4 @@ const mapStateToProps = state => {
   return { game: state.game, user: state.user, players: state.players }
 }
 
-export default connect(mapStateToProps, { storeGameData, storePlayersData, storeQuestions })(GamePlay)
+export default connect(mapStateToProps, { setSocketRoomID, updateRound, storePlayersData, storeQuestions })(GamePlay)

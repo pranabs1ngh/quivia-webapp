@@ -10,8 +10,14 @@ export const storeUserData = (state = { user: null }, { type, payload }) => {
 
 export const storeGameData = (state = null, { type, payload }) => {
   switch (type) {
-    case 'STORE_GAME_NAME':
+    case 'STORE_GAME_DATA':
       return payload;
+
+    case 'SET_SOCKET_ROOM_ID':
+      return { ...state, socketRoomID: payload };
+
+    case 'UPDATE_ROUND':
+      return { ...state, round: payload };
 
     default:
       return state;

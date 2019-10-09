@@ -445,11 +445,11 @@ const AnswerWrapper = styled.div`
     transition: .2s ease-in-out;
     transform: scale(1.01);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background: #fce4ec;
-    color: #f50057;
+    background: #FFE0B2;
+    color: #EF6C00;
   }
   :hover :nth-child(2) {
-    background: #f8bbd0;
+    background: #FFA726;
   }
 `;
 
