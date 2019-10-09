@@ -1,12 +1,12 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import styled, { keyframes } from 'styled-components';
+import React from 'react'
+import { connect } from 'react-redux'
+import styled, { keyframes } from 'styled-components'
 
 class PVPComponent extends React.Component {
   componentDidMount = () => {
     setTimeout(() => {
-      this.props.updateScreen('playersScreen');
-      this.props.updateRound();
+      this.props.updateScreen('playersScreen')
+      this.props.updateRound()
     }, 5000)
   }
 
@@ -50,9 +50,9 @@ const mapStateToProps = (state, ownProps) => ({
   topicKey: state.game.key,
   player_1: state.players.player_1,
   player_2: state.players.player_2
-});
+})
 
-export default connect(mapStateToProps)(PVPComponent);
+export default connect(mapStateToProps)(PVPComponent)
 
 // STYLED COMPONENTS
 

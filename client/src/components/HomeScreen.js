@@ -1,22 +1,32 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import axios from 'axios';
-import styled from 'styled-components';
-import { fetchUser, storeGameData } from '../actions';
+import React from 'react'
+import { connect } from 'react-redux'
+import axios from 'axios'
+import styled from 'styled-components'
+import { fetchUser, storeGameData } from '../actions'
 
 class Home extends React.Component {
-  state = { user: false }
+  constructor(props) {
+    super(props)
 
-  names = ['GK', 'Books', 'Film', 'Music', 'Television', 'Games', 'Science', 'Computers', 'Maths', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals', 'Vehicles', 'Comics', 'Gadgets'];
-  topicNo = [9, 10, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+    this.fetchUser()
+    this.names = ['GK', 'Books', 'Film', 'Music', 'Television', 'Games', 'Science', 'Computers', 'Maths', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals', 'Vehicles', 'Comics', 'Gadgets']
+    this.topicNo = [9, 10, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+    this.state = { user: false }
+  }
 
-  splitName = name => name = name ? name.split(' ') : '';
+  fetchUser = async () => {
+    await this.props.fetchUser()
+    if (this.props.user) this.setState({ user: true })
+    else this.props.history.push('/user/signin')
+  }
+
+  splitName = name => name = name ? name.split(' ') : ''
 
   percentage = data => {
     if (data) {
-      const percentage = Math.round(((data.won / (data.won + data.lost)) * 100));
-      if (percentage) return percentage;
-      else return 0;
+      const percentage = Math.round(((data.won / (data.won + data.lost)) * 100))
+      if (percentage) return percentage
+      else return 0
     }
   }
 
@@ -28,21 +38,15 @@ class Home extends React.Component {
   )
 
   onCardClick = (key, topic) => {
-    this.props.storeGameData({ key, topic, round: 1, socketRoomID: null });
-    this.props.history.push('/gameplay');
-  };
+    this.props.storeGameData({ key, topic, round: 1 })
+    this.props.history.push('/gameplay')
+  }
 
   signOut = () => {
     axios.get('/api/user/signout')
       .then(res => {
-        if (!res.data.auth) this.props.history.push('/user/signin');
+        if (!res.data.auth) this.props.history.push('/user/signin')
       })
-  }
-
-  componentWillMount = async () => {
-    await this.props.fetchUser();
-    if (this.props.user) this.setState({ user: true });
-    else this.props.history.push('/user/signin');
   }
 
   render = () => {
@@ -91,15 +95,15 @@ class Home extends React.Component {
           </Topics>
         </Wrapper>
       </>
-    );
-  };
-};
+    )
+  }
+}
 
 const mapStateToProps = state => {
   return { user: state.user }
 }
 
-export default connect(mapStateToProps, { fetchUser, storeGameData })(Home);
+export default connect(mapStateToProps, { fetchUser, storeGameData })(Home)
 
 
 // STYLED COMPONENTS

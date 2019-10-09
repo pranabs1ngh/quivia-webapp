@@ -1,22 +1,20 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import React from 'react'
+import styled, { keyframes } from 'styled-components'
 
-export default () => {
-  return (
-    <>
-      <audio src='/audio/searching.mp3' autoPlay />
-      <audio src='/audio/battle.mp3' />
-      <Wrapper>
-        <SpinningGlobe>
-          <WorldMap src='img/globe-bg.JPG'></WorldMap>
-        </SpinningGlobe>
-        <SearchText>Searching for opponent
+export default () => (
+  <>
+    <audio src='/audio/searching.mp3' autoPlay />
+    <audio src='/audio/battle.mp3' />
+    <Wrapper>
+      <SpinningGlobe>
+        <WorldMap src='img/globe-bg.JPG'></WorldMap>
+      </SpinningGlobe>
+      <SearchText>Searching for opponent
           <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-        </SearchText>
-      </Wrapper>
-    </>
-  )
-}
+      </SearchText>
+    </Wrapper>
+  </>
+)
 
 // STYLED COMPONENTS
 

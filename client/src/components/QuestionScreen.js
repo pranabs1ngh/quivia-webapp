@@ -5,157 +5,181 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import "react-circular-progressbar/dist/styles.css"
 
 class QuestionScreen extends React.Component {
-  state = {
-    currentRound: 0,
-    displayAns: 'none',
-    sectionCover: 'none',
-    question: '',
-    answers: [],
-    correctAns: null,
-    selectedAnswer: null,
-    playerScore: 0,
-    oppAnswer: null,
-    oppAnswerSt: null,
-    oppScore: 0,
-    answered: false,
-    numOfPlayersAns: null,
-    showCorrectAnswer: false,
-    timeLeft: 10
+  constructor(props) {
+    super(props)
+
+    const question = this.decodeEscapeChars(this.props.questions[this.props.game.round - 1].question)
+
+    this.state = {
+      currentRound: 0,
+      displayAns: 'none',
+      sectionCover: 'none',
+      question,
+      answers: [],
+      correctAns: null,
+      selectedAnswer: null,
+      playerScore: this.props.score1,
+      oppAnswer: null,
+      oppAnswerSt: null,
+      oppScore: this.props.score2,
+      answered: false,
+      numOfPlayersAns: 0,
+      showCorrectAnswer: false,
+      timeLeft: 10
+    }
+  }
+
+  componentDidMount = () => {
+    let { correct_answer, incorrect_answers } = this.props.questions[this.props.game.round - 1]
+    this.arrangeOptions(correct_answer, incorrect_answers)
+
+    this._isMounted = true
+    setTimeout(() => {
+      this.setState({ displayAns: 'flex' })
+      this.timer()
+
+      if (this.props.player_2.title === 'BOT') this.botAnswer()
+      else this.receiveAnswer()
+    }, 2000)
+  }
+
+  componentWillUnmount = () => {
+    this._isMounted = false
   }
 
   timer = () => {
     setTimeout(() => {
       if (this.state.timeLeft > 0 && !this.state.answered) {
-        this.setState({ timeLeft: this.state.timeLeft - 1 });
-        this.timer();
+        this.setState({ timeLeft: this.state.timeLeft - 1 })
+        this.timer()
       } else if (this.state.timeLeft === 0 && this.state.numOfPlayersAns !== 2) {
-        this.setState({ numOfPlayersAns: 2 });
-        if (this.props.player_2.title !== 'BOT') this.sendAnswer();
-        this.showAnswers();
+        this.setState({ numOfPlayersAns: 2 })
+        if (this.props.player_2.title !== 'BOT') this.sendAnswer()
+        this.showAnswers()
       }
-    }, 1000);
+    }, 1000)
   }
 
   botAnswer = () => {
-    const time = Math.round(Math.random() * 4) + 3;
+    const time = Math.round(Math.random() * 4) + 3
     setTimeout(() => {
-      const random = Math.round(Math.random() * 10);
-      const numOfPlayersAns = this.state.numOfPlayersAns + 1;
+      const random = Math.round(Math.random() * 10)
+      const numOfPlayersAns = this.state.numOfPlayersAns + 1
 
-      let ans, oppScore;
+      let ans, oppScore
       if (random > 5) {
-        ans = this.state.correctAns;
-        oppScore = this.state.oppScore + 10 + time;
+        ans = this.state.correctAns
+        oppScore = this.state.oppScore + 10 + time
       } else {
-        ans = Math.round(Math.random() * 4);
-        if (ans === this.state.correctAns) oppScore = this.state.oppScore + 10 + time;
-        else oppScore = this.state.oppScore;
+        ans = Math.round(Math.random() * 4)
+        if (ans === this.state.correctAns) oppScore = this.state.oppScore + 10 + time
+        else oppScore = this.state.oppScore
       }
 
-      this.setState({ oppAnswerSt: ans, oppScore, numOfPlayersAns });
-      this.props.updateScore(this.state.playerScore, oppScore);
-      this.showAnswers();
-    }, time * 1000);
+      this.setState({ oppAnswerSt: ans, oppScore, numOfPlayersAns })
+      this.props.updateScore(this.state.playerScore, oppScore)
+      this.showAnswers()
+    }, time * 1000)
   }
 
   sendAnswer = () => {
-    let { selectedAnswer, playerScore } = this.state;
-    selectedAnswer = this.state.answers[selectedAnswer];
-    const socketID = this.props.player_2.socketID;
-    this.props.socket.emit('answered', ({ socketID, selectedAnswer, playerScore }));
+    let { selectedAnswer, playerScore } = this.state
+    selectedAnswer = this.state.answers[selectedAnswer]
+    const socketID = this.props.player_2.socketID
+    this.props.socket.emit('answered', ({ socketID, selectedAnswer, playerScore }))
   }
 
   receiveAnswer = () => {
     this.props.socket.on('oppAnswered', ({ selectedAnswer, playerScore }) => {
       if (this._isMounted) {
-        const num = this.state.numOfPlayersAns + 1;
+        const num = this.state.numOfPlayersAns + 1
 
-        selectedAnswer = this.state.answers.findIndex(ans => ans === selectedAnswer);
-        this.setState({ oppAnswerSt: selectedAnswer, numOfPlayersAns: num, oppScore: playerScore });
-        this.props.updateScore(this.state.playerScore, playerScore);
-        this.showAnswers();
+        selectedAnswer = this.state.answers.findIndex(ans => ans === selectedAnswer)
+        this.setState({ oppAnswerSt: selectedAnswer, numOfPlayersAns: num, oppScore: playerScore })
+        this.props.updateScore(this.state.playerScore, playerScore)
+        this.showAnswers()
       }
     })
   }
 
   showAnswers = () => {
     if (this.state.numOfPlayersAns === 2) {
-      this.setState({ oppAnswer: this.state.oppAnswerSt });
+      this.setState({ oppAnswer: this.state.oppAnswerSt })
       setTimeout(() => {
-        this.setState({ showCorrectAnswer: true });
-        this.renderNextScreen();
-      }, 1000);
+        this.setState({ showCorrectAnswer: true })
+        this.renderNextScreen()
+      }, 1000)
     }
   }
 
   replaceAll = str => {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
   }
 
   decodeEscapeChars = key => {
     // APOSTROPHES
-    key = key.replace(new RegExp(this.replaceAll('&quot;'), 'g'), '"');
-    key = key.replace(new RegExp(this.replaceAll('&ldquo;'), 'g'), '"');
-    key = key.replace(new RegExp(this.replaceAll('&rdquo;'), 'g'), '"');
-    key = key.replace(new RegExp(this.replaceAll('&rsquo;'), 'g'), "'");
-    key = key.replace(new RegExp(this.replaceAll('&lsquo;'), 'g'), "'");
-    key = key.replace(new RegExp(this.replaceAll('&#039;'), 'g'), "'");
+    key = key.replace(new RegExp(this.replaceAll('&quot;'), 'g'), '"')
+    key = key.replace(new RegExp(this.replaceAll('&ldquo;'), 'g'), '"')
+    key = key.replace(new RegExp(this.replaceAll('&rdquo;'), 'g'), '"')
+    key = key.replace(new RegExp(this.replaceAll('&rsquo;'), 'g'), "'")
+    key = key.replace(new RegExp(this.replaceAll('&lsquo;'), 'g'), "'")
+    key = key.replace(new RegExp(this.replaceAll('&#039;'), 'g'), "'")
 
     // EXTRAS
-    key = key.replace(new RegExp(this.replaceAll('&hellip;'), 'g'), "...");
-    key = key.replace(new RegExp(this.replaceAll('&amp;'), 'g'), "&");
-    key = key.replace(new RegExp(this.replaceAll('&shy;'), 'g'), "-");
+    key = key.replace(new RegExp(this.replaceAll('&hellip;'), 'g'), "...")
+    key = key.replace(new RegExp(this.replaceAll('&amp;'), 'g'), "&")
+    key = key.replace(new RegExp(this.replaceAll('&shy;'), 'g'), "-")
 
     // MATHEMATICAL SYMBOLS
-    key = key.replace(new RegExp(this.replaceAll('&pi;'), 'g'), "π");
-    key = key.replace(new RegExp(this.replaceAll('&Delta;'), 'g'), "Δ");
+    key = key.replace(new RegExp(this.replaceAll('&pi;'), 'g'), "π")
+    key = key.replace(new RegExp(this.replaceAll('&Delta;'), 'g'), "Δ")
 
     // LATIN ACUTE VOWELS
-    key = key.replace(new RegExp(this.replaceAll('&aacute;'), 'g'), "á");
-    key = key.replace(new RegExp(this.replaceAll('&Eacute;'), 'g'), "É");
-    key = key.replace(new RegExp(this.replaceAll('&eacute;'), 'g'), "é");
-    key = key.replace(new RegExp(this.replaceAll('&iacute;'), 'g'), "í");
-    key = key.replace(new RegExp(this.replaceAll('&oacute;'), 'g'), "ó");
-    key = key.replace(new RegExp(this.replaceAll('&uacute;'), 'g'), "ú");
+    key = key.replace(new RegExp(this.replaceAll('&aacute;'), 'g'), "á")
+    key = key.replace(new RegExp(this.replaceAll('&Eacute;'), 'g'), "É")
+    key = key.replace(new RegExp(this.replaceAll('&eacute;'), 'g'), "é")
+    key = key.replace(new RegExp(this.replaceAll('&iacute;'), 'g'), "í")
+    key = key.replace(new RegExp(this.replaceAll('&oacute;'), 'g'), "ó")
+    key = key.replace(new RegExp(this.replaceAll('&uacute;'), 'g'), "ú")
     // LATIN DIAERESIS LETTERS
-    key = key.replace(new RegExp(this.replaceAll('&auml;'), 'g'), "ä");
-    key = key.replace(new RegExp(this.replaceAll('&euml;'), 'g'), "ë");
-    key = key.replace(new RegExp(this.replaceAll('&iuml;'), 'g'), "ï");
-    key = key.replace(new RegExp(this.replaceAll('&ouml;'), 'g'), "ö");
-    key = key.replace(new RegExp(this.replaceAll('&uuml;'), 'g'), "ü");
+    key = key.replace(new RegExp(this.replaceAll('&auml;'), 'g'), "ä")
+    key = key.replace(new RegExp(this.replaceAll('&euml;'), 'g'), "ë")
+    key = key.replace(new RegExp(this.replaceAll('&iuml;'), 'g'), "ï")
+    key = key.replace(new RegExp(this.replaceAll('&ouml;'), 'g'), "ö")
+    key = key.replace(new RegExp(this.replaceAll('&uuml;'), 'g'), "ü")
     // LATIN RING LETTERS
-    key = key.replace(new RegExp(this.replaceAll('&aring;'), 'g'), "å");
-    key = key.replace(new RegExp(this.replaceAll('&ering;'), 'g'), "e̊");
-    key = key.replace(new RegExp(this.replaceAll('&iring;'), 'g'), "i̊");
-    key = key.replace(new RegExp(this.replaceAll('&oring;'), 'g'), "o̊");
-    key = key.replace(new RegExp(this.replaceAll('&uring;'), 'g'), "ů");
+    key = key.replace(new RegExp(this.replaceAll('&aring;'), 'g'), "å")
+    key = key.replace(new RegExp(this.replaceAll('&ering;'), 'g'), "e̊")
+    key = key.replace(new RegExp(this.replaceAll('&iring;'), 'g'), "i̊")
+    key = key.replace(new RegExp(this.replaceAll('&oring;'), 'g'), "o̊")
+    key = key.replace(new RegExp(this.replaceAll('&uring;'), 'g'), "ů")
     // LATIN CICUMFLEX LETTERS
-    key = key.replace(new RegExp(this.replaceAll('&acirc;'), 'g'), "â");
-    key = key.replace(new RegExp(this.replaceAll('&ecirc;'), 'g'), "ê");
-    key = key.replace(new RegExp(this.replaceAll('&icirc;'), 'g'), "î");
-    key = key.replace(new RegExp(this.replaceAll('&ocirc;'), 'g'), "ô");
-    key = key.replace(new RegExp(this.replaceAll('&ucirc;'), 'g'), "û");
-    return key;
+    key = key.replace(new RegExp(this.replaceAll('&acirc;'), 'g'), "â")
+    key = key.replace(new RegExp(this.replaceAll('&ecirc;'), 'g'), "ê")
+    key = key.replace(new RegExp(this.replaceAll('&icirc;'), 'g'), "î")
+    key = key.replace(new RegExp(this.replaceAll('&ocirc;'), 'g'), "ô")
+    key = key.replace(new RegExp(this.replaceAll('&ucirc;'), 'g'), "û")
+    return key
   }
 
   arrangeOptions = (correctAns, incorrectAns) => {
-    let answers = ['', '', '', ''];
-    let random = Math.round(Math.random() * 4);
-    if (random === 4) random--;
+    let answers = ['', '', '', '']
+    let random = Math.round(Math.random() * 4)
+    if (random === 4) random--
 
-    correctAns = this.decodeEscapeChars(correctAns);
-    answers[random] = correctAns;
+    correctAns = this.decodeEscapeChars(correctAns)
+    answers[random] = correctAns
 
-    let pointer = 0;
+    let pointer = 0
     incorrectAns.forEach(element => {
-      element = this.decodeEscapeChars(element);
-      if (pointer === random) pointer++;
-      answers[pointer] = element;
-      pointer++;
-    });
+      element = this.decodeEscapeChars(element)
+      if (pointer === random) pointer++
+      answers[pointer] = element
+      pointer++
+    })
 
     this.setState({ answers })
-    this.setState({ correctAns: random });
+    this.setState({ correctAns: random })
   }
 
   answerVisibilityStatus = key => {
@@ -167,23 +191,23 @@ class QuestionScreen extends React.Component {
   }
 
   handleClick = key => {
-    const playerScore = (key === this.state.correctAns) ? this.state.playerScore + 10 + this.state.timeLeft : this.state.playerScore;
-    const numOfPlayersAns = this.state.numOfPlayersAns + 1;
+    const playerScore = (key === this.state.correctAns) ? this.state.playerScore + 10 + this.state.timeLeft : this.state.playerScore
+    const numOfPlayersAns = this.state.numOfPlayersAns + 1
     this.setState({
       selectedAnswer: key,
       sectionCover: 'block',
       answered: true,
       playerScore,
       numOfPlayersAns
-    });
+    })
 
-    if (key === this.state.correctAns) this.props.updateCorrAns();
-    this.props.updateScore(playerScore, this.state.oppScore);
+    if (key === this.state.correctAns) this.props.updateCorrAns()
+    this.props.updateScore(playerScore, this.state.oppScore)
 
     setTimeout(() => {
-      if (this.props.player_2.title !== 'BOT') this.sendAnswer();
-      this.showAnswers();
-    }, 500);
+      if (this.props.player_2.title !== 'BOT') this.sendAnswer()
+      this.showAnswers()
+    }, 500)
   }
 
   returnColors = type => {
@@ -198,8 +222,8 @@ class QuestionScreen extends React.Component {
   }
 
   answerBtn = (answer, key) => {
-    const { selectedAnswer, oppAnswer, correctAns } = this.state;
-    let colors;
+    const { selectedAnswer, oppAnswer, correctAns } = this.state
+    let colors
 
     if (key === selectedAnswer && key === correctAns) colors = this.returnColors('correct')
     else if (key === selectedAnswer && key !== correctAns) colors = this.returnColors('incorrect')
@@ -208,10 +232,10 @@ class QuestionScreen extends React.Component {
     else if (this.state.showCorrectAnswer) colors = this.returnColors('correct')
     else colors = this.returnColors()
 
-    const { bg1, bg2, color } = colors;
+    const { bg1, bg2, color } = colors
 
-    const len = answer.length;
-    const fontSize = len > 23 ? '1rem' : '1.4rem';
+    const len = answer.length
+    const fontSize = len > 23 ? '1rem' : '1.4rem'
 
     return (
       <AnswerWrapper
@@ -231,32 +255,8 @@ class QuestionScreen extends React.Component {
 
   renderNextScreen = () => {
     setTimeout(() => {
-      this.props.updateRound();
-    }, 1000);
-  }
-
-
-  componentWillMount = () => {
-    this._isMounted = true;
-    let { question, correct_answer, incorrect_answers } = this.props.questions[this.props.game.round - 1];
-    question = this.decodeEscapeChars(question);
-    this.arrangeOptions(correct_answer, incorrect_answers);
-
-    const playerScore = this.props.score1;
-    const oppScore = this.props.score2;
-    this.setState({ question, playerScore, oppScore, numOfPlayersAns: 0 });
-
-    setTimeout(() => {
-      this.setState({ displayAns: 'flex' });
-      this.timer();
-
-      if (this.props.player_2.title === 'BOT') this.botAnswer();
-      else this.receiveAnswer();
-    }, 2000)
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
+      this.props.updateRound()
+    }, 1000)
   }
 
   render = () => (
@@ -445,11 +445,11 @@ const AnswerWrapper = styled.div`
     transition: .2s ease-in-out;
     transform: scale(1.01);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background: #fce4ec;
-    color: #f50057;
+    background: #FFE0B2;
+    color: #EF6C00;
   }
   :hover :nth-child(2) {
-    background: #f8bbd0;
+    background: #FFA726;
   }
 `;
 

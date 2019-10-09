@@ -1,30 +1,42 @@
-import React from 'react';
-import axios from 'axios';
-import { connect } from 'react-redux';
+import React from 'react'
+import axios from 'axios'
+import { connect } from 'react-redux'
 import { fetchUser } from '../actions'
 
-import './css/style.css';
+import './css/style.css'
 
 class UserForm extends React.Component {
-  state = {
-    name: "",
-    email: "",
-    password: "",
-    signInError: null,
-    signUpError: null
-  };
+  constructor(props) {
+    super(props)
+
+    this.fetchUser()
+    this.state = {
+      showLoader: true,
+      name: "",
+      email: "",
+      password: "",
+      signInError: null,
+      signUpError: null
+    }
+  }
+
+  fetchUser = async () => {
+    await this.props.fetchUser()
+    if (this.props.user) this.props.history.push('/')
+    else this.setState({ showLoader: false })
+  }
 
   signUpClick = event => {
-    event.target.parentElement.parentElement.parentElement.parentElement.classList.add("right-panel-active");
-    this.props.history.push('/user/signup');
-  };
+    event.target.parentElement.parentElement.parentElement.parentElement.classList.add("right-panel-active")
+    this.props.history.push('/user/signup')
+  }
   signInClick = event => {
-    event.target.parentElement.parentElement.parentElement.parentElement.classList.remove("right-panel-active");
-    this.props.history.push('/user/signin');
-  };
+    event.target.parentElement.parentElement.parentElement.parentElement.classList.remove("right-panel-active")
+    this.props.history.push('/user/signin')
+  }
 
   signUp = event => {
-    event.preventDefault();
+    event.preventDefault()
     const data = {
       name: this.state.name,
       email: this.state.email,
@@ -32,36 +44,31 @@ class UserForm extends React.Component {
     }
     axios.post("/api/user/signup", data)
       .then(res => {
-        if (res.data.auth) this.props.history.push('/');
+        if (res.data.auth) this.props.history.push('/')
       })
       .catch(err => {
-        this.setState({ signUpError: err.response.data });
+        this.setState({ signUpError: err.response.data })
       })
-  };
+  }
 
   signIn = event => {
-    event.preventDefault();
+    event.preventDefault()
     const data = {
       email: this.state.email,
       password: this.state.password
     }
     axios.post("/api/user/signin", data)
       .then(res => {
-        if (res.data.auth) this.props.history.push('/');
+        if (res.data.auth) this.props.history.push('/')
       })
       .catch(err => {
-        this.setState({ signInError: err.response.data });
+        this.setState({ signInError: err.response.data })
       })
-  };
-
-  componentWillMount = async () => {
-    await this.props.fetchUser();
-
-    if (this.props.user) this.props.history.push('/');
   }
 
   render = () => {
-    return (
+    if (this.state.showLoader) return <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    else return (
       <div className="container" id="container">
         <div className="form-container sign-up-container">
           <form onSubmit={this.signUp}>
@@ -109,12 +116,12 @@ class UserForm extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
-};
+}
 
 const mapStateToProps = state => {
   return { user: state.user }
 }
 
-export default connect(mapStateToProps, { fetchUser })(UserForm);
+export default connect(mapStateToProps, { fetchUser })(UserForm)
