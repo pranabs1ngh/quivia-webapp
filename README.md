@@ -39,8 +39,6 @@ Create a '.env' file in the root folder and store
 the following data:
 
 ```
-BASE_URL = ******************
-
 COOKIE_SECRET = *************
 
 MONGO_URI = *****************
@@ -59,12 +57,14 @@ FACEBOOK_APP_SECRET = *******
 > section
 
 Now Change the socket connection url inside
-'/client/src/components/Gameplay.js' (line 26) as
+'/client/src/components/Gameplay.js' (line 19) as
 follows:
 
 ```
-socketURL = 'http://localhost:5000/';
+this.socket = io.connect(devURI)
 ```
+
+> Now uncomment line 18
 
 ## Running the app
 
@@ -92,6 +92,7 @@ will automatically get created on deployment.
 - Express
 - React
 - NodeJs
+- Socket.io
 
 ## Author
 

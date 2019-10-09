@@ -15,8 +15,8 @@ class GamePlay extends React.Component {
   constructor(props) {
     super(props)
 
-    const devURI = 'http://localhost:5000'
-    this.socket = io.connect(devURI)
+    // const devURI = 'http://localhost:5000'
+    this.socket = io.connect()
 
     if (!this.props.user.name) this.props.history.push('/')
     if (!this.props.game) this.props.history.push('/')
