@@ -7,9 +7,10 @@ const keys = require('./config/keys');
 require('./services/passport');
 
 const app = express();
+app.enable('trust proxy');
 
 // CONNECT TO MONGODB
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useCreateIndex: true })
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log('Couldn\'t connect to MongoDB...', err));
 

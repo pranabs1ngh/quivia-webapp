@@ -5,64 +5,75 @@ import styled from 'styled-components'
 import { fetchUser, storeGameData, storePlayersData } from '../actions'
 
 class ResultScreen extends React.Component {
-  state = {
-    result: null,
-    player_1_color: null,
-    player_2_color: null,
-    oppConnected: this.props.oppConnected
-  }
+  constructor(props) {
+    super(props)
+    let result, player_1_color, player_2_color
 
-  title = ['Freshman', 'Greenhorn', 'Diligent', 'Meticulous', 'Industrious', 'Captain', 'Master', 'G-Master', 'Commander', 'Headman']
-
-  updatePlayerData = () => {
-    let { title, level, noOfGamesPlayed, noOfQuestionsPlayed } = this.props.user;
-    if (this.props.score1 > this.props.score2) noOfGamesPlayed.won++;
-    else if (this.props.score1 < this.props.score2) noOfGamesPlayed.lost++;
+    if (this.props.score1 > this.props.score2) {
+      result = 'YOU WIN'
+      player_1_color = '#00e676'
+      player_2_color = '#ff5722'
+    }
+    else if (this.props.score1 < this.props.score2) {
+      result = 'YOU LOSE'
+      player_1_color = '#ff5722'
+      player_2_color = '#00e676'
+    }
     else {
-      noOfGamesPlayed.won++;
-      noOfGamesPlayed.lost++;
+      result = 'MATCH DRAW'
+      player_1_color = '#00e676'
+      player_2_color = '#00e676'
     }
 
-    noOfQuestionsPlayed.won += this.props.numOfCorrAns;
-    noOfQuestionsPlayed.lost += 7 - this.props.numOfCorrAns;
+    this.updatePlayerData()
+    this.title = ['Freshman', 'Greenhorn', 'Diligent', 'Meticulous', 'Industrious', 'Captain', 'Master', 'G-Master', 'Commander', 'Headman']
+    this.state = {
+      result,
+      player_1_color,
+      player_2_color,
+      oppConnected: this.props.oppConnected
+    }
+  }
+
+  componentDidMount = () => {
+    this.props.socket.on('rematch', () => { this.props.rematch(false) })
+    this.props.socket.on('opponentDisconnected', () => { this.setState({ oppConnected: false }) })
+  }
+
+  updatePlayerData = () => {
+    let { title, level, noOfGamesPlayed, noOfQuestionsPlayed } = this.props.user
+    if (this.props.score1 > this.props.score2) noOfGamesPlayed.won++
+    else if (this.props.score1 < this.props.score2) noOfGamesPlayed.lost++
+    else {
+      noOfGamesPlayed.won++
+      noOfGamesPlayed.lost++
+    }
+
+    noOfQuestionsPlayed.won += this.props.numOfCorrAns
+    noOfQuestionsPlayed.lost += 7 - this.props.numOfCorrAns
 
     if (noOfGamesPlayed.won !== 0 && noOfGamesPlayed.won % 15 === 0) {
-      level++;
-      if (level <= 10) title = this.title[level - 1];
+      level++
+      if (level <= 10) title = this.title[level - 1]
     }
 
     axios.put('/api/user/update', { title, level, noOfGamesPlayed, noOfQuestionsPlayed })
       .then(res => {
-        if (res.data.update) this.props.fetchUser();
+        if (res.data.update) this.props.fetchUser()
       })
   }
 
   rematch = () => {
     if (this.props.player_2.title !== 'BOT')
-      this.props.socket.emit('rematch', this.props.player_2.socketID);
-    this.props.rematch(true);
+      this.props.socket.emit('rematch', this.props.player_2.socketID)
+    this.props.rematch(true)
   }
 
   anotherGame = () => {
-    this.props.socket.disconnect();
-    this.props.storeGameData(null);
-    this.props.storePlayersData(null);
-    this.props.history.push('/');
-  }
-
-  componentDidMount = () => {
-    this.updatePlayerData();
-    this.props.socket.on('rematch', () => { this.props.rematch(false) });
-    this.props.socket.on('opponentDisconnected', () => { this.setState({ oppConnected: false }) });
-  }
-
-  componentWillMount = () => {
-    if (this.props.score1 > this.props.score2)
-      this.setState({ result: 'YOU WIN', player_1_color: '#00e676', player_2_color: '#ff5722' })
-    else if (this.props.score1 < this.props.score2)
-      this.setState({ result: 'YOU LOSE', player_1_color: '#ff5722', player_2_color: '#00e676' })
-    else
-      this.setState({ result: 'MATCH DRAW', player_1_color: '#00e676', player_2_color: '#00e676' })
+    this.props.socket.disconnect()
+    this.props.storeGameData(null)
+    this.props.storePlayersData(null)
+    this.props.history.push('/')
   }
 
   render = () => (
@@ -110,9 +121,9 @@ const mapStateToProps = (state, ownProps) => ({
   player_1: state.players.player_1,
   player_2: state.players.player_2,
   rematch: ownProps.rematch
-});
+})
 
-export default connect(mapStateToProps, { fetchUser, storeGameData, storePlayersData })(ResultScreen);
+export default connect(mapStateToProps, { fetchUser, storeGameData, storePlayersData })(ResultScreen)
 
 // STYLED COMPONENTS
 
