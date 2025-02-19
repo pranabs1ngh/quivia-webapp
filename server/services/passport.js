@@ -1,7 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy;
+// const FacebookStrategy = require('passport-facebook').Strategy;
 const bcrypt = require('bcryptjs');
 const keys = require('../config/keys');
 
@@ -48,22 +48,22 @@ passport.use(new GoogleStrategy({
   }
 }));
 
-passport.use(new FacebookStrategy({
-  clientID: keys.facebookClientID,
-  clientSecret: keys.facebookClientSecret,
-  callbackURL: `/api/auth/facebook/callback`,
-  profileFields: ['name', 'emails', 'picture.type(large)']
-}, async (accessToken, refreshToken, profile, done) => {
-  let user = await User.findOne({ facebookID: profile.id });
-  if (user) { done(null, user); }
-  else {
-    console.log(profile);
-    user = new User({
-      name: profile.name.givenName.concat(' ', profile.name.familyName),
-      displayImage: profile.photos[0].value,
-      facebookID: profile.id
-    });
-    user = await user.save();
-    done(null, user);
-  }
-}));
+// passport.use(new FacebookStrategy({
+//   clientID: keys.facebookClientID,
+//   clientSecret: keys.facebookClientSecret,
+//   callbackURL: `/api/auth/facebook/callback`,
+//   profileFields: ['name', 'emails', 'picture.type(large)']
+// }, async (accessToken, refreshToken, profile, done) => {
+//   let user = await User.findOne({ facebookID: profile.id });
+//   if (user) { done(null, user); }
+//   else {
+//     console.log(profile);
+//     user = new User({
+//       name: profile.name.givenName.concat(' ', profile.name.familyName),
+//       displayImage: profile.photos[0].value,
+//       facebookID: profile.id
+//     });
+//     user = await user.save();
+//     done(null, user);
+//   }
+// }));

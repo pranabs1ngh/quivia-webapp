@@ -12,11 +12,11 @@ router.get('/google/callback', passport.authenticate('google', {
   failureRedirect: '/user'
 }));
 
-router.get('/facebook', passport.authenticate('facebook'));
+// router.get('/facebook', passport.authenticate('facebook'));
 
-router.get('/facebook/callback', passport.authenticate('facebook', {
-  successRedirect: '/',
-  failureRedirect: '/user'
-}));
+// router.get('/facebook/callback', passport.authenticate('facebook', {
+//   successRedirect: '/',
+//   failureRedirect: '/user'
+// }));
 
 module.exports = router;
