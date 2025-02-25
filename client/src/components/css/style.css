@@ -211,13 +211,6 @@ input:focus {
 
 .overlay {
   background: #ff416c;
-  background: -webkit-linear-gradient(
-    to left bottom,
-    #4a148c,
-    #9c27b0,
-    #e91e63,
-    #ff1744
-  );
   background: linear-gradient(
     to left bottom,
     #4a148c,

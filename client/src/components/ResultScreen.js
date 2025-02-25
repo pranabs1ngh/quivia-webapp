@@ -85,7 +85,7 @@ class ResultScreen extends React.Component {
           <Player1Wrapper>
             <UpperPart>
               <Score1 color={this.state.player_1_color} >{this.props.score1}</Score1>
-              <DisplayImage1 src={this.props.player_1.displayImage} color={this.state.player_1_color}></DisplayImage1>
+              <DisplayImage1 src={this.props.player_1.displayImage} referrerpolicy="no-referrer" color={this.state.player_1_color}></DisplayImage1>
             </UpperPart>
             <Player1Name color={this.state.player_1_color}>{this.props.player_1.name}</Player1Name>
             <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
@@ -94,7 +94,7 @@ class ResultScreen extends React.Component {
           <MidText>VS</MidText>
           <Player2Wrapper>
             <UpperPart>
-              <DisplayImage2 src={this.props.player_2.displayImage} color={this.state.player_2_color}></DisplayImage2>
+              <DisplayImage2 src={this.props.player_2.displayImage} referrerpolicy="no-referrer" color={this.state.player_2_color}></DisplayImage2>
               <Score2 color={this.state.player_2_color}>{this.props.score2}</Score2>
             </UpperPart>
             <Player2Name color={this.state.player_2_color}>{this.props.player_2.name}</Player2Name>

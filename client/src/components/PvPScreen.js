@@ -17,7 +17,7 @@ class PVPComponent extends React.Component {
       <Wrapper>
         <UpperBlock>
           <Player1Wrapper>
-            <DisplayImage src={this.props.player_1.displayImage}></DisplayImage>
+            <DisplayImage src={this.props.player_1.displayImage} referrerpolicy="no-referrer" ></DisplayImage>
             <PlayerDataWrapper>
               <PlayerName>{this.props.player_1.name}</PlayerName>
               <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
@@ -37,7 +37,7 @@ class PVPComponent extends React.Component {
               <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
               <PlayerLevel>Level {this.props.player_2.level}</PlayerLevel>
             </PlayerDataWrapper>
-            <DisplayImage src={this.props.player_2.displayImage}></DisplayImage>
+            <DisplayImage src={this.props.player_2.displayImage} referrerpolicy="no-referrer"></DisplayImage>
           </Player2Wrapper>
         </LowerBlock>
       </Wrapper>

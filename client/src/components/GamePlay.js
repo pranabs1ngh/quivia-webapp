@@ -43,7 +43,7 @@ class GamePlay extends React.Component {
       if (!this.props.players) {
         const player_1 = { ...this.props.user, score: 0 }
         const player_2 = {
-          name: faker.person.findName(),
+          name: faker.name.findName(),
           title: `BOT`,
           level: Math.round(Math.random() * 20),
           displayImage: faker.image.avatar(),

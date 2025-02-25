@@ -60,7 +60,7 @@ class Home extends React.Component {
           <Dashboard>
             <Logo src="img/logo.png" alt="profile-pic"></Logo>
             <Title><h4>{this.props.user.title}</h4></Title>
-            <ProfilePic src={this.props.user.displayImage}></ProfilePic>
+            <ProfilePic src={this.props.user.displayImage} ></ProfilePic>
             <Namespace src="img/namespace-bg.png"></Namespace>
             <NamespaceData>
               {this.splitName(this.props.user.name)[0]}

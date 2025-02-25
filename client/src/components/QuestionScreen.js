@@ -266,7 +266,7 @@ class QuestionScreen extends React.Component {
         <QuestionSection>
           <Header>
             <Player1Wrapper>
-              <DisplayImage src={this.props.player_1.displayImage}></DisplayImage>
+              <DisplayImage src={this.props.player_1.displayImage} referrerpolicy="no-referrer"></DisplayImage>
               <PlayerDataWrapper>
                 <PlayerName>{this.props.player_1.name}</PlayerName>
                 <PlayerTitle>{this.props.player_1.title}</PlayerTitle>
@@ -292,7 +292,7 @@ class QuestionScreen extends React.Component {
                 <PlayerTitle>{this.props.player_2.title}</PlayerTitle>
                 <Score>{this.state.oppScore}</Score>
               </PlayerDataWrapper>
-              <DisplayImage src={this.props.player_2.displayImage}></DisplayImage>
+              <DisplayImage src={this.props.player_2.displayImage} referrerpolicy="no-referrer"></DisplayImage>
             </Player2Wrapper>
           </Header>
           <Question>{this.state.question}</Question>
