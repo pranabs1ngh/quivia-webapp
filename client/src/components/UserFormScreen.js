@@ -75,7 +75,6 @@ class UserForm extends React.Component {
             <h1>Create Account</h1>
             <div className="social-container">
               <a href="/api/auth/google" className="social"><i className="fab fa-google-plus-g"></i></a>
-              <a href="/api/auth/facebook" className="social"><i className="fab fa-facebook-f"></i></a>
             </div>
             <span>or use your email for registration</span>
             <input type="text" spellCheck="false" value={this.state.name} onChange={e => { this.setState({ name: e.target.value, signUpError: null }) }} placeholder="Name" />
@@ -90,7 +89,6 @@ class UserForm extends React.Component {
             <h1>Sign in</h1>
             <div className="social-container">
               <a href="/api/auth/google" className="social"><i className="fab fa-google-plus-g"></i></a>
-              <a href="/api/auth/facebook" className="social"><i className="fab fa-facebook-f"></i></a>
             </div>
             <span>or use your account</span>
             <input name="username" type="text" autoComplete="username email" spellCheck="false" value={this.state.email} onChange={e => { this.setState({ email: e.target.value, signInError: null }) }} placeholder="Email" />

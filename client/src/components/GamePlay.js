@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import io from 'socket.io-client'
-import faker from 'faker'
+import { faker } from '@faker-js/faker';
 import unique from 'unique-string'
 import { setSocketRoomID, updateRound, storePlayersData, storeQuestions } from '../actions'
 
@@ -43,7 +43,7 @@ class GamePlay extends React.Component {
       if (!this.props.players) {
         const player_1 = { ...this.props.user, score: 0 }
         const player_2 = {
-          name: faker.name.findName(),
+          name: faker.person.findName(),
           title: `BOT`,
           level: Math.round(Math.random() * 20),
           displayImage: faker.image.avatar(),
