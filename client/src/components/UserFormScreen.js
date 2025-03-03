@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { fetchUser } from '../actions'
 
 import './css/style.css'
+import { apiUrl } from '../config/env'
 
 class UserForm extends React.Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class UserForm extends React.Component {
       email: this.state.email,
       password: this.state.password
     }
-    axios.post("/api/user/signup", data)
+    axios.post(`${apiUrl}/api/user/signup`, data)
       .then(res => {
         if (res.data.auth) this.props.history.push('/')
       })
@@ -57,7 +58,7 @@ class UserForm extends React.Component {
       email: this.state.email,
       password: this.state.password
     }
-    axios.post("/api/user/signin", data)
+    axios.post(`${apiUrl}/api/user/signin`, data)
       .then(res => {
         if (res.data.auth) this.props.history.push('/')
       })

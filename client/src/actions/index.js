@@ -1,8 +1,9 @@
 // REDUX ACTION CREATORS
 import axios from 'axios'
+import { apiUrl } from '../config/env'
 
 export const fetchUser = () => async dispatch => {
-  const response = await axios.get('/api/user')
+  const response = await axios.get(`${apiUrl}/api/user`)
 
   dispatch({ type: 'FETCH_USER', payload: response.data })
 }

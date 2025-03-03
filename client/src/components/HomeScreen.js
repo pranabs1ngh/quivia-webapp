@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import styled from 'styled-components'
 import { fetchUser, storeGameData } from '../actions'
+import { apiUrl } from '../config/env'
 
 class Home extends React.Component {
   constructor(props) {
@@ -43,7 +44,7 @@ class Home extends React.Component {
   }
 
   signOut = () => {
-    axios.get('/api/user/signout')
+    axios.get(`${apiUrl}/api/user/signout`)
       .then(res => {
         if (!res.data.auth) this.props.history.push('/user/signin')
       })

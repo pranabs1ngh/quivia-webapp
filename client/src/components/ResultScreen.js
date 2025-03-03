@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import styled from 'styled-components'
 import { fetchUser, storeGameData, storePlayersData } from '../actions'
+import { apiUrl } from '../config/env'
 
 class ResultScreen extends React.Component {
   constructor(props) {
@@ -57,7 +58,7 @@ class ResultScreen extends React.Component {
       if (level <= 10) title = this.title[level - 1]
     }
 
-    axios.put('/api/user/update', { title, level, noOfGamesPlayed, noOfQuestionsPlayed })
+    axios.put(`${apiUrl}/api/user/update`, { title, level, noOfGamesPlayed, noOfQuestionsPlayed })
       .then(res => {
         if (res.data.update) this.props.fetchUser()
       })
