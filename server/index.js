@@ -4,10 +4,28 @@ const session = require('cookie-session');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const keys = require('./config/keys');
+const cors = require('cors');
 require('./services/passport');
 
 const app = express();
-app.enable('trust proxy');
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+
+// Apply the CORS middleware globally
+app.use(cors(corsOptions));
+
 
 // CONNECT TO MONGODB
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
