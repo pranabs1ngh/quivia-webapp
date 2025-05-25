@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export default props => {
+const RoundScreen = props => {
 
   setTimeout(() => { props.updateScreen('roundScreen') }, 1500)
 
@@ -18,6 +18,8 @@ export default props => {
     </Wrapper>
   )
 }
+
+export default RoundScreen;
 
 // STYLED COMPONENTS
 
