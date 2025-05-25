@@ -4,9 +4,6 @@ WORKDIR /opt/app
 COPY . .
 RUN npm install
 
-WORKDIR /opt/app/client
-RUN npm install && npm run build
-
 WORKDIR /opt/app
 
 ENV PORT=3000
