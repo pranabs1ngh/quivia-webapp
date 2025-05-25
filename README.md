@@ -47,6 +47,20 @@ GOOGLE_CLIENT_ID = **********
 
 GOOGLE_CLIENT_SECRET = ******
 
+MONGO_INITDB_ROOT_USERNAME = *********
+
+MONGO_INITDB_ROOT_PASSWORD = *********
+
+MONGO_INITDB_DATABASE = **************
+
+ME_CONFIG_MONGODB_ADMINUSERNAME: *****
+
+ME_CONFIG_MONGODB_ADMINPASSWORD: *****
+
+ME_CONFIG_MONGODB_URL: ***************
+
+ME_CONFIG_BASICAUTH: *****************
+
 ```
 
 > Get google/facebook client id and secret by
