@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
 
-export default () => (
+const OpponentSearchScreen = () => (
   <>
     <audio src='/audio/searching.mp3' autoPlay />
     <audio src='/audio/battle.mp3' />
@@ -15,6 +15,8 @@ export default () => (
     </Wrapper>
   </>
 )
+
+export default OpponentSearchScreen;
 
 // STYLED COMPONENTS
 

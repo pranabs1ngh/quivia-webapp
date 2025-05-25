@@ -3,26 +3,32 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.19.0",
+    "@craco/craco": "^7.1.0",
     "@faker-js/faker": "6.0.0",
-    "http-proxy-middleware": "^0.19.1",
+    "axios": "1.9.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.1",
+    "http-proxy-middleware": "^3.0.5",
+    "polyfill": "^0.1.0",
+    "process": "^0.11.10",
     "react": "^16.10.2",
     "react-circular-progressbar": "^2.0.2",
     "react-dom": "^16.10.2",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^5.0.1",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
-    "socket.io-client": "^2.3.0",
+    "socket.io-client": "^4.8.1",
+    "stream-browserify": "^3.0.0",
     "styled-components": "^4.4.0",
-    "unique-string": "^2.0.0"
+    "unique-string": "^2.0.0",
+    "vm-browserify": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -38,8 +44,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "remote-redux-devtools": "^0.5.16"
   }
 }
