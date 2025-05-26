@@ -33,7 +33,7 @@ passport.use(new LocalStrategy({ usernameField: 'email', passReqToCallback: true
 passport.use(new GoogleStrategy({
   clientID: keys.googleClientID,
   clientSecret: keys.gooogleClientSecret,
-  callbackURL: `${keys.appURL}/api/auth/google/callback`
+  callbackURL: `${keys.appBackendURL}/api/auth/google/callback`
 }, async (accessToken, refreshToken, profile, done) => {
   let user = await User.findOne({ googleID: profile.id });
   if (user) { done(null, user); }
