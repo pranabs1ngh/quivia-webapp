@@ -93,7 +93,7 @@ class UserForm extends React.Component {
           <form onSubmit={this.signUp}>
             <h1>Create Account</h1>
             <div className="social-container">
-              <a className="social" onClick={this.onGoogleAuthClick}><i className="fab fa-google-plus-g"></i></a>
+              <span className="social" onClick={this.onGoogleAuthClick}><i className="fab fa-google-plus-g"></i></span>
             </div>
             <span>or use your email for registration</span>
             <input type="text" spellCheck="false" value={this.state.name} onChange={e => { this.setState({ name: e.target.value, signUpError: null }) }} placeholder="Name" />
@@ -107,7 +107,7 @@ class UserForm extends React.Component {
           <form onSubmit={this.signIn}>
             <h1>Sign in</h1>
             <div className="social-container">
-              <a className="social" onClick={this.onGoogleAuthClick}><i className="fab fa-google-plus-g"></i></a>
+              <span className="social" onClick={this.onGoogleAuthClick}><i className="fab fa-google-plus-g"></i></span>
             </div>
             <span>or use your account</span>
             <input name="username" type="text" autoComplete="username email" spellCheck="false" value={this.state.email} onChange={e => { this.setState({ email: e.target.value, signInError: null }) }} placeholder="Email" />
