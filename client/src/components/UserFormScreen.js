@@ -67,6 +67,24 @@ class UserForm extends React.Component {
       })
   }
 
+  onGoogleAuthClick = async (e) => {
+    e.preventDefault();
+    try {
+      // Call the backend to get the Google auth URL
+      const res = await axios.get(`${apiUrl}/api/auth/google`, { withCredentials: true });
+      // If the backend returns a redirect URL, navigate there
+      if (res.data && res.data.url) {
+        window.location.href = res.data.url;
+      } else {
+        // Fallback: try to redirect to the endpoint directly
+        window.location.href = `${apiUrl}/api/auth/google`;
+      }
+    } catch (err) {
+      // Fallback: try to redirect to the endpoint directly
+      window.location.href = `${apiUrl}/api/auth/google`;
+    }
+  }
+
   render = () => {
     if (this.state.showLoader) return <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
     else return (
@@ -75,7 +93,7 @@ class UserForm extends React.Component {
           <form onSubmit={this.signUp}>
             <h1>Create Account</h1>
             <div className="social-container">
-              <a href="/api/auth/google" className="social"><i className="fab fa-google-plus-g"></i></a>
+              <a href="#" className="social" onClick={this.onGoogleAuthClick}><i className="fab fa-google-plus-g"></i></a>
             </div>
             <span>or use your email for registration</span>
             <input type="text" spellCheck="false" value={this.state.name} onChange={e => { this.setState({ name: e.target.value, signUpError: null }) }} placeholder="Name" />
@@ -89,7 +107,7 @@ class UserForm extends React.Component {
           <form onSubmit={this.signIn}>
             <h1>Sign in</h1>
             <div className="social-container">
-              <a href="/api/auth/google" className="social"><i className="fab fa-google-plus-g"></i></a>
+              <a href="#" className="social" onClick={this.onGoogleAuthClick}><i className="fab fa-google-plus-g"></i></a>
             </div>
             <span>or use your account</span>
             <input name="username" type="text" autoComplete="username email" spellCheck="false" value={this.state.email} onChange={e => { this.setState({ email: e.target.value, signInError: null }) }} placeholder="Email" />
