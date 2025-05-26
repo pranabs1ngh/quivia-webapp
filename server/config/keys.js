@@ -1,4 +1,5 @@
 module.exports = {
+  appURL: process.env.APP_URL,
   cookieSecret: process.env.COOKIE_SECRET,
   mongoURI: process.env.MONGO_URI,
   googleClientID: process.env.GOOGLE_CLIENT_ID,

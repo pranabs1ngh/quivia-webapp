@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const keys = require('../config/keys');
 
 const router = express.Router();
 
@@ -8,8 +9,8 @@ router.get('/google', passport.authenticate('google', {
 }));
 
 router.get('/google/callback', passport.authenticate('google', {
-  successRedirect: '/',
-  failureRedirect: '/user'
+  successRedirect: keys.appURL,
+  failureRedirect: `${keys.appURL}/user`
 }));
 
 // router.get('/facebook', passport.authenticate('facebook'));
