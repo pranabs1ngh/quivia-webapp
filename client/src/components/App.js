@@ -6,13 +6,11 @@ import GamePlay from './GamePlay'
 
 const App = () => {
   return (
-    <div>
-      <Router>
-        <Route path='/' exact component={HomeScreen} />
-        <Route path='/user' component={UserFormScreen} />
-        <Route path='/gameplay' component={GamePlay} />
-      </Router>
-    </div>
+    <Router>
+      <Route path='/' exact component={HomeScreen} />
+      <Route path='/user' component={UserFormScreen} />
+      <Route path='/gameplay' component={GamePlay} />
+    </Router>
   )
 }
 
