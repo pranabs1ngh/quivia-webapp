@@ -5,6 +5,8 @@ services:
     restart: always
     env_file: 
       - ./.env
+    volumes:
+      - mongodb_data:/data/db
 
   mongo-express:
     image: mongo-express
@@ -26,3 +28,7 @@ services:
       - ./.env
     depends_on:
       - mongo
+
+volumes:
+  mongodb_data:
+    driver: local
