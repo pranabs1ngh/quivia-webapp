@@ -29,7 +29,7 @@ services:
     depends_on:
       - mongo
     volumes:
-      - ./server:/opt/app/server
+      - ./server/:/opt/app/server/
 
 volumes:
   mongodb_data:
