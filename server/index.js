@@ -35,7 +35,8 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useCreateIndex: true, u
 // COOKIE SESSION MIDDLEWARE
 app.use(session({
   maxAge: 30 * 24 * 60 * 60 * 1000,
-  secret: keys.cookieSecret
+  secret: keys.cookieSecret,
+  domain: keys.appURL,
 }));
 
 // PASSPORT MIDDLEWARE
