@@ -25,6 +25,7 @@ const corsOptions = {
 
 // Apply the CORS middleware globally
 app.use(cors(corsOptions));
+app.enable('trust proxy');
 
 
 // CONNECT TO MONGODB
