@@ -28,6 +28,8 @@ services:
       - ./.env
     depends_on:
       - mongo
+    volumes:
+      - .:/opt/app
 
 volumes:
   mongodb_data:
