@@ -9,8 +9,21 @@ require('./services/passport');
 
 const app = express();
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  exposedHeaders: ['set-cookie']
+};
+
 // Apply the CORS middleware globally
-app.use(cors({ origin: keys.allowedOrigins.split(','), credentials: true, exposedHeaders: ["set-cookie"], }));
+app.use(cors(corsOptions));
 if (process.env.NODE_ENV !== 'production') {
   app.enable('trust proxy');
 }
@@ -27,8 +40,7 @@ app.use(session({
   secret: keys.cookieSecret,
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'none',
-  httpOnly: true,
-  domain: keys.appURL,
+  // domain: keys.appURL,
 }));
 
 // PASSPORT MIDDLEWARE
