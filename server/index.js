@@ -9,15 +9,8 @@ require('./services/passport');
 
 const app = express();
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
-const corsOptions = {
-  origin: keys.allowedOrigins.split(','),
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true
-};
-
 // Apply the CORS middleware globally
-app.use(cors(corsOptions));
+app.use(cors({ origin: keys.allowedOrigins.split(','), credentials: true }));
 if (process.env.NODE_ENV !== 'production') {
   app.enable('trust proxy');
 }
