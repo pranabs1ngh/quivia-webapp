@@ -4,7 +4,7 @@ import io from 'socket.io-client'
 import { faker } from '@faker-js/faker';
 import unique from 'unique-string'
 import { setSocketRoomID, updateRound, storePlayersData, storeQuestions } from '../actions'
-
+import { apiUrl } from '../config/env'
 import OpponentSearchScreen from './OpponentSearchScreen'
 import PvPScreen from './PvPScreen'
 import RoundScreen from './RoundScreen'
@@ -16,7 +16,7 @@ class GamePlay extends React.Component {
     super(props)
 
     // const devURI = 'http://localhost:5000'
-    this.socket = io.connect()
+    this.socket = io.connect(apiUrl)
 
     if (!this.props.user.name) this.props.history.push('/')
     if (!this.props.game) this.props.history.push('/')
