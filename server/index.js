@@ -68,4 +68,4 @@ app.use('/api/auth', require('./routes/authRoutes'));
 const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, console.log(`Server started on PORT: ${PORT}`));
-require('./services/socket')(socket(server));
+require('./services/socket')(socket(server, { origins: '*' }));
