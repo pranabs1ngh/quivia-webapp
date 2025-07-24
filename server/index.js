@@ -37,6 +37,9 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useCreateIndex: true, u
 app.use(session({
   maxAge: 30 * 24 * 60 * 60 * 1000,
   secret: keys.cookieSecret,
+  secure: true,
+  sameSite: 'none',
+  httpOnly: true,
   domain: keys.appURL,
 }));
 
