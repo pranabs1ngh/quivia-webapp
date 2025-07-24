@@ -69,6 +69,7 @@ const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, console.log(`Server started on PORT: ${PORT}`));
 require('./services/socket')(socket(server, {
+  origins: allowedOrigins,
   handlePreflightRequest: (req, res) => {
     const headers = {
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
