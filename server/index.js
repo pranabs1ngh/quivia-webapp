@@ -11,13 +11,7 @@ const app = express();
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: keys.allowedOrigins,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true
 };
@@ -40,7 +34,8 @@ app.use(session({
   secret: keys.cookieSecret,
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'none',
-  // domain: keys.appURL,
+  httpOnly: true,
+  domain: keys.appURL,
 }));
 
 // PASSPORT MIDDLEWARE
