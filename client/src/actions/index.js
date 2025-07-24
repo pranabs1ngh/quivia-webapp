@@ -3,7 +3,7 @@ import axios from 'axios'
 import { apiUrl } from '../config/env'
 
 export const fetchUser = () => async dispatch => {
-  const response = await axios.get(`${apiUrl}/api/user`)
+  const response = await axios.get(`${apiUrl}/api/user`, { withCredentials: true })
 
   dispatch({ type: 'FETCH_USER', payload: response.data })
 }

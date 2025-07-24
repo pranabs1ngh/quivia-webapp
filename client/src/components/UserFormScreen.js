@@ -71,7 +71,7 @@ class UserForm extends React.Component {
     e.preventDefault();
     try {
       // Call the backend to get the Google auth URL
-      const res = await axios.get(`${apiUrl}/api/auth/google`);
+      const res = await axios.get(`${apiUrl}/api/auth/google`, { withCredentials: true });
       // If the backend returns a redirect URL, navigate there
       if (res.data && res.data.url) {
         window.location.href = res.data.url;

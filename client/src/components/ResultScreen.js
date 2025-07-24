@@ -58,7 +58,7 @@ class ResultScreen extends React.Component {
       if (level <= 10) title = this.title[level - 1]
     }
 
-    axios.put(`${apiUrl}/api/user/update`, { title, level, noOfGamesPlayed, noOfQuestionsPlayed })
+    axios.put(`${apiUrl}/api/user/update`, { title, level, noOfGamesPlayed, noOfQuestionsPlayed }, { withCredentials: true })
       .then(res => {
         if (res.data.update) this.props.fetchUser()
       })

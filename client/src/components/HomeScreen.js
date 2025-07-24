@@ -44,7 +44,7 @@ class Home extends React.Component {
   }
 
   signOut = () => {
-    axios.get(`${apiUrl}/api/user/signout`)
+    axios.get(`${apiUrl}/api/user/signout`, { withCredentials: true })
       .then(res => {
         if (!res.data.auth) this.props.history.push('/user/signin')
       })

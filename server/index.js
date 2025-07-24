@@ -8,7 +8,6 @@ const cors = require('cors');
 require('./services/passport');
 
 const app = express();
-app.enable('trust proxy');
 app.set('trust proxy', 1);
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
