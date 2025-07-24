@@ -40,7 +40,7 @@ app.use(session({
   secret: keys.cookieSecret,
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'none',
-  domain: keys.appURL,
+  // domain: keys.appURL,
 }));
 
 // PASSPORT MIDDLEWARE
