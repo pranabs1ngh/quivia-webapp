@@ -19,13 +19,14 @@ const corsOptions = {
     }
   },
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204
+  credentials: true
 };
 
 // Apply the CORS middleware globally
 app.use(cors(corsOptions));
-app.enable('trust proxy');
+if (process.env.NODE_ENV !== 'production') {
+  app.enable('trust proxy');
+}
 
 
 // CONNECT TO MONGODB
@@ -37,7 +38,7 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useCreateIndex: true, u
 app.use(session({
   maxAge: 30 * 24 * 60 * 60 * 1000,
   secret: keys.cookieSecret,
-  secure: true,
+  secure: process.env.NODE_ENV === 'production',
   sameSite: 'none',
   domain: keys.appURL,
 }));
