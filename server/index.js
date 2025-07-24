@@ -39,7 +39,6 @@ app.use(session({
   secret: keys.cookieSecret,
   secure: true,
   sameSite: 'none',
-  httpOnly: true,
   domain: keys.appURL,
 }));
 
