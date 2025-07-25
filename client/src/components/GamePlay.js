@@ -16,7 +16,11 @@ class GamePlay extends React.Component {
     super(props)
 
     // const devURI = 'http://localhost:5000'
-    this.socket = io.connect(apiUrl)
+    this.socket = io.connect(apiUrl, { withCredentials: true, transports: ['websocket', 'xhr-polling'] })
+
+    this.socket.on('connect_error', (err) => {
+      console.log('connection error', err)
+    })
 
     if (!this.props.user.name) this.props.history.push('/')
     if (!this.props.game) this.props.history.push('/')
