@@ -92,9 +92,9 @@ class UserForm extends React.Component {
         <div className="form-container sign-up-container">
           <form onSubmit={this.signUp}>
             <h1>Create Account</h1>
-            <div className="social-container">
+            {/* <div className="social-container">
               <span className="social" onClick={this.onGoogleAuthClick}><i className="fab fa-google-plus-g"></i></span>
-            </div>
+            </div> */}
             <span>or use your email for registration</span>
             <input type="text" spellCheck="false" value={this.state.name} onChange={e => { this.setState({ name: e.target.value, signUpError: null }) }} placeholder="Name" />
             <input type="email" spellCheck="false" value={this.state.email} onChange={e => { this.setState({ email: e.target.value, signUpError: null }) }} placeholder="Email" />
@@ -106,9 +106,9 @@ class UserForm extends React.Component {
         <div className="form-container sign-in-container">
           <form onSubmit={this.signIn}>
             <h1>Sign in</h1>
-            <div className="social-container">
+            {/* <div className="social-container">
               <span className="social" onClick={this.onGoogleAuthClick}><i className="fab fa-google-plus-g"></i></span>
-            </div>
+            </div> */}
             <span>or use your account</span>
             <input name="username" type="text" autoComplete="username email" spellCheck="false" value={this.state.email} onChange={e => { this.setState({ email: e.target.value, signInError: null }) }} placeholder="Email" />
             <input name="password" type="password" spellCheck="false" autoComplete="password" value={this.state.password} onChange={e => { this.setState({ password: e.target.value, signInError: null }) }} placeholder="Password" />

@@ -53,7 +53,7 @@ class GamePlay extends React.Component {
           name: faker.name.findName(),
           title: `BOT`,
           level: Math.round(Math.random() * 20),
-          displayImage: faker.image.avatar(),
+          displayImage: 'img/bot.webp',
           score: 0
         }
         this.props.storePlayersData({ player_1, player_2 })
