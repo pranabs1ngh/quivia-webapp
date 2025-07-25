@@ -67,16 +67,10 @@ app.use('/api/auth', require('./routes/authRoutes'));
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, console.log(`Server started on PORT: ${PORT}`));
+const server = require('http').createServer(app);
 require('./services/socket')(socket(server, {
-  origins: allowedOrigins,
-  handlePreflightRequest: (req, res) => {
-    const headers = {
-        "Access-Control-Allow-Methods": "GET,POST",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
-    };
-    res.writeHead(200, headers);
-    res.end();
-}
+  cors: {
+    origin: 'https://quivia.thecoderover.dev'
+  }
 }));
+server.listen(PORT, console.log(`Server started on PORT: ${PORT}`));
