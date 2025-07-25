@@ -19,7 +19,10 @@ class GamePlay extends React.Component {
     this.socket = io.connect(apiUrl, { withCredentials: true, transports: ['websocket', 'xhr-polling'] })
 
     this.socket.on('connect_error', (err) => {
-      console.log('connection error', err)
+      console.log(err.req);      // the request object
+      console.log(err.code);     // the error code, for example 1
+      console.log(err.message);  // the error message, for example "Session ID unknown"
+      console.log(err.context);  // some additional error context
     })
 
     if (!this.props.user.name) this.props.history.push('/')
