@@ -43,9 +43,17 @@ class Home extends React.Component {
     this.props.history.push('/gameplay')
   }
 
+  deleteCookies = () => {
+    const allCookies = document.cookie.split(";");
+
+    for (let i = 0; i < allCookies.length; i += 1)
+      document.cookie = `${allCookies[i]}=;expires=${new Date(0).toUTCString()}`;
+  };
+
   signOut = () => {
     axios.get(`${apiUrl}/api/user/signout`, { withCredentials: true })
       .then(res => {
+        this.deleteCookies()
         if (!res.data.auth) this.props.history.push('/user/signin')
       })
   }
